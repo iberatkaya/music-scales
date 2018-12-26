@@ -1,2 +1,2 @@
-# music_app
-Music Scales App
+# An app that shows the notes in a chosen key
+# It was written in Flutter
