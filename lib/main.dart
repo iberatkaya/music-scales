@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Notes',
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        primarySwatch: Colors.orange,
         iconTheme: IconThemeData(
           size: 25,
           opacity: 1,
@@ -68,19 +68,20 @@ class _MyHomePageState extends State<MyHomePage> {
       child:
        Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text("  Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
         ),
         body: Center(
           child: Column(
             children: <Widget>[
               Flexible(
               child: ListView.separated(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.fromLTRB(10,6,10,0),
                 itemCount: notes.length,
                 separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(4, 4, 0, 10),
+                    contentPadding: EdgeInsets.fromLTRB(4, 6, 0, 10),
                     dense: true,
                     onTap:() {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
@@ -113,7 +114,8 @@ class SecondScreen extends StatelessWidget {
       child:
       Scaffold(
         appBar: AppBar(
-          title: Text("Choose A Scale"),
+          title: Text("Choose a Scale For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
         ),
         body: Center(
           child: Column(
@@ -121,12 +123,12 @@ class SecondScreen extends StatelessWidget {
   //             Text("$clickedindex $clickednote"),
               Flexible(
                 child: ListView.separated(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(10.0),
                   itemCount: scales.length,
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(4, 4, 0, 10),
+                      contentPadding: EdgeInsets.fromLTRB(4, 6, 0, 10),
                       dense: true,
                       onTap:() {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdScreen()));
@@ -170,14 +172,15 @@ class ThirdScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("The Scale"),
+        title: Text("The $clickednote $clickednotescale Scale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
       ),
       body: Center(
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(5, 30, 5, 0),
-              child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 60,),),
+              margin: EdgeInsets.fromLTRB(5, 35, 5, 0),
+              child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 60, color: Colors.red),),
            ),
       ],
       ),

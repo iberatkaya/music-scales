@@ -1,4 +1,4 @@
-package com.example.musicapp;
+package com.kaya.musicapp;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
