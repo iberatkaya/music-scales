@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           opacity: 1,
         ),
       ),
-      home: MyHomePage(title: '   Notes'),
+      home: MyHomePage(title: 'Notes'),
     );
   }
 }
@@ -39,26 +40,42 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+double textSize;
+int typeselect;   //0 for scale, 1 for chord
 var clickednote = "";
 var clickedindex = 0;
 var clickednotescale = "";
 var clickedindexscale = 0;
-    List<Note> notes = [
-      Note("A", 0),
-      Note("A#", 1),
-      Note("B", 2),
-      Note("C", 3),
-      Note("C#", 4),
-      Note("D", 5),
-      Note("D#", 6),
-      Note("E", 7),
-      Note("F", 8),
-      Note("F#", 9),
-      Note("G", 10),
-      Note("G#", 11),
-    ];
+List<Note> notes = [
+  Note("A", 0),
+  Note("A#", 1),
+  Note("B", 2),
+  Note("C", 3),
+  Note("C#", 4),
+  Note("D", 5),
+  Note("D#", 6),
+  Note("E", 7),
+  Note("F", 8),
+  Note("F#", 9),
+  Note("G", 10),
+  Note("G#", 11),
+];
+
 
 class _MyHomePageState extends State<MyHomePage> {
+
+@override
+  void initState() {
+    super.initState();
+    _loadSize();
+  }
+
+  _loadSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      textSize = (prefs.getDouble('textSize') ?? 28.0);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +85,82 @@ class _MyHomePageState extends State<MyHomePage> {
       child:
        Scaffold(
         appBar: AppBar(
-          title: Text("  Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+              height: 110,
+              child: DrawerHeader(
+                child: Padding(
+                  child: Text('Menu', style: TextStyle(fontSize: 24)),
+                  padding: EdgeInsets.fromLTRB(12, 6, 0, 0),
+                  ),
+                decoration: BoxDecoration(
+                  color: Colors.orangeAccent,
+                ),
+               ),
+              ),
+              //Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+              ListTile(
+                title: Text('Settings', style: TextStyle(fontSize: 18)),
+                trailing: Icon(Icons.settings),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Flexible(
+              child: ListView(
+                children: <Widget>[
+                  ListTile(
+                    title: Text("Scales", style: TextStyle(fontSize: textSize + 4),),
+                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
+                    onTap: (){
+                      typeselect = 0;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                  ListTile(
+                    title: Text("Chords", style: TextStyle(fontSize: textSize + 4),),
+                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
+                    onTap: (){
+                      typeselect = 1;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                ],
+              ),
+              ),
+            ],
+          ),
+        ),
+      )
+      );
+    }
+  }
+
+class NoteScreen extends StatelessWidget {
+   @override
+  Widget build(BuildContext context) {
+
+    return new ListTileTheme(
+      iconColor: Colors.red,
+      child:
+       Scaffold(
+        appBar: AppBar(
+          title: Text("Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
         body: Center(
@@ -81,14 +173,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(4, 6, 0, 10),
+                    contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.80, 0, -12 + textSize * 0.85),
                     dense: true,
                     onTap:() {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
+                      if(typeselect == 0)
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
+                      else if(typeselect == 1)
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
                       clickedindex = notes[index].index;
                       clickednote = notes[index].note;
                     },
-                    title: Text(notes[index].note ?? 'broke', style: TextStyle(fontSize: 28)),
+                    title: Text(notes[index].note ?? 'broke', style: TextStyle(fontSize: textSize)),
                     leading: Icon(Icons.music_note),
                   );
                 },
@@ -100,9 +195,10 @@ class _MyHomePageState extends State<MyHomePage> {
       )
       );
     }
-  }
+}
 
-class SecondScreen extends StatelessWidget {
+
+class ScaleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Scale> scales = [
@@ -128,14 +224,14 @@ class SecondScreen extends StatelessWidget {
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(4, 6, 0, 10),
+                      contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.85, 0, -12 + textSize * 0.90),
                       dense: true,
                       onTap:() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
                         clickedindexscale = scales[index].index;
                         clickednotescale = scales[index].name;
                       },
-                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: 26)),
+                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
                       leading: Icon(Icons.music_note),
                     );
                 },
@@ -149,7 +245,54 @@ class SecondScreen extends StatelessWidget {
   }
 }
 
-class ThirdScreen extends StatelessWidget {
+class ChordScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    List<Scale> scales = [
+      Scale("Major", 0),
+      Scale("Minor", 1),
+//      Scale("7 Chord", 2),
+    ];
+    return ListTileTheme(
+      iconColor: Colors.red,
+      child:
+      Scaffold(
+        appBar: AppBar(
+          title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: ListView.separated(
+                  padding: EdgeInsets.all(10.0),
+                  itemCount: scales.length,
+                  separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                     contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.85, 0, -12 + textSize * 0.90),
+                     dense: true,
+                      onTap:() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
+                        clickedindexscale = scales[index].index;
+                        clickednotescale = scales[index].name;
+                      },
+                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
+                      leading: Icon(Icons.music_note),
+                    );
+                },
+              )
+              ),
+            ],
+        ),
+        ),
+      )
+    );
+  }
+}
+
+class ScalePrintScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String calculateScale(var mode, var key){
@@ -168,7 +311,7 @@ class ThirdScreen extends StatelessWidget {
         index += 2;
 	    	}
       return theScale;
-      };
+      }
 
     return Scaffold(
       appBar: AppBar(
@@ -180,7 +323,7 @@ class ThirdScreen extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(5, 35, 5, 0),
-              child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 60, color: Colors.red),),
+              child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 20 + textSize * 1.15, color: Colors.red),),
            ),
       ],
       ),
@@ -189,3 +332,107 @@ class ThirdScreen extends StatelessWidget {
   }
 }
 
+class ChordPrintScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    String calculateChord(var mode, var key){
+    	String theNotes = "";
+      var index = key;
+	    for(int i=0; i<3; i++){
+        if(i == 1 && mode == 0){
+          index++;
+        }
+        else if(i == 2 && mode == 1){
+          index++;
+        }
+        if(index > 11)
+			    index %= 12;
+        theNotes += notes[index].note + " ";
+        index +=3;     //A A# B C C# D D# E F F# G G#
+	    	}             //0 3 7 m   0 4 7 M
+      return theNotes;
+      }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("The $clickednote $clickednotescale Chord", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          elevation: 1,
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 35, 5, 0),
+              child: Text(calculateChord(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 20 + textSize * 1.15, color: Colors.red),),
+           ),
+      ],
+      ),
+      ),
+    );
+  }
+}
+
+
+class SettingsScreen extends StatefulWidget {
+  SettingsScreen({Key key, this.title}) : super(key: key);
+  final String title;
+  @override
+  _SettingsScreen createState() => _SettingsScreen();
+}
+
+class _SettingsScreen extends State<SettingsScreen> {
+
+  _changeText(double temp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setDouble('textSize', temp);
+    });
+  }
+  _loadSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      textSize = (prefs.getDouble('textSize') ?? 28.0);
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+          elevation: 1,
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
+              padding: EdgeInsets.all(5),
+              child: Row(
+              
+              children: <Widget>[
+                Text("Select Text Size:  ", style: TextStyle(fontSize: 18),),
+                DropdownButton<double>(
+                hint: Text("${textSize.toInt()}", style: TextStyle(fontSize: 18),),
+                items: <double>[20, 24, 26, 28, 30, 32].map((double value) {
+                  return DropdownMenuItem<double>(
+                    value: value,
+                    child: Text("${value.toInt()}"),
+                  );
+                }).toList(),
+                onChanged: (double newValueSelected) {
+                  _changeText(newValueSelected);
+                  _loadSize();
+                  //textSize = newValueSelected;
+                },
+                ),
+                ],
+              ),
+             ),
+                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),
+          ],
+        ),
+      ),
+    );
+  }
+}
