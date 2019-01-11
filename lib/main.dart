@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'chords.dart';
 import 'scales.dart';
+import 'prog.dart';
 
 void main() => runApp(MyApp());
 
@@ -43,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 double textSize;
-int typeselect;   //0 for scale, 1 for chord
+int typeselect;   //0 for scale, 1 for chord, 2 for progression
 var clickednote = "";
 var clickedindex = 0;
 var clickednotescale = "";
@@ -142,6 +143,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                  ListTile(
+                    title: Text("Progressions", style: TextStyle(fontSize: textSize + 2),),
+                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
+                    onTap: (){
+                      typeselect = 2;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                    },
+                  ),
+                  //Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
                 ],
               ),
               ),
@@ -157,208 +167,45 @@ class NoteScreen extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
 
-    return new ListTileTheme(
-      iconColor: Colors.red,
-      child:
+    return
        Scaffold(
         appBar: AppBar(
           title: Text("Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Flexible(
-              child: ListView.separated(
-                padding: EdgeInsets.fromLTRB(10,6,10,0),
-                itemCount: notes.length,
-                separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.80, 0, -12 + textSize * 0.85),
-                    dense: true,
-                    onTap:() {
-                      if(typeselect == 0)
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
-                      else if(typeselect == 1)
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
-                      clickedindex = notes[index].index;
-                      clickednote = notes[index].note;
-                    },
-                    title: Text(notes[index].note ?? 'broke', style: TextStyle(fontSize: textSize)),
-                    leading: Icon(Icons.music_note),
-                  );
+        body: GridView.count(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+          padding: EdgeInsets.fromLTRB(12, 24, 12, 0),
+          children: List.generate(12, (index){
+            return Center(
+              child: GestureDetector(
+                onTap: (){
+                  clickedindex = notes[index].index;
+                  clickednote = notes[index].note;
+                  key = notes[index].note;
+                  if(typeselect == 0) 
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
+                  else if(typeselect == 1) 
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
+                  else if(typeselect == 2) 
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
                 },
-              )
+                child:Container( 
+                  width: 40 + textSize * 1.65,
+                  height: 40 + textSize * 1.65,
+                  decoration: BoxDecoration(color: Color.fromRGBO(110,240,255,0.15), borderRadius: BorderRadius.circular(24)),
+                  child: Center(
+                    child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 39, 43, 1), fontSize: textSize * 1.2),)),
+                ),
               ),
-            ],
+            );
+            }
           ),
         ),
-      )
       );
     }
 }
-
-
-class ScaleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    List<Scale> scales = [
-      Scale("Major", 0),
-      Scale("Minor", 1),
-    ];
-    return ListTileTheme(
-      iconColor: Colors.red,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text("Choose a Scale For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-        ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-  //             Text("$clickedindex $clickednote"),
-              Flexible(
-                child: ListView.separated(
-                  padding: EdgeInsets.all(10.0),
-                  itemCount: scales.length,
-                  separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.85, 0, -12 + textSize * 0.90),
-                      dense: true,
-                      onTap:() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
-                        clickedindexscale = scales[index].index;
-                        clickednotescale = scales[index].name;
-                      },
-                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
-                      leading: Icon(Icons.music_note),
-                    );
-                },
-              )
-              ),
-            ],
-        ),
-        ),
-      )
-    );
-  }
-}
-
-
-
-class ScalePrintScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    List<String> calculateScale(var mode, var key){
-    	List<String> theScale = [];
-      var index = key;
-	    for(int i=0; i<7; i++){
-	    	if((i == 2 || i == 5) && mode == 1)
-		    	index--;
-		    else if(mode == 0 && (i == 3 || i == 7))
-			    index--;
-		    if(index > 11)
-			    index %= 12;
-	    	theScale.add(notes[index].note);
-        index += 2;
-	    	}
-      return theScale;
-      }
-    List<String> myScale;
-    myScale = calculateScale(clickedindexscale, clickedindex);
-    
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("The $clickednote $clickednotescale Scale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            /*Container(
-              margin: EdgeInsets.fromLTRB(5, 35, 5, 0),
-              child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 20 + textSize * 1.15, color: Colors.red),),
-           ),*/
-           Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 28, 56-textSize, 18), child: Table(
-             border: TableBorder.all(width: 2, color: Color.fromRGBO(150, 0, 40, 0.2)),
-             children: <TableRow>[
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("2", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("3", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("4", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[0]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[1]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[2]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[3]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                ],
-              ),
-              ],
-           ),),
-           Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 0), child: Table(
-             border: TableBorder.all(width: 2, color: Color.fromRGBO(150, 0, 40, 0.2)),
-             children: <TableRow>[
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("6", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("7", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[4]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[5]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[6]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
-                  ),
-                ],
-              ),
-              ],
-           ),
-           ),
-      ],
-      ),
-      ),
-    );
-  }
-}
-
-
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key key, this.title}) : super(key: key);
@@ -396,24 +243,22 @@ class _SettingsScreen extends State<SettingsScreen> {
             Container(
               margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
               padding: EdgeInsets.all(5),
-              child: Row(
-              
-              children: <Widget>[
-                Text("Select Text Size:  ", style: TextStyle(fontSize: 18),),
-                DropdownButton<double>(
-                hint: Text("${textSize.toInt()}", style: TextStyle(fontSize: 18),),
-                items: <double>[20, 24, 26, 28, 30, 32].map((double value) {
-                  return DropdownMenuItem<double>(
-                    value: value,
-                    child: Text("${value.toInt()}"),
-                  );
-                }).toList(),
-                onChanged: (double newValueSelected) {
-                  _changeText(newValueSelected);
-                  _loadSize();
-                  //textSize = newValueSelected;
-                },
-                ),
+              child: Row(              
+                children: <Widget>[
+                  Text("Select Text Size:  ", style: TextStyle(fontSize: 18),),
+                  DropdownButton<double>(
+                  hint: Text("${textSize.toInt()}", style: TextStyle(fontSize: 18),),
+                  items: <double>[24, 26, 28, 30].map((double value) {
+                    return DropdownMenuItem<double>(
+                      value: value,
+                      child: Text("${value.toInt()}"),
+                    );
+                  }).toList(),
+                  onChanged: (double newValueSelected) {
+                    _changeText(newValueSelected);
+                    _loadSize();
+                   },
+                  ),
                 ],
               ),
              ),

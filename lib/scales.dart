@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'main.dart';
 
 void main() => runApp(ScaleScreen());
@@ -37,7 +38,7 @@ class ScaleScreen extends StatelessWidget {
                         clickednotescale = scales[index].name;
                       },
                       title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
-                      leading: Icon(Icons.music_note),
+                      leading: Icon(FontAwesomeIcons.itunesNote),
                     );
                 },
               )
@@ -61,7 +62,7 @@ class ScalePrintScreen extends StatelessWidget {
 	    for(int i=0; i<7; i++){
 	    	if((i == 2 || i == 5) && mode == 1)
 		    	index--;
-		    else if(mode == 0 && (i == 3 || i == 7))
+		    else if(mode == 0 && i == 3)
 			    index--;
 		    if(index > 11)
 			    index %= 12;
@@ -86,7 +87,7 @@ class ScalePrintScreen extends StatelessWidget {
               child: Text(calculateScale(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 20 + textSize * 1.15, color: Colors.red),),
            ),*/
            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 28, 56-textSize, 18), child: Table(
-             border: TableBorder.all(width: 2, color: Color.fromRGBO(150, 0, 40, 0.2)),
+             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -123,7 +124,7 @@ class ScalePrintScreen extends StatelessWidget {
               ],
            ),),
            Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 0), child: Table(
-             border: TableBorder.all(width: 2, color: Color.fromRGBO(150, 0, 40, 0.2)),
+             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
