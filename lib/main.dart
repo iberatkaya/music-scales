@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 import 'chords.dart';
 import 'scales.dart';
 import 'prog.dart';
 
-void main() => runApp(MyApp());
+void main() { 
+  /*SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {*/runApp(MyApp());/*});*/
+}
 
 class Note{
   String note;
@@ -38,6 +42,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+  
   final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -93,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         drawer: Drawer(
           child: ListView(
+            physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             children: <Widget>[
               Container(
@@ -174,10 +180,12 @@ class NoteScreen extends StatelessWidget {
           elevation: 1,
         ),
         body: GridView.count(
+          physics: BouncingScrollPhysics(),
           crossAxisCount: 3,
           childAspectRatio: 1,
           padding: EdgeInsets.fromLTRB(12, 24, 12, 0),
           children: List.generate(12, (index){
+            
             return Center(
               child: GestureDetector(
                 onTap: (){

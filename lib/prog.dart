@@ -80,7 +80,7 @@ class ProgScreen extends StatelessWidget{
             children: <Widget>[
               Flexible(
                 child: ListView.separated(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.fromLTRB(10, 4, 10, 10),
                   itemCount: scales.length,
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
@@ -168,7 +168,8 @@ class ProgPrintScreen extends StatelessWidget{
       },
     ),
     
-    body: Center(
+    body: SingleChildScrollView(
+      child: Center(
         child: Column(
           children: <Widget>[
           Padding(padding: EdgeInsets.fromLTRB(42 - textSize, 28, 42-textSize, 18), child: Table(
@@ -240,8 +241,9 @@ class ProgPrintScreen extends StatelessWidget{
               ],
            ),
            ),
-      ],
-      ),
+         ],
+       ),
+       ),
       ),
     );
   }
@@ -355,11 +357,13 @@ class RandomProgScreen extends StatelessWidget{
          title: Text("Random ${theScale[0].name} Progression"),
          elevation: 1,  
        ),
-       body: Center(
-         child: Column(
-           children: <Widget>[
-             progTable(myrand),
-           ],
+       body: SingleChildScrollView(
+         child: Center(
+          child: Column(
+            children: <Widget>[
+              progTable(myrand),
+            ],
+          ),
          ),
        ),
     );

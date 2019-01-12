@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'main.dart';
 
 void main() => runApp(ChordScreen());
+
 
 class ChordScreen extends StatelessWidget {
   @override
@@ -27,7 +29,8 @@ class ChordScreen extends StatelessWidget {
             children: <Widget>[
               Flexible(
                 child: ListView.separated(
-                  padding: EdgeInsets.all(10.0),
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(10, 4, 10, 10),
                   itemCount: scales.length,
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
@@ -53,7 +56,13 @@ class ChordScreen extends StatelessWidget {
   }
 }
 
-class ChordPrintScreen extends StatelessWidget {
+class ChordPrintScreen extends StatefulWidget{
+  @override
+  _ChordPrintScreen createState() => _ChordPrintScreen();
+}
+
+class _ChordPrintScreen extends State<ChordPrintScreen> {
+
   @override
   Widget build(BuildContext context) {
     List<String> calculateChord(var mode, var key){
@@ -106,7 +115,7 @@ class ChordPrintScreen extends StatelessWidget {
       if(mode == 4)
         the3rd = "4";
       if(!(mode == 2)){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 28, 56 - textSize * 0.45, 0),
+        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 28, 56 - textSize * 0.45, 10),
             child: Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
@@ -141,7 +150,7 @@ class ChordPrintScreen extends StatelessWidget {
            );
         }
       else if(mode == 2){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.6, 28, 56 - textSize * 0.6, 0), 
+        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.6, 28, 56 - textSize * 0.6, 10), 
           child:Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
@@ -194,7 +203,37 @@ class ChordPrintScreen extends StatelessWidget {
         return "The ${key}sus2 Chord";
       else if(mode == "Sus4")
         return "The ${key}sus4 Chord"; 
-      return "The ${key} ${mode} Chord";
+      return "The $key $mode Chord";
+    }
+
+    String urlChord(String mode, List<String> notes, String instr){
+      String url;
+      if(!notes[0].contains("#")){
+        if(mode == "Major")
+          url = "$instr-${notes[0]}-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Minor")
+          url = "$instr-${notes[0]}m-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Major 7th")
+          url = "$instr-${notes[0]}maj7-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
+        else if(mode == "Sus2")
+          url = "$instr-${notes[0]}sus2-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Sus4")
+          url = "$instr-${notes[0]}sus4-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}"; 
+        return url.replaceAll("#", "s");
+      }
+    else{
+        if(mode == "Major")
+          url = "$instr-${notes[0]}-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Minor")
+          url = "$instr-${notes[0]}m-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Major 7th")
+          url = "$instr-${notes[0]}maj7-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
+        else if(mode == "Sus2")
+          url = "$instr-${notes[0]}sus2-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+        else if(mode == "Sus4")
+          url = "$instr-${notes[0]}sus4-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}"; 
+        return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
+    }
     }
 
     return Scaffold(
@@ -202,16 +241,32 @@ class ChordPrintScreen extends StatelessWidget {
         title: Text("${titleText(clickednote, clickednotescale)}", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-/*            Container(
-              margin: EdgeInsets.fromLTRB(5, 35, 5, 0),
-              child: Text(calculateChord(clickedindexscale, clickedindex), textAlign: TextAlign.center, style: TextStyle(fontSize: 20 + textSize * 1.15, color: Colors.red),),
-           ),*/
+      body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Center(
+          child: Column(
+            children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(22, 20, 22, 0), 
+              child: CachedNetworkImage(
+                imageUrl:'https://www.scales-chords.com/chord-charts/${urlChord(clickednotescale, myNotes, "piano")}.jpg',
+                placeholder: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  backgroundColor: Colors.orangeAccent,
+                ),
+                errorWidget: Column(children: <Widget>[
+                    Padding( 
+                      padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
+                      child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
+                    ),
+                    Icon(Icons.error, color: Colors.red),
+                  ],
+                ),
+                ),
+              ),
             mytable(clickedindexscale),
-           
       ],
+      ),
       ),
       ),
     );
