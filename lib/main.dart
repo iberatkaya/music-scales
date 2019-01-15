@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
 import 'chords.dart';
 import 'scales.dart';
 import 'prog.dart';
@@ -48,8 +47,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+String instrument;
 double textSize;
 int typeselect;   //0 for scale, 1 for chord, 2 for progression
+
 var clickednote = "";
 var clickedindex = 0;
 var clickednotescale = "";
@@ -76,6 +77,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _loadSize();
+    _loadInstr();
+  }
+
+    _loadInstr() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      instrument = (prefs.getString('instrument') ?? "Piano");
+    });
   }
 
   _loadSize() async {
@@ -139,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                     },
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   ListTile(
                     title: Text("Chords", style: TextStyle(fontSize: textSize + 4),),
                     contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
@@ -148,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                     },
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   ListTile(
                     title: Text("Progressions", style: TextStyle(fontSize: textSize + 2),),
                     contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
@@ -237,6 +246,18 @@ class _SettingsScreen extends State<SettingsScreen> {
     });
   }
 
+  _changeInstr(String temp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('instrument', temp);
+    });
+  }
+  _loadInstr() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      instrument = (prefs.getString('instrument') ?? "piano");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +269,29 @@ class _SettingsScreen extends State<SettingsScreen> {
       body: Center(
         child: Column(
           children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
+              padding: EdgeInsets.all(5),
+              child: Row(              
+                children: <Widget>[
+                  Text("Instrument For Scales:  ", style: TextStyle(fontSize: 18),),
+                  DropdownButton<String>(
+                  hint: Text("$instrument", style: TextStyle(fontSize: 18),),
+                  items: <String>["Piano", "Guitar"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text("$value"),
+                    );
+                  }).toList(),
+                  onChanged: (String newValueSelected) {
+                    _changeInstr(newValueSelected);
+                    _loadInstr();
+                   },
+                  ),
+                ],
+              ),
+             ),
+                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),
             Container(
               margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
               padding: EdgeInsets.all(5),

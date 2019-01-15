@@ -80,12 +80,11 @@ class ProgScreen extends StatelessWidget{
             children: <Widget>[
               Flexible(
                 child: ListView.separated(
-                  padding: EdgeInsets.fromLTRB(10, 4, 10, 10),
                   itemCount: scales.length,
-                  separatorBuilder:(BuildContext context, int index) => Divider(height: 4, color: Color.fromRGBO(0, 0, 200, 0.2),),
+                  separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(4, -12 + textSize * 0.85, 0, -12 + textSize * 0.90),
+                      contentPadding: EdgeInsets.fromLTRB(24, -8 + textSize * 0.85, 0, -8 + textSize * 0.90),
                       dense: true,
                       onTap:() {
                         myindex = clickedindex;
