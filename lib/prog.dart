@@ -64,8 +64,8 @@ class ProgScreen extends StatelessWidget{
   Widget build(BuildContext context){
   
     List<Scale> scales = [
-      Scale("Major", 0),
-      Scale("Minor", 1),
+      Scale("Major", 0, []),
+      Scale("Minor", 1, []),
     ];
     return ListTileTheme(
       iconColor: Colors.red,
@@ -75,6 +75,7 @@ class ProgScreen extends StatelessWidget{
           title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             children: <Widget>[
@@ -254,7 +255,7 @@ class RandomProgScreen extends StatelessWidget{
     List<List> progs(){
       List<List> theProgs;
       if(mode == "M")
-        theProgs = [[1, 4, 5], [1, 5, 6, 4], [2, 5, 1], [1, 6, 4, 5], [1, 4, 2, 5], [1, 4, 1, 5], [1, 3, 4, 5]];
+        theProgs = [[1, 4, 5], [1, 5, 6, 4], [2, 5, 1], [1, 6, 4, 5], [1, 4, 2, 5], [1, 4, 1, 5], [1, 3, 4, 5], [1, 2, 5]];
       else if(mode == "m")
         theProgs = [[1, 6, 7], [1, 4, 6], [1, 4, 5], [1, 6, 3, 7], [1, 7, 6, 7], [6, 7, 1, 1], [1, 4, 5, 1]];
       return theProgs;
@@ -356,8 +357,9 @@ class RandomProgScreen extends StatelessWidget{
          title: Text("Random ${theScale[0].name} Progression"),
          elevation: 1,  
        ),
-       body: SingleChildScrollView(
-         child: Center(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
             children: <Widget>[
               progTable(myrand),

@@ -15,10 +15,19 @@ class Note{
   Note(this.note, this.index);
 }
 
+class Chord{
+  String note;
+  int index;
+  List<int> formula;
+  Chord(this.note, this.index, this.formula);
+}
+
+
 class Scale{
   String name;
   int index;
-  Scale(this.name, this.index);
+  List<int> formula;
+  Scale(this.name, this.index, this.formula);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +57,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 String instrument;
-double textSize;
+double textSize = 28.0;
+String speed;
 int typeselect;   //0 for scale, 1 for chord, 2 for progression
 
 var clickednote = "";
@@ -76,27 +86,35 @@ class _MyHomePageState extends State<MyHomePage> {
 @override
   void initState() {
     super.initState();
-    _loadSize();
+    //_loadSize();
     _loadInstr();
+    _loadSpeed();
   }
 
-    _loadInstr() async {
+  _loadInstr() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       instrument = (prefs.getString('instrument') ?? "Piano");
     });
   }
 
-  _loadSize() async {
+  /*_loadSize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       textSize = (prefs.getDouble('textSize') ?? 28.0);
+    });
+  }*/
+
+  _loadSpeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      speed = (prefs.getString('speed') ?? "Fast");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
+    precacheImage(AssetImage('lib/assets/imgs/logo.jpg'), context);
     return new ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -105,24 +123,25 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        backgroundColor: Colors.white,
         drawer: Drawer(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
+          child: ListView( 
+            physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             children: <Widget>[
               Container(
-              height: 110,
+              //height: 110,
+              color: Colors.orangeAccent,
               child: DrawerHeader(
-                child: Padding(
-                  child: Text('Menu', style: TextStyle(fontSize: 24)),
-                  padding: EdgeInsets.fromLTRB(12, 6, 0, 0),
-                  ),
-                decoration: BoxDecoration(
-                  color: Colors.orangeAccent,
-                ),
+                
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
+                child: Image(
+                  fit: BoxFit.fill,
+                  image: AssetImage('lib/assets/imgs/logo.jpg')),
                ),
               ),
-              //Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+              Padding(padding: EdgeInsets.fromLTRB(2, 1, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
               ListTile(
                 title: Text('Settings', style: TextStyle(fontSize: 18)),
                 trailing: Icon(Icons.settings),
@@ -140,31 +159,52 @@ class _MyHomePageState extends State<MyHomePage> {
               Flexible(
               child: ListView(
                 children: <Widget>[
-                  ListTile(
-                    title: Text("Scales", style: TextStyle(fontSize: textSize + 4),),
-                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
-                    onTap: (){
-                      typeselect = 0;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
-                    },
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    child: RaisedButton(
+                      onPressed: (){
+                          typeselect = 0;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                        },
+                        elevation: 1,
+                        highlightElevation: 1,
+                        padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                        color: Color.fromRGBO(240, 120, 120, 0.7),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        child: Center( child: Text("Scales 🎹", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                    ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  ListTile(
-                    title: Text("Chords", style: TextStyle(fontSize: textSize + 4),),
-                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
-                    onTap: (){
-                      typeselect = 1;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
-                    },
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    child: RaisedButton(
+                      onPressed: (){
+                        typeselect = 1;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                      },
+                      elevation: 1,
+                      highlightElevation: 1,
+                      padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                      color: Color.fromRGBO(120, 240, 120, 0.7),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      child:  Center( child: Text("Chords 🎸", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                    ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  ListTile(
-                    title: Text("Progressions", style: TextStyle(fontSize: textSize + 2),),
-                    contentPadding: EdgeInsets.fromLTRB(24, -12 + textSize * 0.95, 0, -12 + textSize * 1),
-                    onTap: (){
-                      typeselect = 2;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
-                    },
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    child: RaisedButton(
+                      onPressed: (){
+                          typeselect = 2;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                        },
+                      elevation: 1,
+                      highlightElevation: 1,
+                      padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                      color: Color.fromRGBO(150, 165, 250, 0.5),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      child:  Center( child: Text("Progressions 🎼", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                    ),
                   ),
                   //Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
                 ],
@@ -194,10 +234,13 @@ class NoteScreen extends StatelessWidget {
           childAspectRatio: 1,
           padding: EdgeInsets.fromLTRB(12, 24, 12, 0),
           children: List.generate(12, (index){
-            
             return Center(
-              child: GestureDetector(
-                onTap: (){
+              child: Container( 
+                  width: 42 + textSize * 1.65,
+                  height: 42 + textSize * 1.65,
+                  //decoration: BoxDecoration(, borderRadius: BorderRadius.circular(36)),
+                  child:RaisedButton(
+                onPressed: (){
                   clickedindex = notes[index].index;
                   clickednote = notes[index].note;
                   key = notes[index].note;
@@ -208,15 +251,16 @@ class NoteScreen extends StatelessWidget {
                   else if(typeselect == 2) 
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
                 },
-                child:Container( 
-                  width: 40 + textSize * 1.65,
-                  height: 40 + textSize * 1.65,
-                  decoration: BoxDecoration(color: Color.fromRGBO(110,240,255,0.15), borderRadius: BorderRadius.circular(24)),
-                  child: Center(
-                    child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 39, 43, 1), fontSize: textSize * 1.2),)),
-                ),
+                elevation: 1,
+                highlightElevation: 1,
+                color: Color.fromRGBO(202, 242, 242, 0.9),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
+                
+                child:  Center(
+                    child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.normal),)),
+                  ),
               ),
-            );
+              );
             }
           ),
         ),
@@ -232,7 +276,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreen extends State<SettingsScreen> {
-
+/*
   _changeText(double temp) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -245,7 +289,7 @@ class _SettingsScreen extends State<SettingsScreen> {
       textSize = (prefs.getDouble('textSize') ?? 28.0);
     });
   }
-
+*/
   _changeInstr(String temp) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -255,9 +299,24 @@ class _SettingsScreen extends State<SettingsScreen> {
   _loadInstr() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      instrument = (prefs.getString('instrument') ?? "piano");
+      instrument = (prefs.getString('instrument') ?? "Piano");
     });
   }
+  
+  _changeSpeed(String temp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('speed', temp);
+    });
+  }
+
+  _loadSpeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      speed = (prefs.getString('speed') ?? "Fast");
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -266,15 +325,16 @@ class _SettingsScreen extends State<SettingsScreen> {
         title: Text("Settings"),
           elevation: 1,
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[
-                  Text("Instrument For Scales:  ", style: TextStyle(fontSize: 18),),
+                  Text("Instrument:    ", style: TextStyle(fontSize: 18),),
                   DropdownButton<String>(
                   hint: Text("$instrument", style: TextStyle(fontSize: 18),),
                   items: <String>["Piano", "Guitar"].map((String value) {
@@ -291,8 +351,31 @@ class _SettingsScreen extends State<SettingsScreen> {
                 ],
               ),
              ),
-                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),
-            Container(
+            Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
+             Container(
+              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
+              padding: EdgeInsets.all(6),
+              child: Row(              
+                children: <Widget>[
+                  Text("Audio Speed:    ", style: TextStyle(fontSize: 18),),
+                  DropdownButton<String>(
+                  hint: Text("$speed", style: TextStyle(fontSize: 18),),
+                  items: <String>["Fast", "Slow"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text("$value"),
+                    );
+                  }).toList(),
+                  onChanged: (String newValueSelected) {
+                    _changeSpeed(newValueSelected);
+                    _loadSpeed();
+                   },
+                  ),
+                ],
+              ),
+             ),
+            Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
+            /*Container(
               margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
               padding: EdgeInsets.all(5),
               child: Row(              
@@ -314,7 +397,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                 ],
               ),
              ),
-                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),
+                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),*/
           ],
         ),
       ),

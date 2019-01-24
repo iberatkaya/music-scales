@@ -3,23 +3,31 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart';
 import 'package:flutter_advanced_networkimage/transition_to_image.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'chordfigering.dart';
 import 'main.dart';
 
 void main() => runApp(ChordScreen());
 
 
+List<Chord> chords = [    //A A# B C C# D D# E F F# G G# 
+  Chord("Major", 0, [4, 3]),
+  Chord("Minor", 1, [3, 4]),
+  Chord("7th", 6, [4, 3, 3]),
+  Chord("Major 7th", 2, [4, 3, 4]),
+  Chord("Minor 7th", 5, [3, 4, 3]),
+  Chord("Sus2", 3, [2, 5]),
+  Chord("Sus4", 4, [5, 2]),
+  Chord("Diminished", 7, [3, 3]),
+  Chord("Augmented", 8, [4, 4]),
+  Chord("9th", 9, [4, 3, 3, 4]),  
+  Chord("6th", 10, [4, 3, 2])
+];
+
 class ChordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Scale> scales = [
-      Scale("Major", 0),
-      Scale("Minor", 1),
-      Scale("Major 7th", 2),
-      Scale("Minor 7th", 5),
-      Scale("Sus2", 3),
-      Scale("Sus4", 4),
-    ];
     return ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -28,24 +36,25 @@ class ChordScreen extends StatelessWidget {
           title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             children: <Widget>[
               Flexible(
                 child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: scales.length,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: chords.length,
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                      contentPadding: EdgeInsets.fromLTRB(24, -8 + textSize * 0.85, 0, -8 + textSize * 0.90),
                      dense: true,
                       onTap:() {
+                        clickedindexscale = chords[index].index;
+                        clickednotescale = chords[index].note;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
-                        clickedindexscale = scales[index].index;
-                        clickednotescale = scales[index].name;
                       },
-                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
+                      title: Text(chords[index].note ?? 'broke', style: TextStyle(fontSize: textSize)),
                       leading: Icon(FontAwesomeIcons.itunesNote),
                     );
                 },
@@ -66,51 +75,63 @@ class ChordPrintScreen extends StatefulWidget{
 
 class _ChordPrintScreen extends State<ChordPrintScreen> {
   AudioPlayer audio = new AudioPlayer();
-  List<String> calculateChord(var mode, var key){
-  List<String> theNotes = [];
-  var index = key;
-  int ctr = 3;
-  if(mode == 0 || mode == 1 || mode == 2 || mode == 5){
-    for(int i=0; i<ctr; i++){
-      if(i == 1 && (mode == 0 || mode == 2)){  //Major and Major 7
-        index++;
-      }
-      else if(i == 2 && (mode == 1 || mode == 5)){
-        index++;
-      }
-      if(i == 2 && (mode == 2 || mode == 5)) //Major 7 and Minor 7
-        ctr++;
-      if(i == 3 && mode == 2)   //Major 7
-        index++;
-      if(index > 11)
-        index %= 12;
-      theNotes.add(notes[index].note);
-      index += 3;     //A A# B C C# D D# E F F# G G#
-    }                 //0 3 7 m   0 4 7 M   0 4 7 11
-  }
-  else if(mode == 3 || mode == 4){    //0 2 7 sus2   0 5 7 sus4
-    for(int i=0; i<3; i++){
-      if(i == 1 && mode == 3)   //Sus2
-        index--;
-      if(i == 2 && mode == 3)   //Sus2
-        index += 2;
-      if(i == 1 && mode == 4)   //Sus4
-        index += 2;
-      if(i == 2 && mode == 4)   //Sus4
-        index--;
-      if(index > 11)
-        index %= 12;
-      theNotes.add(notes[index].note);
-      index += 3;
+  AudioCache audioc = new AudioCache();
+  List<Note> calculateChord(var mode, var key){
+    List<Note> theNotes = [];
+    var index = key;
+    Chord chordObj;
+    for(int i=0; i<chords.length; i++){
+      if(mode == chords[i].index)
+        chordObj = chords[i];
     }
-  }
+    for(int j=0; j<chordObj.formula.length+1; j++){
+      if(j != 0)
+        index += chordObj.formula[j-1];
+      if(index > 11)
+        index %= 12;
+      theNotes.add(notes[index]); 
+    }  
   return theNotes;
   }
 
+  Icon myplay;
+  int playctr;
+  EdgeInsets playpadding;
+  var instrimg;
+  @override
+    void initState() {
+      myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
+      playctr = 1;
+      playpadding = EdgeInsets.only(left: 6);
+      instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
+      super.initState();
+    }
+
   @override
   Widget build(BuildContext context) {
-  List<String> myNotes = calculateChord(clickedindexscale, clickedindex);
-    
+    List<Note> myNotes = calculateChord(clickedindexscale, clickedindex);
+
+    Future<void> playcache(String note) async{
+      if(instrument == "Piano")
+        await audioc.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3", volume: 0.6);
+      else
+        await audioc.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3");
+      }
+
+    TableCell noteCell(String note){
+      return TableCell(
+        child: GestureDetector(
+          onTap: (){
+            playcache("$note");
+          },
+          child: Container(
+            decoration: BoxDecoration(color: Color.fromRGBO(200, 80, 80, 0.15)),
+              child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+            ),
+        ),
+      );
+    }
+
     Padding mytable(int mode){
       Padding thetable;
       String the3rd = "3";
@@ -118,43 +139,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         the3rd = "2";
       if(mode == 4)
         the3rd = "4";
-      if(!(mode == 2 || mode == 5)){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 28, 56 - textSize * 0.45, 10),
-            child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
-             children: <TableRow>[
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("$the3rd", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[0]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[1]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[2]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
-                  ),
-                ],
-              ),
-              ],
-            ),
-           );
-        }
-      else if(mode == 2 || mode == 5){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.6, 28, 56 - textSize * 0.6, 10), 
+      if(mode == 2 || mode == 5 || mode == 6 || mode == 10){
+        thetable = Padding(padding: EdgeInsets.fromLTRB(50 - textSize * 0.6, 28, 50 - textSize * 0.6, 10), 
           child:Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
@@ -176,18 +162,95 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
               ),
               TableRow(
                 children: <TableCell>[
+                  noteCell(myNotes[0].note),
+                  noteCell(myNotes[1].note),
+                  noteCell(myNotes[2].note),
+                  noteCell(myNotes[3].note),
+                ],
+              ),
+              ],
+            ),
+           );
+        }
+      else if(mode == 9){
+        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 28, 56 - textSize * 0.45, 10),
+          child: Column(
+            children: <Widget>[ 
+            Table(
+             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             children: <TableRow>[
+              TableRow(
+                children: <TableCell>[
                   TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[0]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
                   ),
                   TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[1]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("$the3rd", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
                   ),
                   TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[2]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: <TableCell>[
+                  noteCell(myNotes[0].note),
+                  noteCell(myNotes[1].note),
+                  noteCell(myNotes[2].note),
+                ],
+              ),
+              ],
+            ),
+          Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 16, 56 - textSize * 0.35, 10),
+            child: Table(
+             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             children: <TableRow>[
+              TableRow(
+                children: <TableCell>[
+                  TableCell(
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("7", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
                   ),
                   TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myNotes[3]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("9", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
                   ),
+                ],
+              ),
+              TableRow(
+                children: <TableCell>[
+                  noteCell(myNotes[3].note),
+                  noteCell(myNotes[4].note),
+                ],
+              ),
+              ],
+            ),
+            ),
+           ]
+           )
+           );
+      }
+      else{ 
+        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 28, 56 - textSize * 0.45, 10),
+            child: Table(
+             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             children: <TableRow>[
+              TableRow(
+                children: <TableCell>[
+                  TableCell(
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
+                  ),
+                  TableCell(
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("$the3rd", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                  ),
+                  TableCell(
+                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: <TableCell>[
+                  noteCell(myNotes[0].note),
+                  noteCell(myNotes[1].note),
+                  noteCell(myNotes[2].note),
                 ],
               ),
               ],
@@ -209,72 +272,191 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         return "The ${key}sus4 Chord"; 
       else if(mode == "Minor 7th")
         return "The ${key}m7 Chord"; 
+      else if(mode == "7th")
+        return "The ${key}7 Chord";  
+      else if(mode == "Diminished")
+        return "The ${key}dim Chord"; 
+      else if(mode == "Augmented")
+        return "The ${key}aug Chord"; 
+      else if(mode == "9th")
+        return "The ${key}9 Chord";  
+      else if(mode == "6th")
+        return "The ${key}6 Chord";  
       return "The $key $mode Chord";
     }
 
-    String urlChord(String mode, List<String> notes, String instr){
+    String urlChord(String mode, List<Note> notes, String instr){
       String url;
-      if(!notes[0].contains("#")){
-        if(mode == "Major")
-          url = "${instr.toLowerCase()}-${notes[0]}-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-        else if(mode == "Minor")
-          url = "${instr.toLowerCase()}-${notes[0]}m-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-        else if(mode == "Major 7th")
-          url = "${instr.toLowerCase()}-${notes[0]}maj7-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
-        else if(mode == "Minor 7th")
-          url = "${instr.toLowerCase()}-${notes[0]}m7-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
-        else if(mode == "Sus2")
-          url = "${instr.toLowerCase()}-${notes[0]}sus2-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-        else if(mode == "Sus4")
-          url = "${instr.toLowerCase()}-${notes[0]}sus4-${notes[0].toLowerCase()}-n-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}"; 
-        return url.replaceAll("#", "s");
+      if(instr == "Piano"){
+        if(!notes[0].note.contains("#")){
+          if(mode == "Major")
+            url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Minor")
+            url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Major 7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Minor 7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Sus2")
+            url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Sus4")
+            url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+          else if(mode == "7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+          else if(mode == "Diminished")
+            url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Augmented")
+            url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+          else if(mode == "9th")
+            url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
+          else if(mode == "6th")
+            url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+          return url.replaceAll("#", "s");
+        }
+      else{
+          if(mode == "Major")
+            url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Minor")
+            url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Major 7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Minor 7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Sus2")
+            url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Sus4")
+            url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+          else if(mode == "7th")
+            url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Diminished")
+            url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+          else if(mode == "Augmented")
+            url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+          else if(mode == "9th")
+            url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}";
+          else if(mode == "6th")
+            url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
+        }
       }
-    else{
+    else if(instr == "Guitar"){     
+      if(!notes[0].note.contains("#")){
         if(mode == "Major")
-          url = "${instr.toLowerCase()}-${notes[0]}-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][0].replaceAll(" ", "-")}";
         else if(mode == "Minor")
-          url = "${instr.toLowerCase()}-${notes[0]}m-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Major 7th")
-          url = "${instr.toLowerCase()}-${notes[0]}maj7-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
-          url = "${instr.toLowerCase()}-${notes[0]}m7-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "Sus2")
-          url = "${instr.toLowerCase()}-${notes[0]}sus2-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
-          url = "${instr.toLowerCase()}-${notes[0]}sus4-${notes[0].toLowerCase()}-l-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][5].replaceAll(" ", "-")}";
+        else if(mode == "7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][6].replaceAll(" ", "-")}";
+        else if(mode == "Diminished")
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][7].replaceAll(" ", "-")}";
+        else if(mode == "Augmented")
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][8].replaceAll(" ", "-")}";
+        else if(mode == "9th")
+          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][9].replaceAll(" ", "-")}";
+        else if(mode == "6th")
+          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][10].replaceAll(" ", "-")}";
+        return url.replaceAll("#", "s");
+        }
+      else{
+        if(mode == "Major")
+          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][0].replaceAll(" ", "-")}";
+        else if(mode == "Minor")
+          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][1].replaceAll(" ", "-")}";
+        else if(mode == "Major 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][2].replaceAll(" ", "-")}";
+        else if(mode == "Minor 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][3].replaceAll(" ", "-")}";
+        else if(mode == "Sus2")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][4].replaceAll(" ", "-")}";
+        else if(mode == "Sus4")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][5].replaceAll(" ", "-")}";
+        else if(mode == "7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][6].replaceAll(" ", "-")}";
+        else if(mode == "Diminished")
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][7].replaceAll(" ", "-")}";  
+        else if(mode == "Augmented")
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][8].replaceAll(" ", "-")}";
+        else if(mode == "9th")
+          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][9].replaceAll(" ", "-")}";
+        else if(mode == "6th")
+          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][10].replaceAll(" ", "-")}";
         return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
-    }
+        }
+      }
     }
 
-    
-    String urlAudio(String mode, List<String> notes, String instr, String speed){
+    String urlAudio(String mode, List<Note> notes, String instr, String speed){
       String url;
+      if(instr == "Piano"){
+        if(mode == "Major")
+          url = "${instr.toLowerCase()}-${notes[0].note}-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+        else if(mode == "Minor")
+          url = "${instr.toLowerCase()}-${notes[0].note}m-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+        else if(mode == "Major 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+        else if(mode == "Minor 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+        else if(mode == "Sus2")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
+        else if(mode == "Sus4")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+        else if(mode == "7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+        else if(mode == "Diminished")
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+        else if(mode == "Augmented")
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}"; 
+        else if(mode == "9th")
+          url = "${instr.toLowerCase()}-${notes[0].note}9-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
+        else if(mode == "6th")
+          url = "${instr.toLowerCase()}-${notes[0].note}6-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+        }
+    else if(instr == "Guitar"){
       if(mode == "Major")
-        url = "${instr.toLowerCase()}-${notes[0]}-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-      else if(mode == "Minor")
-        url = "${instr.toLowerCase()}-${notes[0]}m-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-      else if(mode == "Major 7th")
-        url = "${instr.toLowerCase()}-${notes[0]}maj7-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}";
-      else if(mode == "Sus2")
-        url = "${instr.toLowerCase()}-${notes[0]}sus2-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}";
-      else if(mode == "Sus4")
-        url = "${instr.toLowerCase()}-${notes[0]}sus4-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}"; 
-      else if(mode == "Minor 7th")
-        url = "${instr.toLowerCase()}-${notes[0]}m7-$speed-${notes[0].toLowerCase()}-${notes[1].toLowerCase()}-${notes[2].toLowerCase()}-${notes[3].toLowerCase()}"; 
-    if(!notes[0].contains("#"))
+          url = "${instr.toLowerCase()}-${notes[0].note}-$speed-${strings[notes[0].index][0].replaceAll(" ", "-")}";
+        else if(mode == "Minor")
+          url = "${instr.toLowerCase()}-${notes[0].note}m-$speed-${strings[notes[0].index][1].replaceAll(" ", "-")}";
+        else if(mode == "Major 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${strings[notes[0].index][2].replaceAll(" ", "-")}";
+        else if(mode == "Minor 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${strings[notes[0].index][3].replaceAll(" ", "-")}"; 
+        else if(mode == "Sus2")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${strings[notes[0].index][4].replaceAll(" ", "-")}";
+        else if(mode == "Sus4")
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-$speed-${strings[notes[0].index][5].replaceAll(" ", "-")}"; 
+        else if(mode == "7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}7-$speed-${strings[notes[0].index][6].replaceAll(" ", "-")}"; 
+        else if(mode == "Diminished")
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-$speed-${strings[notes[0].index][7].replaceAll(" ", "-")}"; 
+        else if(mode == "Augmented")
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-$speed-${strings[notes[0].index][8].replaceAll(" ", "-")}"; 
+        else if(mode == "9th")
+          url = "${instr.toLowerCase()}-${notes[0].note}9-$speed-${strings[notes[0].index][9].replaceAll(" ", "-")}"; 
+        else if(mode == "6th")
+          url = "${instr.toLowerCase()}-${notes[0].note}6-$speed-${strings[notes[0].index][10].replaceAll(" ", "-")}"; 
+        }
+    if(!notes[0].note.contains("#"))
       return url.replaceAll("#", "s");
     else
       return url.replaceFirst("#", "s").replaceAll("#", "s");  
     }
 
     Future<void> play() async{
-      await audio.play("https://www.scales-chords.com/chord-sound/${urlAudio(clickednotescale, myNotes, "piano", "fast")}.mp3");
+      await audio.play("https://www.scales-chords.com/chord-sound/${urlAudio(clickednotescale, myNotes, instrument, speed.toLowerCase())}.mp3");
     }
 
     Future<void> pause() async {
       await audio.pause();
     }
-    int playctr = 1;
+    
 
     var chordimg;
     TransitionToImage _chrdimg(String url){
@@ -304,49 +486,99 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         chordimg.reloadImage();                      
         });
     }
+
+    
+    Icon playicon(){
+      setState(() {
+        if(playctr == 1){
+          myplay = Icon(FontAwesomeIcons.pause, color: Colors.black87);  
+          }
+        else{
+          myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);  
+          }});
+      }
+  
+
     
     return Scaffold(
       appBar: AppBar(
         title: Text("${titleText(clickednote, clickednotescale)}", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-      ),
-      body: RefreshIndicator(
-        onRefresh: refimg,
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Center(
-          child: Column(
-            children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(22, 20, 22, 0), 
-              child: chordimg,
+        elevation: 1,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: (){
+              setState(() {
+                  if(instrument == "Guitar")
+                    instrument = "Piano";
+                  else if(instrument == "Piano")
+                    instrument = "Guitar";
+                  instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
+                });
+            },
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 6, 4), 
+              child: Image(
+                color: Colors.black,
+                image: instrimg,
+                ),
               ),
-            mytable(clickedindexscale),
-            //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
-            
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 14, 0 ,20),
-              child: RawMaterialButton(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(20),
-                fillColor: Color.fromRGBO(250, 50, 50, 0.9),
-                child:Padding(padding: EdgeInsets.only(left: 5), child: Icon(FontAwesomeIcons.play, color: Colors.black87),),
-                onPressed: (){
-                if(playctr == 1){
-                  play();
-                  playctr = 0;
-                }
-                else{
-                  pause();
-                  playctr = 1;
-                } 
-                },
-              )
             ),
-      ],
+          ],  
       ),
-      ),
-      ),
+      backgroundColor: Colors.white,
+      body:  RefreshIndicator(
+        onRefresh: refimg,
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
+                  child: chordimg,
+                  ),
+                mytable(clickedindexscale),
+                //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
+                
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 14, 0 ,20),
+                  child: RawMaterialButton(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(20),
+                    fillColor: Color.fromRGBO(250, 50, 50, 0.9),
+                    child:Padding(padding: playpadding, child: myplay,),
+                    onPressed: (){
+                      playicon();
+                      if(playctr == 1){
+                        play();
+                        setState(() {
+                          playpadding = EdgeInsets.only(left: 0);
+                          playctr = 0;                            
+                        });
+                      }
+                      else{
+                        pause();
+                        setState(() {
+                          playpadding = EdgeInsets.only(left: 6);
+                          playctr = 1;
+                        });
+                      } 
+                      audio.completionHandler = (){
+                        playicon();
+                        setState(() {
+                          playpadding = EdgeInsets.only(left: 6);
+                          playctr = 1;
+                          });
+                      };
+                    },
+                  )
+                ),
+          ],
+          ),
+          ),
+        ),
+        ),
       ),
     );
   }

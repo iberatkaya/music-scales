@@ -2,20 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart';
 import 'package:flutter_advanced_networkimage/transition_to_image.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'main.dart';
 
 void main() => runApp(ScaleScreen());
 
+List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
+  Scale("Major", 0, [2, 2, 1, 2, 2, 2]),
+  Scale("Minor", 1, [2, 1, 2, 2, 1, 2]),
+  Scale("Major Pentatonic", 12, [2, 2, 3, 2]),
+  Scale("Minor Pentatonic", 13, [3, 2, 2, 3]),
+  Scale("Blues", 2, [3, 2, 1, 1, 3]),
+  Scale("Harmonic Minor", 3, [2, 1, 2, 2, 1, 3]),
+  Scale("Melodic Minor", 4, [2, 1, 2, 2, 2, 2]),
+  Scale("Ionian", 5, [2, 2, 1, 2, 2, 2]),
+  Scale("Dorian", 6, [2, 1, 2, 2, 2, 1]),
+  Scale("Mixolydian", 7, [2, 2, 1, 2, 2, 1]),
+  Scale("Lydian", 8, [2, 2, 2, 1, 2, 2]),
+  Scale("Phrygian", 9, [1, 2, 2, 2, 1, 2]), 
+  Scale("Aeolian", 10, [2, 1, 2, 2, 1, 2]),
+  Scale("Locrian", 11, [1, 2, 2, 1, 2, 2]),
+  Scale("Augmented", 12, [3, 1, 3, 1, 3])
+];
+
 class ScaleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<Scale> scales = [
-      Scale("Major", 0),
-      Scale("Minor", 1),
-      Scale("Blues", 2),
-      Scale("Harmonic Minor", 3),
-      Scale("Melodic Minor", 4),
-    ];
+    
     return ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -24,12 +37,12 @@ class ScaleScreen extends StatelessWidget {
           title: Text("Choose a Scale For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             children: <Widget>[
               Flexible(
                 child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
                   itemCount: scales.length,
                   separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
                   itemBuilder: (BuildContext context, int index) {
@@ -62,70 +75,55 @@ class ScalePrintScreen extends StatefulWidget{
 }
 
 class _ScalePrintScreen extends State<ScalePrintScreen> {
+  AudioCache audio = new AudioCache();
+  var instrimg;
+  @override
+    void initState() {
+      instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
+      super.initState();
+    }
   @override
   Widget build(BuildContext context) {
-    List<String> calculateScale(var mode, var key){
-    	List<String> theScale = [];
-      var index = key;
-      if(mode == 0 || mode == 1 || mode == 3 || mode == 4){ //A A# B C C# D D# E F F# G G#
-        for(int i=0; i<7; i++){   //Major Minor Melodic Harmonic
-          if((i == 2 || i == 5) && (mode == 1 || mode == 3 || mode == 4))
-            index--;
-          else if(mode == 0 && i == 3)
-            index--;
-          if(mode == 4 && i == 5)   //Melodic
-            index++;
-          if(mode == 3 && i == 6)   //Harmonic
-            index++;
-          if(index > 11)
-            index %= 12;
-          theScale.add(notes[index].note);
-          index += 2;
-          }
+    List<Note> calculateScale(int mode, int key){
+    	List<Note> theScale = [];
+      int index = key;
+      Scale scaleObj;
+      for(int i=0; i<scales.length; i++){
+        if(mode == scales[i].index)
+          scaleObj = scales[i];
       }
-      else if(mode == 2){   //Blues
-        for(int i=0; i<7; i++){     
-          if(i == 1)                          
-            index++;
-          if(i == 3)
-            index--;
-          if(i == 4)
-            index--;
-          if(i == 5)
-            index++;
-          if(index > 11)
-            index %= 12;
-          theScale.add(notes[index].note);
-          index += 2;
-        }
+      for(int j=0; j<scaleObj.formula.length+1; j++){
+        if(j != 0)
+          index += scaleObj.formula[j-1];
+        if(index > 11)
+          index %= 12;
+        theScale.add(notes[index]); 
       }
       return theScale;
-      }
-    List<String> myScale;
+    }
+    List<Note> myScale;
     myScale = calculateScale(clickedindexscale, clickedindex);
-    
-    String urlScale(String mode, String notes, String instr){
+    //print(myScale.length);
+    String urlScale(String mode, List<Note> notes, String instr){
       String url;
-      if(!notes.contains("#")){
-        if(mode == "Major" || mode == "Blues")
-          url = "$instr-${mode.toLowerCase()}-${notes[0]}-n";
-        else if(mode == "Minor")
-          url = "$instr-natural_minor-${notes[0]}-n";
-        else if(mode == "Harmonic Minor")
-          url = "$instr-harmonic_minor-${notes[0]}-n";
-        else if(mode == "Melodic Minor")
-          url = "$instr-melodic_minor-${notes[0]}-n";
-          }
-      else{
-        if(mode == "Major" || mode == "Blues")
-          url = "$instr-${mode.toLowerCase()}-${notes[0]}-sharp";
-        else if(mode == "Minor")
-          url = "$instr-natural_minor-${notes[0]}-sharp";        
-        else if(mode == "Harmonic Minor")
-          url = "$instr-harmonic_minor-${notes[0]}-sharp";        
-        else if(mode == "Melodic Minor")
-          url = "$instr-melodic_minor-${notes[0]}-sharp";        
-      }
+      String n_or_sharp;
+      if(!notes[0].note.contains("#"))
+        n_or_sharp = "n";
+      else 
+        n_or_sharp = "sharp";
+      if(mode == "Major" || mode == "Blues" || mode == "Ionian" || mode == "Dorian" || mode == "Mixolydian" || mode == "Lydian" || mode == "Phrygian" || mode == "Aeolian" || mode == "Locrian" || mode == "Augmented")
+        url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Minor")
+        url = "$instr-natural_minor-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Harmonic Minor")
+        url = "$instr-harmonic_minor-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Melodic Minor")
+        url = "$instr-melodic_minor-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Major Pentatonic")
+        url = "$instr-major_pentatonic-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Minor Pentatonic")
+        url = "$instr-minor_pentatonic-${notes[0].note[0]}-$n_or_sharp";
+      //print(url);
       return url;
     }
     List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
@@ -136,99 +134,89 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[5] = "b6";
         nums[6] = "b7";
       }
-      if(mode == "Blues"){
+      else if(mode == "Blues"){
         nums[1] = "b3";
         nums[2] = "4";
         nums[3] = "#4";
         nums[4] = "5";
         nums[5] = "b7";
       }
-      if(mode == "Melodic Minor")
+      else if(mode == "Melodic Minor")
         nums[2] = "b3";
-      if(mode == "Harmonic Minor"){
+      else if(mode == "Harmonic Minor"){
         nums[2] = "b3";
         nums[5] = "b6";
+      }
+      else if(mode == "Dorian"){
+        nums[2] = "b3";
+        nums[6] = "b7";
+      }
+      else if(mode == "Mixolydian")
+        nums[6] = "b7";
+      else if(mode == "Lydian")
+        nums[3] = "#4";
+      else if(mode == "Phrygian"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Aeolian"){
+        nums[2] = "b3";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Locrian"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Major Pentatonic"){
+        nums[3] = "5";
+        nums[4] = "6";  
+      }
+      else if(mode == "Minor Pentatonic"){
+        nums[1] = "b3";
+        nums[2] = "4";
+        nums[3] = "5";
+        nums[4] = "b7";
+      }
+      else if(mode == "Augmented"){
+        nums[1] = "b3";
+        nums[3] = "5";
+        nums[4] = "#5";
+        nums[5] = "7";
       }
     }
 
     tableNums(clickednotescale);
 
-    Column scaletable(String mode){
-      if(!(mode == "Blues")){
-        return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 28, 56-textSize, 18), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
-              children: <TableRow>[
-                TableRow(
-                  children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[0]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[1]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[2]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[3]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[0]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[1]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[2]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[3]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                  ],
-                ),
-                ],
-            ),),
-            Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 10), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
-              children: <TableRow>[
-                TableRow(
-                  children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[4]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[5]}", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[6]}", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[4]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[5]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[6]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
-                    ),
-                  ],
-                ),
-                ],
-            ),
-            ),
-        ],
-        );
+
+    Future<void> play(String note) async{
+      if(instrument == "Piano")
+        await audio.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3", volume: 0.6);
+      else
+        await audio.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3");
       }
-      else if(mode == "Blues"){
+
+    TableCell noteCell(String note){
+      return TableCell(
+        child: GestureDetector(
+          onTap: (){
+            play("$note");
+          },
+          child: Container(
+            decoration: BoxDecoration(color: Color.fromRGBO(200, 80, 80, 0.15)),
+              child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+            ),
+        ),
+      );
+    }
+
+    Column scaletable(String mode){
+      if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
             Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 28, 56 - textSize * 0.35, 18), child: Table(
               border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
@@ -248,15 +236,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[0]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[1]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[2]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
+                   noteCell(myScale[0].note),
+                   noteCell(myScale[1].note),
+                   noteCell(myScale[2].note),
                   ],
                 ),
                 ],
@@ -279,15 +261,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[3]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[4]}", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
-                    ),
-                    TableCell(
-                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${myScale[5]}", style: TextStyle(fontSize: textSize * 1.1 , color: Colors.red),))),
-                    ),
+                   noteCell(myScale[3].note),
+                   noteCell(myScale[4].note),
+                   noteCell(myScale[5].note),
                   ],
                 ),
                 ],
@@ -295,10 +271,121 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             ),
         ]);
       }
+      else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic"){
+        return Column(children: <Widget>[            
+            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 28, 56 - textSize * 0.35, 18), child: Table(
+              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              children: <TableRow>[
+                TableRow(
+                  children: <TableCell>[
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[0]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[1]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[2]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <TableCell>[
+                   noteCell(myScale[0].note),
+                   noteCell(myScale[1].note),
+                   noteCell(myScale[2].note),
+                  ],
+                ),
+                ],
+            ),),
+            Padding(padding: EdgeInsets.fromLTRB(92 - textSize * 0.35, 0, 92 - textSize * 0.35, 10), child: Table(
+              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              children: <TableRow>[
+                TableRow(
+                  children: <TableCell>[
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[3]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[4]}", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <TableCell>[
+                   noteCell(myScale[3].note),
+                   noteCell(myScale[4].note),
+                  ],
+                ),
+                ],
+            ),
+            ),
+        ]);
+      }
+      else{
+        return Column(children: <Widget>[            
+            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 28, 56-textSize, 18), child: Table(
+              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              children: <TableRow>[
+                TableRow(
+                  children: <TableCell>[
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center( child: Text("${nums[0]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[1]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[2]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[3]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <TableCell>[
+                    noteCell(myScale[0].note),
+                    noteCell(myScale[1].note),
+                    noteCell(myScale[2].note),
+                    noteCell(myScale[3].note),
+                    ],
+                ),
+                ],
+            ),),
+            Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 10), child: Table(
+              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              children: <TableRow>[
+                TableRow(
+                  children: <TableCell>[
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[4]}", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[5]}", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                    TableCell(
+                      child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("${nums[6]}", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <TableCell>[
+                    noteCell(myScale[4].note),
+                    noteCell(myScale[5].note),
+                    noteCell(myScale[6].note),
+                  ],
+                ),
+                ],
+            ),
+            ),
+        ],
+        );
+      }
     }
 
     var scaleimg = (instrument == "Guitar") ? TransitionToImage(
-        AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale[0], instrument.toLowerCase())}.jpg", useDiskCache: true),
+        AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
         loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
         placeholder: Column(children: <Widget>[
                     Padding( 
@@ -308,11 +395,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                     Icon(Icons.error, color: Colors.red),
                   ],
                 ),
-        height: 90,
+        height: 80,
         alignment: Alignment(-1, -1),
         fit: BoxFit.fitHeight,
       ) : TransitionToImage(
-        AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale[0], instrument.toLowerCase())}.jpg", useDiskCache: true),
+        AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
         loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
         placeholder: Column(children: <Widget>[
                     Padding( 
@@ -333,26 +420,49 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("$clickednote $clickednotescale Scale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
+        title: Text("$clickednote $clickednotescale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+        elevation: 1,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: (){
+              setState(() {
+                  if(instrument == "Guitar")
+                    instrument = "Piano";
+                  else if(instrument == "Piano")
+                    instrument = "Guitar";
+                  instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
+                });
+            },
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 6, 4), 
+              child: Image(
+                color: Colors.black,
+                image: instrimg,
+                ),
+              ),
+            ),
+          ],
       ),
+      backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: refimg,
-        child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Padding(
-              padding: EdgeInsets.fromLTRB(16, 20, 16, 0), 
-              child: scaleimg,
-              ),
-              scaletable(clickednotescale),
-            //Text('$clickednotescale ${myScale[0]}  ${urlScale(clickednotescale, myScale[0], instrument.toLowerCase())}'),
-          ],
-          ),  
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
+                  child: scaleimg,
+                  ),
+                  scaletable(clickednotescale),
+                //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),
+              ],
+              ),  
+            ),
+          ),
         ),
-      ),
       ),
     );
   }
