@@ -5,7 +5,6 @@ import 'package:flutter_advanced_networkimage/transition_to_image.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'main.dart';
 
-void main() => runApp(ScaleScreen());
 
 List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Major", 0, [2, 2, 1, 2, 2, 2]),
@@ -22,8 +21,11 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Phrygian", 9, [1, 2, 2, 2, 1, 2]), 
   Scale("Aeolian", 10, [2, 1, 2, 2, 1, 2]),
   Scale("Locrian", 11, [1, 2, 2, 1, 2, 2]),
-  Scale("Augmented", 12, [3, 1, 3, 1, 3])
+  Scale("Augmented", 14, [3, 1, 3, 1, 3]),
+  Scale("Double Harmonic", 15, [1, 3, 1, 2, 1, 3]),
+  Scale("Altered", 16, [1, 2, 1, 2, 2, 2])
 ];
+
 
 class ScaleScreen extends StatelessWidget {
   @override
@@ -37,6 +39,7 @@ class ScaleScreen extends StatelessWidget {
           title: Text("Choose a Scale For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        bottomNavigationBar: Container(height: 50,),
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
@@ -111,9 +114,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         n_or_sharp = "n";
       else 
         n_or_sharp = "sharp";
-      if(mode == "Major" || mode == "Blues" || mode == "Ionian" || mode == "Dorian" || mode == "Mixolydian" || mode == "Lydian" || mode == "Phrygian" || mode == "Aeolian" || mode == "Locrian" || mode == "Augmented")
-        url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Minor")
+     if(mode == "Minor")
         url = "$instr-natural_minor-${notes[0].note[0]}-$n_or_sharp";
       else if(mode == "Harmonic Minor")
         url = "$instr-harmonic_minor-${notes[0].note[0]}-$n_or_sharp";
@@ -123,7 +124,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         url = "$instr-major_pentatonic-${notes[0].note[0]}-$n_or_sharp";
       else if(mode == "Minor Pentatonic")
         url = "$instr-minor_pentatonic-${notes[0].note[0]}-$n_or_sharp";
-      //print(url);
+      else if(mode == "Double Harmonic")
+        url = "$instr-double_harmonic-${notes[0].note[0]}-$n_or_sharp";
+      else
+        url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp"; 
       return url;
     }
     List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
@@ -188,6 +192,18 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[3] = "5";
         nums[4] = "#5";
         nums[5] = "7";
+      }
+      else if(mode == "Double Harmonic"){
+        nums[1] = "b2";
+        nums[5] = "b6";
+      }
+      else if(mode == "Altered"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[3] = "b4";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "b7";
       }
     }
 
@@ -384,6 +400,12 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       }
     }
 
+    Axis scrollaxis;
+    if(instrument == "Guitar")
+      scrollaxis = Axis.horizontal;
+    else 
+      scrollaxis = Axis.vertical;
+
     var scaleimg = (instrument == "Guitar") ? TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
         loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
@@ -395,7 +417,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                     Icon(Icons.error, color: Colors.red),
                   ],
                 ),
-        height: 80,
+        height: 100,
         alignment: Alignment(-1, -1),
         fit: BoxFit.fitHeight,
       ) : TransitionToImage(
@@ -433,7 +455,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 6, 4), 
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 6, 10, 6), 
               child: Image(
                 color: Colors.black,
                 image: instrimg,
@@ -442,6 +464,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             ),
           ],
       ),
+      bottomNavigationBar: Container(height: 50,),
       backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: refimg,
@@ -454,7 +477,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 children: <Widget>[
                   Padding(
                   padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
-                  child: scaleimg,
+                  child: SingleChildScrollView(
+                    child: scaleimg,
+                    scrollDirection: scrollaxis,
+                    ),
                   ),
                   scaletable(clickednotescale),
                 //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),

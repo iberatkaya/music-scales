@@ -4,10 +4,9 @@ import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart
 import 'package:flutter_advanced_networkimage/transition_to_image.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'chordfigering.dart';
 import 'main.dart';
-
-void main() => runApp(ChordScreen());
 
 
 List<Chord> chords = [    //A A# B C C# D D# E F F# G G# 
@@ -36,6 +35,7 @@ class ChordScreen extends StatelessWidget {
           title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        bottomNavigationBar: Container(height: 50,),
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
@@ -110,6 +110,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
   @override
   Widget build(BuildContext context) {
     List<Note> myNotes = calculateChord(clickedindexscale, clickedindex);
+    int imgctr = 0;   //Ctr for guitar strings
+    int audioctr = 0;
 
     Future<void> playcache(String note) async{
       if(instrument == "Piano")
@@ -285,7 +287,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       return "The $key $mode Chord";
     }
 
-    String urlChord(String mode, List<Note> notes, String instr){
+    String urlChord(String mode, List<Note> notes, String instr, int img){
       String url;
       if(instr == "Piano"){
         if(!notes[0].note.contains("#")){
@@ -342,58 +344,58 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     else if(instr == "Guitar"){     
       if(!notes[0].note.contains("#")){
         if(mode == "Major")
-          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][0].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][0].replaceAll(" ", "-")}";
         else if(mode == "Minor")
-          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][1].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Major 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][2].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][3].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "Sus2")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][4].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][5].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][5].replaceAll(" ", "-")}";
         else if(mode == "7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][6].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][6].replaceAll(" ", "-")}";
         else if(mode == "Diminished")
-          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][7].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][7].replaceAll(" ", "-")}";
         else if(mode == "Augmented")
-          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][8].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][8].replaceAll(" ", "-")}";
         else if(mode == "9th")
-          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][9].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][9].replaceAll(" ", "-")}";
         else if(mode == "6th")
-          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-n-l-h-${strings[notes[0].index][10].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][10].replaceAll(" ", "-")}";
         return url.replaceAll("#", "s");
         }
       else{
         if(mode == "Major")
-          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][0].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][0].replaceAll(" ", "-")}";
         else if(mode == "Minor")
-          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][1].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Major 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][2].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][3].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "Sus2")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][4].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][5].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][5].replaceAll(" ", "-")}";
         else if(mode == "7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][6].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][6].replaceAll(" ", "-")}";
         else if(mode == "Diminished")
-          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][7].replaceAll(" ", "-")}";  
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][7].replaceAll(" ", "-")}";  
         else if(mode == "Augmented")
-          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][8].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][8].replaceAll(" ", "-")}";
         else if(mode == "9th")
-          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][9].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}9-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][9].replaceAll(" ", "-")}";
         else if(mode == "6th")
-          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-l-h-${strings[notes[0].index][10].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}6-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][10].replaceAll(" ", "-")}";
         return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
         }
       }
     }
 
-    String urlAudio(String mode, List<Note> notes, String instr, String speed){
+    String urlAudio(String mode, List<Note> notes, String instr, String speed, int img){
       String url;
       if(instr == "Piano"){
         if(mode == "Major")
@@ -421,27 +423,27 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         }
     else if(instr == "Guitar"){
       if(mode == "Major")
-          url = "${instr.toLowerCase()}-${notes[0].note}-$speed-${strings[notes[0].index][0].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}-$speed-${strings[img][notes[0].index][0].replaceAll(" ", "-")}";
         else if(mode == "Minor")
-          url = "${instr.toLowerCase()}-${notes[0].note}m-$speed-${strings[notes[0].index][1].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}m-$speed-${strings[img][notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Major 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${strings[notes[0].index][2].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${strings[notes[0].index][3].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${strings[img][notes[0].index][3].replaceAll(" ", "-")}"; 
         else if(mode == "Sus2")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${strings[notes[0].index][4].replaceAll(" ", "-")}";
+          url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
-          url = "${instr.toLowerCase()}-${notes[0].note}sus4-$speed-${strings[notes[0].index][5].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}sus4-$speed-${strings[img][notes[0].index][5].replaceAll(" ", "-")}"; 
         else if(mode == "7th")
-          url = "${instr.toLowerCase()}-${notes[0].note}7-$speed-${strings[notes[0].index][6].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}7-$speed-${strings[img][notes[0].index][6].replaceAll(" ", "-")}"; 
         else if(mode == "Diminished")
-          url = "${instr.toLowerCase()}-${notes[0].note}dim-$speed-${strings[notes[0].index][7].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}dim-$speed-${strings[img][notes[0].index][7].replaceAll(" ", "-")}"; 
         else if(mode == "Augmented")
-          url = "${instr.toLowerCase()}-${notes[0].note}aug-$speed-${strings[notes[0].index][8].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}aug-$speed-${strings[img][notes[0].index][8].replaceAll(" ", "-")}"; 
         else if(mode == "9th")
-          url = "${instr.toLowerCase()}-${notes[0].note}9-$speed-${strings[notes[0].index][9].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}9-$speed-${strings[img][notes[0].index][9].replaceAll(" ", "-")}"; 
         else if(mode == "6th")
-          url = "${instr.toLowerCase()}-${notes[0].note}6-$speed-${strings[notes[0].index][10].replaceAll(" ", "-")}"; 
+          url = "${instr.toLowerCase()}-${notes[0].note}6-$speed-${strings[img][notes[0].index][10].replaceAll(" ", "-")}"; 
         }
     if(!notes[0].note.contains("#"))
       return url.replaceAll("#", "s");
@@ -450,7 +452,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     }
 
     Future<void> play() async{
-      await audio.play("https://www.scales-chords.com/chord-sound/${urlAudio(clickednotescale, myNotes, instrument, speed.toLowerCase())}.mp3");
+      await audio.play("https://www.scales-chords.com/chord-sound/${urlAudio(clickednotescale, myNotes, instrument, speed.toLowerCase(), audioctr)}.mp3");
+      //print(urlAudio(clickednotescale, myNotes, instrument, speed.toLowerCase(), audioctr));
     }
 
     Future<void> pause() async {
@@ -465,6 +468,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       totalurl = "https://www.scales-chords.com/chord-charts/$url.jpg";
       chordimg =  TransitionToImage(
         AdvancedNetworkImage(totalurl, useDiskCache: true),
+        fit: BoxFit.fill,
         loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
         placeholder: Column(children: <Widget>[
                     Padding( 
@@ -477,8 +481,35 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       );
       return chordimg;
       }
-    
-    chordimg = _chrdimg("${urlChord(clickednotescale, myNotes, instrument)}");
+
+    if(instrument == "Guitar"){
+      chordimg = Container(
+        height: 135,
+        padding: EdgeInsets.fromLTRB(12, 16, 12, 0),
+        child: Swiper(
+          onIndexChanged: (index){
+            audioctr = index;
+          },
+          control: SwiperControl(
+            size: 28,
+            padding: EdgeInsets.only(bottom: 16),
+            color: Colors.amberAccent,
+            iconNext: Icons.navigate_next,
+            iconPrevious: Icons.navigate_before
+          ),
+        itemCount: 4, 
+        itemBuilder: (BuildContext context, int index){
+          return _chrdimg("${urlChord(clickednotescale, myNotes, instrument, index)}");
+        },
+        // _chrdimg("${urlChord(clickednotescale, myNotes, instrument, imgctr)}"),
+      )
+      );
+    }
+    else
+      chordimg = Container(
+        padding: EdgeInsets.fromLTRB(6, 16, 6, 0),
+        child: _chrdimg("${urlChord(clickednotescale, myNotes, instrument, imgctr)}")
+        );
 
     Future<void> refimg() async{
       await Future.delayed(new Duration(seconds: 2));
@@ -486,9 +517,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         chordimg.reloadImage();                      
         });
     }
-
     
-    Icon playicon(){
+    void playicon(){
       setState(() {
         if(playctr == 1){
           myplay = Icon(FontAwesomeIcons.pause, color: Colors.black87);  
@@ -497,9 +527,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);  
           }});
       }
-  
 
-    
+    audioc.loadAll(["notes/guitar/A.mp3", "notes/guitar/As.mp3", "notes/guitar/B.mp3", "notes/guitar/C.mp3", "notes/guitar/Cs.mp3", "notes/guitar/D.mp3", "notes/guitar/Ds.mp3", "notes/guitar/E.mp3", "notes/guitar/F.mp3", "notes/guitar/Fs.mp3", "notes/guitar/G.mp3", "notes/guitar/Gs.mp3", "notes/piano/A.mp3", "notes/piano/As.mp3", "notes/piano/B.mp3", "notes/piano/C.mp3", "notes/piano/Cs.mp3", "notes/piano/D.mp3", "notes/piano/Ds.mp3", "notes/piano/E.mp3", "notes/piano/F.mp3", "notes/piano/Fs.mp3", "notes/piano/G.mp3", "notes/piano/Gs.mp3"]);
     return Scaffold(
       appBar: AppBar(
         title: Text("${titleText(clickednote, clickednotescale)}", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
@@ -515,7 +544,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 4, 6, 4), 
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 6, 10, 6), 
               child: Image(
                 color: Colors.black,
                 image: instrimg,
@@ -524,6 +553,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             ),
           ],  
       ),
+      bottomNavigationBar: Container(height: 50,),
       backgroundColor: Colors.white,
       body:  RefreshIndicator(
         onRefresh: refimg,
@@ -534,10 +564,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
-                  child: chordimg,
-                  ),
+                chordimg,
                 mytable(clickedindexscale),
                 //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
                 

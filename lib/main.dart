@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'chords.dart';
+import 'appid.dart';
 import 'scales.dart';
 import 'prog.dart';
+import 'piano.dart';
+
 
 void main() { 
-  /*SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    .then((_) {*/runApp(MyApp());/*});*/
+  runApp(MyApp());
 }
 
 class Note{
@@ -82,13 +85,40 @@ List<Note> notes = [
 
 
 class _MyHomePageState extends State<MyHomePage> {
+  static final MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    keywords: ["Music", "Scales", "Guitar", "Piano"],
+  );
 
-@override
+  BannerAd mybanner = BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event){
+        print(event);
+      }
+    );
+
+  InterstitialAd myInterstitial = InterstitialAd(
+    adUnitId: InterstitialAd.testAdUnitId,
+    targetingInfo: targetingInfo,
+    listener: (MobileAdEvent event) {
+      print("InterstitialAd event is $event");
+    },
+  );
+
+  @override
   void initState() {
     super.initState();
     //_loadSize();
     _loadInstr();
     _loadSpeed();
+  }
+  
+  @override
+  void dispose(){
+    mybanner?.dispose();
+    myInterstitial?.dispose();
+    super.dispose();
   }
 
   _loadInstr() async {
@@ -112,9 +142,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  bool loaded = false;
+
   @override
   Widget build(BuildContext context) {
-    precacheImage(AssetImage('lib/assets/imgs/logo.jpg'), context);
+    if(!loaded){
+      precacheImage(AssetImage('lib/assets/imgs/logo.jpg'), context);
+      loaded = true;
+    }
+
+    FirebaseAdMob.instance.initialize(appId: appid).then((response){
+      mybanner..load()..show(
+        anchorType: AnchorType.bottom,
+      );
+    });
+
     return new ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -123,6 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        bottomNavigationBar: Container(height: 50,),
         backgroundColor: Colors.white,
         drawer: Drawer(
           child: ListView( 
@@ -160,31 +203,33 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
+                          myInterstitial..load()..show();
                           typeselect = 0;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                         },
                         elevation: 1,
                         highlightElevation: 1,
-                        padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
                         color: Color.fromRGBO(240, 120, 120, 0.7),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                        child: Center( child: Text("Scales 🎹", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                        child: Center( child: Text("Scales 🎼", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
                     ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
+                          myInterstitial..load()..show();
                         typeselect = 1;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                       },
                       elevation: 1,
                       highlightElevation: 1,
-                      padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
                       color: Color.fromRGBO(120, 240, 120, 0.7),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                       child:  Center( child: Text("Chords 🎸", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
@@ -192,21 +237,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
+                          myInterstitial..load()..show();
                           typeselect = 2;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                         },
                       elevation: 1,
                       highlightElevation: 1,
-                      padding: EdgeInsets.fromLTRB(30, 27, 30, 27),
+                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
                       color: Color.fromRGBO(150, 165, 250, 0.5),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Progressions 🎼", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                      child:  Center( child: Text("Progressions 🎶", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
                     ),
                   ),
-                  //Padding(padding: EdgeInsets.fromLTRB(4, 0, 2, 0), child: Divider(height: 4, color: Colors.black54,)),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                    child: RaisedButton(
+                      onPressed: (){
+                          myInterstitial..load()..show();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
+                        },
+                      elevation: 1,
+                      highlightElevation: 1,
+                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                      color: Color.fromRGBO(250, 135, 50, 0.5),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      child:  Center( child: Text("Piano 🎹", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                    ),
+                  ),
                 ],
               ),
               ),
@@ -228,6 +289,7 @@ class NoteScreen extends StatelessWidget {
           title: Text("Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        bottomNavigationBar: Container(height: 50,),
         body: GridView.count(
           physics: BouncingScrollPhysics(),
           crossAxisCount: 3,
@@ -239,27 +301,27 @@ class NoteScreen extends StatelessWidget {
                   width: 42 + textSize * 1.65,
                   height: 42 + textSize * 1.65,
                   //decoration: BoxDecoration(, borderRadius: BorderRadius.circular(36)),
-                  child:RaisedButton(
-                onPressed: (){
-                  clickedindex = notes[index].index;
-                  clickednote = notes[index].note;
-                  key = notes[index].note;
-                  if(typeselect == 0) 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
-                  else if(typeselect == 1) 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
-                  else if(typeselect == 2) 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
-                },
-                elevation: 1,
-                highlightElevation: 1,
-                color: Color.fromRGBO(202, 242, 242, 0.9),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
-                
-                child:  Center(
-                    child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.normal),)),
-                  ),
-              ),
+                child:RaisedButton(
+                  onPressed: (){
+                    clickedindex = notes[index].index;
+                    clickednote = notes[index].note;
+                    key = notes[index].note;
+                    if(typeselect == 0) 
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
+                    else if(typeselect == 1) 
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
+                    else if(typeselect == 2) 
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
+                  },
+                  elevation: 1,
+                  highlightElevation: 1,
+                  color: Color.fromRGBO(202, 242, 242, 0.9),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
+                  
+                  child:  Center(
+                      child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.normal),)),
+                    ),
+                ),
               );
             }
           ),
@@ -325,6 +387,7 @@ class _SettingsScreen extends State<SettingsScreen> {
         title: Text("Settings"),
           elevation: 1,
       ),
+      bottomNavigationBar: Container(height: 50,),
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
@@ -357,7 +420,7 @@ class _SettingsScreen extends State<SettingsScreen> {
               padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[
-                  Text("Audio Speed:    ", style: TextStyle(fontSize: 18),),
+                  Text("Chord Audio Speed:    ", style: TextStyle(fontSize: 18),),
                   DropdownButton<String>(
                   hint: Text("$speed", style: TextStyle(fontSize: 18),),
                   items: <String>["Fast", "Slow"].map((String value) {

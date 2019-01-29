@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'main.dart';
 import 'dart:math';
 
-void main() => runApp(ProgScreen());
 
 class Chord{
   String name;
@@ -75,6 +74,7 @@ class ProgScreen extends StatelessWidget{
           title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
+        bottomNavigationBar: Container(height: 50,),
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
@@ -157,6 +157,7 @@ class ProgPrintScreen extends StatelessWidget{
       title: Text("The ${theScale[0].name} Diatonic Chords", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
       elevation: 1,
      ),
+    bottomNavigationBar: Container(height: 50,),
     floatingActionButton: FloatingActionButton(
       child: Icon(FontAwesomeIcons.diceFour),
       elevation: 2,
@@ -357,6 +358,7 @@ class RandomProgScreen extends StatelessWidget{
          title: Text("Random ${theScale[0].name} Progression"),
          elevation: 1,  
        ),
+      bottomNavigationBar: Container(height: 50,),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
