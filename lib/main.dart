@@ -64,6 +64,10 @@ double textSize = 28.0;
 String speed;
 int typeselect;   //0 for scale, 1 for chord, 2 for progression
 
+double adpadding = 0;   //If banner ad will be used in the future
+int showad = 0;
+int showad2 = 0;
+
 var clickednote = "";
 var clickedindex = 0;
 var clickednotescale = "";
@@ -86,20 +90,19 @@ List<Note> notes = [
 
 class _MyHomePageState extends State<MyHomePage> {
   static final MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: ["Music", "Scales", "Guitar", "Piano"],
+    keywords: ["Music", "Scales", "Guitar", "Piano", "Instrument", "Songs", "Chords"],
   );
 
-  BannerAd mybanner = BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.banner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event){
-        print(event);
-      }
-    );
-
   InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: InterstitialAd.testAdUnitId,
+    adUnitId: interstitialid,/* InterstitialAd.testAdUnitId,*/
+    targetingInfo: targetingInfo,
+    listener: (MobileAdEvent event) {
+      print("InterstitialAd event is $event");
+    },
+  );
+
+  InterstitialAd myInterstitial2 = InterstitialAd(
+    adUnitId: interstitialid, /*InterstitialAd.testAdUnitId,*/
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -116,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
   
   @override
   void dispose(){
-    mybanner?.dispose();
     myInterstitial?.dispose();
     super.dispose();
   }
@@ -151,11 +153,14 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: appid).then((response){
-      mybanner..load()..show(
-        anchorType: AnchorType.bottom,
-      );
-    });
+    FirebaseAdMob.instance.initialize(appId:/* FirebaseAdMob.testAppId);*/ appid);
+    myInterstitial..load();
+    myInterstitial2..load();
+    if(showad > 2)
+      myInterstitial..load()..show();
+    if(showad2 > 11)
+      myInterstitial2..load()..show();
+
 
     return new ListTileTheme(
       iconColor: Colors.red,
@@ -165,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
-        bottomNavigationBar: Container(height: 50,),
+        //bottomNavigationBar: Container(height: adpadding,),
         backgroundColor: Colors.white,
         drawer: Drawer(
           child: ListView( 
@@ -176,7 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
               //height: 110,
               color: Colors.orangeAccent,
               child: DrawerHeader(
-                
                 margin: EdgeInsets.zero,
                 padding: EdgeInsets.zero,
                 child: Image(
@@ -186,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Padding(padding: EdgeInsets.fromLTRB(2, 1, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
               ListTile(
+                contentPadding: EdgeInsets.fromLTRB(15, 6, 15, 6),
                 title: Text('Settings', style: TextStyle(fontSize: 18)),
                 trailing: Icon(Icons.settings),
                 onTap: () {
@@ -193,6 +198,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
                 },
               ),
+              Padding(padding: EdgeInsets.fromLTRB(2, 1, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(15, 6, 15, 6),
+                title: Text('About', style: TextStyle(fontSize: 18, color: Colors.black87)),
+                trailing: Icon(Icons.help_outline),
+                onTap: () {showAboutDialog(
+                  applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
+                  applicationName: "Music Scales",
+                  context: context,
+                  children: <Widget>[
+                    Text("Music Scales is an app that shows the user the notes of a scale or a chord in a selected key, and shows chord progressions for free. The simple design lets the user quickly learn the chords, scales, and progressions on a piano and on a guitar."),
+                  ]
+                  );
+                },
+              )
             ],
           ),
         ),
@@ -206,7 +226,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
-                          myInterstitial..load()..show();
+                          showad++;
+                          showad2++;
                           typeselect = 0;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                         },
@@ -223,7 +244,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
-                          myInterstitial..load()..show();
+                        showad++;
+                        showad2++;
                         typeselect = 1;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                       },
@@ -240,7 +262,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
-                          myInterstitial..load()..show();
+                          showad++;
+                          showad2++;
                           typeselect = 2;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                         },
@@ -257,7 +280,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
                     child: RaisedButton(
                       onPressed: (){
-                          myInterstitial..load()..show();
+                          showad++;
+                          showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
                         },
                       elevation: 1,
@@ -283,13 +307,15 @@ class NoteScreen extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
 
+    
     return
        Scaffold(
         appBar: AppBar(
           title: Text("Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
-        bottomNavigationBar: Container(height: 50,),
+        
+        //bottomNavigationBar: Container(height: adpadding,),
         body: GridView.count(
           physics: BouncingScrollPhysics(),
           crossAxisCount: 3,
@@ -303,13 +329,19 @@ class NoteScreen extends StatelessWidget {
                   //decoration: BoxDecoration(, borderRadius: BorderRadius.circular(36)),
                 child:RaisedButton(
                   onPressed: (){
+                    showad++;
+                    showad2++;
                     clickedindex = notes[index].index;
                     clickednote = notes[index].note;
                     key = notes[index].note;
+                    if(typeselect == 0 || typeselect == 1){
+                      clickedindexscale = 0;
+                      clickednotescale = "Major";
+                    }
                     if(typeselect == 0) 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ScaleScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
                     else if(typeselect == 1) 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChordScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
                     else if(typeselect == 2) 
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
                   },
@@ -387,7 +419,7 @@ class _SettingsScreen extends State<SettingsScreen> {
         title: Text("Settings"),
           elevation: 1,
       ),
-      bottomNavigationBar: Container(height: 50,),
+      //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
@@ -397,7 +429,7 @@ class _SettingsScreen extends State<SettingsScreen> {
               padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[
-                  Text("Instrument:    ", style: TextStyle(fontSize: 18),),
+                  Text("Default Instrument:    ", style: TextStyle(fontSize: 18),),
                   DropdownButton<String>(
                   hint: Text("$instrument", style: TextStyle(fontSize: 18),),
                   items: <String>["Piano", "Guitar"].map((String value) {

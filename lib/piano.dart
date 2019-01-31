@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'main.dart';
 
 
 class PianoScreen extends StatelessWidget {
@@ -291,7 +292,7 @@ class PianoScreen extends StatelessWidget {
           title: Text("Piano", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
         ),
-        bottomNavigationBar: Container(height: 50,),
+        //bottomNavigationBar: Container(height: adpadding,),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
         child: Center(

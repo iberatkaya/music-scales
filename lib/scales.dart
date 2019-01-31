@@ -26,52 +26,6 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Altered", 16, [1, 2, 1, 2, 2, 2])
 ];
 
-
-class ScaleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    
-    return ListTileTheme(
-      iconColor: Colors.red,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text("Choose a Scale For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-        ),
-        bottomNavigationBar: Container(height: 50,),
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                child: ListView.separated(
-                  itemCount: scales.length,
-                  separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(18, -8 + textSize * 0.85, 0, -8 + textSize * 0.90),
-                      dense: true,
-                      onTap:() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
-                        clickedindexscale = scales[index].index;
-                        clickednotescale = scales[index].name;
-                      },
-                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
-                      leading: Icon(FontAwesomeIcons.itunesNote),
-                    );
-                },
-              )
-              ),
-            ],
-        ),
-        ),
-      )
-    );
-  }
-}
-
-
 class ScalePrintScreen extends StatefulWidget{
   @override
   _ScalePrintScreen createState() => _ScalePrintScreen();
@@ -408,7 +362,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
     var scaleimg = (instrument == "Guitar") ? TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
-        loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
+        loadingWidget: Padding(padding: EdgeInsets.all(6), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -422,7 +376,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         fit: BoxFit.fitHeight,
       ) : TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
-        loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
+        loadingWidget: Padding(padding: EdgeInsets.all(6), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -464,7 +418,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             ),
           ],
       ),
-      bottomNavigationBar: Container(height: 50,),
+      //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
       body: RefreshIndicator(
         onRefresh: refimg,
@@ -475,6 +429,31 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Scale:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
+                        DropdownButton(
+                          hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
+                          items: scales.map((Scale value){
+                            return DropdownMenuItem<Scale>(
+                              child: Text("${value.name}", style: TextStyle(fontSize: 18),),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (Scale newvalue){
+                            setState(() {
+                            clickednotescale = newvalue.name;
+                            clickedindexscale = newvalue.index; 
+                            });
+                          },
+                        ),
+                      ],
+                      ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(2, 6, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
                   padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
                   child: SingleChildScrollView(

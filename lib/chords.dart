@@ -23,50 +23,6 @@ List<Chord> chords = [    //A A# B C C# D D# E F F# G G#
   Chord("6th", 10, [4, 3, 2])
 ];
 
-class ChordScreen extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTileTheme(
-      iconColor: Colors.red,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-        ),
-        bottomNavigationBar: Container(height: 50,),
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                child: ListView.separated(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemCount: chords.length,
-                  separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                     contentPadding: EdgeInsets.fromLTRB(24, -8 + textSize * 0.85, 0, -8 + textSize * 0.90),
-                     dense: true,
-                      onTap:() {
-                        clickedindexscale = chords[index].index;
-                        clickednotescale = chords[index].note;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
-                      },
-                      title: Text(chords[index].note ?? 'broke', style: TextStyle(fontSize: textSize)),
-                      leading: Icon(FontAwesomeIcons.itunesNote),
-                    );
-                },
-              )
-              ),
-            ],
-        ),
-        ),
-      )
-    );
-  }
-}
 
 class ChordPrintScreen extends StatefulWidget{
   @override
@@ -469,7 +425,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       chordimg =  TransitionToImage(
         AdvancedNetworkImage(totalurl, useDiskCache: true),
         fit: BoxFit.fill,
-        loadingWidget: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,),
+        loadingWidget: Padding(padding: EdgeInsets.all(6), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -553,7 +509,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             ),
           ],  
       ),
-      bottomNavigationBar: Container(height: 50,),
+      //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
       body:  RefreshIndicator(
         onRefresh: refimg,
@@ -564,6 +520,31 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Chord:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
+                        DropdownButton(
+                          hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
+                          items: chords.map((Chord value){
+                            return DropdownMenuItem<Chord>(
+                              child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (Chord newvalue){
+                            setState(() {
+                            clickednotescale = newvalue.note;
+                            clickedindexscale = newvalue.index; 
+                            });
+                          },
+                        ),
+                      ],
+                      ),
+                  ),
+                Padding(padding: EdgeInsets.fromLTRB(2, 6, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
                 chordimg,
                 mytable(clickedindexscale),
                 //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
