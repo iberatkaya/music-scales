@@ -7,7 +7,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'chordfigering.dart';
 import 'main.dart';
-
+import 'dart:async';
 
 List<Chord> chords = [    //A A# B C C# D D# E F F# G G# 
   Chord("Major", 0, [4, 3]),
@@ -500,13 +500,25 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 6, 10, 6), 
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 8, 8), 
               child: Image(
                 color: Colors.black,
                 image: instrimg,
                 ),
               ),
             ),
+          GestureDetector(
+            child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+            onTap: (){
+              showDialog(
+              context: context,
+              builder: (ctxt) => AlertDialog(
+                title: Text("Help", textAlign: TextAlign.center,),
+                content: Text("Click and select a chord from the menu. Press the button next to the question mark to change the instrument. Click the red button to hear the audio of the chord, and the red tiles to hear the individual notes with the selected instrument. While viewing the guitar chord, slide the chord to the view alternative shapes of the chord."),
+              )
+              );
+            },
+          )
           ],  
       ),
       //bottomNavigationBar: Container(height: adpadding,),

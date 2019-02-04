@@ -4,7 +4,7 @@ import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart
 import 'package:flutter_advanced_networkimage/transition_to_image.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'main.dart';
-
+import 'dart:async';
 
 List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Major", 0, [2, 2, 1, 2, 2, 2]),
@@ -23,7 +23,11 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Locrian", 11, [1, 2, 2, 1, 2, 2]),
   Scale("Augmented", 14, [3, 1, 3, 1, 3]),
   Scale("Double Harmonic", 15, [1, 3, 1, 2, 1, 3]),
-  Scale("Altered", 16, [1, 2, 1, 2, 2, 2])
+  Scale("Altered", 16, [1, 2, 1, 2, 2, 2]),
+  Scale("Dorian b2", 17, [1, 2, 2, 2, 2, 1]),
+  Scale("Augmented Lydian", 18, [2, 2, 2, 2, 1, 2]),
+  Scale("Lydian b7", 19, [2, 2, 2, 1, 2, 1]),
+  Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2])
 ];
 
 class ScalePrintScreen extends StatefulWidget{
@@ -80,6 +84,14 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         url = "$instr-minor_pentatonic-${notes[0].note[0]}-$n_or_sharp";
       else if(mode == "Double Harmonic")
         url = "$instr-double_harmonic-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Dorian b2")
+        url = "$instr-dorian_b2-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Augmented Lydian")
+        url = "$instr-augmented_lydian-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Lydian b7")
+        url = "$instr-lydian_b7-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Mixolydian b6")
+        url = "$instr-mixolydian_b6-${notes[0].note[0]}-$n_or_sharp";
       else
         url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp"; 
       return url;
@@ -156,6 +168,23 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[2] = "b3";
         nums[3] = "b4";
         nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Dorian b2"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[6] = "b7";
+      }
+      else if(mode == "Augmented Lydian"){
+        nums[3] = "#4";
+        nums[4] = "#5";
+      }
+      else if(mode == "Lydian b7"){
+        nums[3] = "#4";
+        nums[6] = "b7";
+      }
+      else if(mode == "Mixolydian b6"){
         nums[5] = "b6";
         nums[6] = "b7";
       }
@@ -409,13 +438,25 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 6, 10, 6), 
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
               child: Image(
                 color: Colors.black,
                 image: instrimg,
                 ),
               ),
             ),
+            GestureDetector(
+              child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+              onTap: (){
+                showDialog(
+                context: context,
+                builder: (ctxt) => AlertDialog(
+                  title: Text("Help", textAlign: TextAlign.center,),
+                  content: Text("Click and select a scale from the menu. Press the button next to the question mark to change the instrument. Click on the red tiles to hear the individual notes with the selected instrument. While viewing the guitar scale, slide the scale to the right to see the remaining scale."),
+                )
+                );
+              },
+            )
           ],
       ),
       //bottomNavigationBar: Container(height: adpadding,),

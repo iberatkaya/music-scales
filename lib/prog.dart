@@ -156,6 +156,20 @@ class ProgPrintScreen extends StatelessWidget{
     appBar: AppBar(
       title: Text("The ${theScale[0].name} Diatonic Chords", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
       elevation: 1,
+      actions: <Widget>[
+          GestureDetector(
+            child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+            onTap: (){
+              showDialog(
+              context: context,
+              builder: (ctxt) => AlertDialog(
+                title: Text("Help", textAlign: TextAlign.center,),
+                content: Text("View the diatonic chords of ${theScale[0].name}. Click on the dice to view a random progression in the key of ${theScale[0].name}."),
+              )
+              );
+            },
+          )
+      ],
      ),
     //bottomNavigationBar: Container(height: adpadding,),
     floatingActionButton: FloatingActionButton(

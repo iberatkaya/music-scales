@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'chords.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'appid.dart';
 import 'scales.dart';
+import 'examplesongs.dart';
 import 'prog.dart';
+import 'chordprob.dart';
 import 'piano.dart';
 
 
@@ -94,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: interstitialid,/* InterstitialAd.testAdUnitId,*/
+    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -102,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   InterstitialAd myInterstitial2 = InterstitialAd(
-    adUnitId: interstitialid, /*InterstitialAd.testAdUnitId,*/
+    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -120,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose(){
     myInterstitial?.dispose();
+    myInterstitial2?.dispose();
     super.dispose();
   }
 
@@ -153,15 +158,16 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId:/* FirebaseAdMob.testAppId);*/ appid);
+    FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     if(showad > 2)
       myInterstitial..load()..show();
-    if(showad2 > 11)
+    if(showad2 > 12)
       myInterstitial2..load()..show();
 
 
+    
     return new ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -220,10 +226,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               Flexible(
-              child: ListView(
+                child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: RaisedButton(
                       onPressed: (){
                           showad++;
@@ -233,15 +239,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         elevation: 1,
                         highlightElevation: 1,
-                        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                        padding: EdgeInsets.only(top: 30, bottom: 30),
                         color: Color.fromRGBO(240, 120, 120, 0.7),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                        child: Center( child: Text("Scales 🎼", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                        child: Center( child: Text("Scales 🎼", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
                     ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: RaisedButton(
                       onPressed: (){
                         showad++;
@@ -251,15 +257,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       elevation: 1,
                       highlightElevation: 1,
-                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(120, 240, 120, 0.7),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Chords 🎸", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                      child:  Center( child: Text("Chords 🎸", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
                     ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: RaisedButton(
                       onPressed: (){
                           showad++;
@@ -269,15 +275,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       elevation: 1,
                       highlightElevation: 1,
-                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(150, 165, 250, 0.5),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Progressions 🎶", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                      child:  Center( child: Text("Progressions 🎶", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
                     ),
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: RaisedButton(
                       onPressed: (){
                           showad++;
@@ -286,10 +292,44 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       elevation: 1,
                       highlightElevation: 1,
-                      padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(250, 135, 50, 0.5),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Piano 🎹", style: TextStyle(fontSize: textSize + 3, fontWeight: FontWeight.normal),),),
+                      child:  Center( child: Text("Piano 🎹", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: RaisedButton(
+                      onPressed: (){
+                          showad++;
+                          showad2++;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChordProbScreen()));
+                        },
+                      elevation: 1,
+                      highlightElevation: 1,
+                      padding: EdgeInsets.only(top: 30, bottom: 30),
+                      color: Color.fromRGBO(50, 235, 250, 0.5),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      child:  Center( child: Text("Chord Possibility 🎲", style: TextStyle(fontSize: textSize - 1, fontWeight: FontWeight.normal),),),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: RaisedButton(
+                      onPressed: (){
+                          showad++;
+                          showad2++;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SongsListScreen()));
+                        },
+                      elevation: 1,
+                      highlightElevation: 1,
+                      padding: EdgeInsets.only(top: 30, bottom: 30),
+                      color: Color.fromRGBO(250, 135, 250, 0.5),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      child:  Center( child: Text("Example Songs 🎧", style: TextStyle(fontSize: textSize - 1, fontWeight: FontWeight.normal),),),
                     ),
                   ),
                 ],
@@ -431,17 +471,17 @@ class _SettingsScreen extends State<SettingsScreen> {
                 children: <Widget>[
                   Text("Default Instrument:    ", style: TextStyle(fontSize: 18),),
                   DropdownButton<String>(
-                  hint: Text("$instrument", style: TextStyle(fontSize: 18),),
-                  items: <String>["Piano", "Guitar"].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text("$value"),
-                    );
-                  }).toList(),
-                  onChanged: (String newValueSelected) {
-                    _changeInstr(newValueSelected);
-                    _loadInstr();
-                   },
+                    hint: Text("$instrument", style: TextStyle(fontSize: 18),),
+                    items: <String>["Piano", "Guitar"].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text("$value"),
+                      );
+                    }).toList(),
+                    onChanged: (String newValueSelected) {
+                      _changeInstr(newValueSelected);
+                      _loadInstr();
+                    },
                   ),
                 ],
               ),

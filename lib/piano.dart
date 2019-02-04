@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'main.dart';
-
+import 'dart:async';
 
 class PianoScreen extends StatelessWidget {
   
@@ -291,6 +291,20 @@ class PianoScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text("Piano", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
+          actions: <Widget>[
+            GestureDetector(
+              child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+              onTap: (){
+                showDialog(
+                context: context,
+                builder: (ctxt) => AlertDialog(
+                  title: Text("Help", textAlign: TextAlign.center,),
+                  content: Text("Click on a key and hear the note. View the piano in a row in landscape mode."),
+                )
+              );
+            },
+          )
+          ],
         ),
         //bottomNavigationBar: Container(height: adpadding,),
         backgroundColor: Colors.white,
