@@ -1,3 +1,5 @@
-# An app that shows the notes in a chosen key
-The app: play.google.com/store/apps/details?id=com.kaya.musicapp  
-It was written in Flutter
+# Music Scales
+# An android app that shows music scales, chords, and progressions.
+Play Store Link: play.google.com/store/apps/details?id=com.kaya.musicapp  
+
+Written in Flutter
