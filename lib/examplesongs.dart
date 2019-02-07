@@ -326,7 +326,7 @@ class _SongsListScreen extends State<SongsListScreen>{
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("$globalappbarprog Progression Songs", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          title: Text("Songs Containing $globalappbarprog", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
           actions: <Widget>[
             GestureDetector(

@@ -4,6 +4,9 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'chords.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:launch_review/launch_review.dart';
+import "my_flutter_app_icons.dart" as CustomIcons;
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'appid.dart';
 import 'scales.dart';
 import 'examplesongs.dart';
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Notes',
+      title: 'Music Scales',  //Notes
       theme: ThemeData(
         primarySwatch: Colors.orange,
         iconTheme: IconThemeData(
@@ -158,12 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: appid);
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId); //appid);
     myInterstitial..load();
     myInterstitial2..load();
-    if(showad > 2)
+    if(showad == 3)
       myInterstitial..load()..show();
-    if(showad2 > 12)
+    if(showad2 == 12)
       myInterstitial2..load()..show();
 
 
@@ -194,31 +197,42 @@ class _MyHomePageState extends State<MyHomePage> {
                   image: AssetImage('lib/assets/imgs/logo.jpg')),
                ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 1, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(15, 6, 15, 6),
-                title: Text('Settings', style: TextStyle(fontSize: 18)),
-                trailing: Icon(Icons.settings),
+                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                title: Text('Settings', style: TextStyle(fontSize: 17)),
+                leading: Icon(Icons.settings),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
                 },
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 1, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
+              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(15, 6, 15, 6),
-                title: Text('About', style: TextStyle(fontSize: 18, color: Colors.black87)),
-                trailing: Icon(Icons.help_outline),
+                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                title: Text('Rate App', style: TextStyle(fontSize: 17)),
+                leading: Icon(Icons.star),
+                onTap: () {
+                  LaunchReview.launch(
+                    androidAppId: "com.kaya.musicapp",
+                  );
+                  },
+              ),
+              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                title: Text('About', style: TextStyle(fontSize: 17, color: Colors.black87)),
+                leading: Icon(Icons.help_outline),
                 onTap: () {showAboutDialog(
                   applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
                   applicationName: "Music Scales",
                   context: context,
                   children: <Widget>[
                     Text("Music Scales is an app that shows the user the notes of a scale or a chord in a selected key, and shows chord progressions for free. The simple design lets the user quickly learn the chords, scales, and progressions on a piano and on a guitar."),
-                  ]
+                   ]
                   );
                 },
-              )
+              ),
+              
             ],
           ),
         ),
@@ -226,114 +240,112 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               Flexible(
-                child: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                child: StaggeredGridView.count(
+                  crossAxisCount: 2,
+                  staggeredTiles: [
+                    StaggeredTile.count(2, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(2, 1),
+                  ],
+                  children: <Widget>[
+                    RaisedButton(
                       onPressed: (){
-                          showad++;
-                          showad2++;
-                          typeselect = 0;
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
-                        },
-                        elevation: 1,
-                        highlightElevation: 1,
-                        padding: EdgeInsets.only(top: 30, bottom: 30),
-                        color: Color.fromRGBO(240, 120, 120, 0.7),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                        child: Center( child: Text("Scales 🎼", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
+                        showad++;
+                        showad2++;
+                        typeselect = 0;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                      },
+                      color: Color.fromRGBO(50, 245, 250, 0.5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(CustomIcons.MyFlutterApp.music_notes, size: 110, color: Color.fromRGBO(195, 0, 0, 1),),
+                          Padding(padding: EdgeInsets.only(bottom: 8), child:Text("Scales", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),))
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
                         showad++;
                         showad2++;
                         typeselect = 1;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                       },
-                      elevation: 1,
-                      highlightElevation: 1,
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(120, 240, 120, 0.7),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Chords 🎸", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(CustomIcons.MyFlutterApp.guitar, size: 100, color: Colors.deepPurple,),
+                          Padding(padding: EdgeInsets.only(bottom: 8, top: 6), child:Text("Chords", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300),))
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
                           showad++;
                           showad2++;
                           typeselect = 2;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
                         },
-                      elevation: 1,
-                      highlightElevation: 1,
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(150, 165, 250, 0.5),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Progressions 🎶", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(right: 12), child:Icon(CustomIcons.MyFlutterApp.prog, size: 90, color: Colors.green,),),
+                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Progressions", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
                           showad++;
                           showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
                         },
-                      elevation: 1,
-                      highlightElevation: 1,
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
-                      color: Color.fromRGBO(250, 135, 50, 0.5),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Piano 🎹", style: TextStyle(fontSize: textSize + 1, fontWeight: FontWeight.normal),),),
+                      color: Color.fromRGBO(250, 135, 20, 0.5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(CustomIcons.MyFlutterApp.piano, size: 90, color: Colors.black,),
+                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Piano", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
                           showad++;
                           showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ChordProbScreen()));
                         },
-                      elevation: 1,
-                      highlightElevation: 1,
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
-                      color: Color.fromRGBO(50, 235, 250, 0.5),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Chord Possibility 🎲", style: TextStyle(fontSize: textSize - 1, fontWeight: FontWeight.normal),),),
+                      color: Color.fromRGBO(250, 100, 100, 0.7),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(right: 10),child: Icon(FontAwesomeIcons.dice, size: 70, color: Colors.blueGrey,),),
+                          Padding(padding: EdgeInsets.only(top: 14), child:Text("Chord\nPossibility", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: RaisedButton(
+                    RaisedButton(
                       onPressed: (){
                           showad++;
                           showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SongsListScreen()));
                         },
-                      elevation: 1,
-                      highlightElevation: 1,
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
                       color: Color.fromRGBO(250, 135, 250, 0.5),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      child:  Center( child: Text("Example Songs 🎧", style: TextStyle(fontSize: textSize - 1, fontWeight: FontWeight.normal),),),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(FontAwesomeIcons.headphones, size: 90, color: Colors.brown,),
+                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Example Songs", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -364,8 +376,8 @@ class NoteScreen extends StatelessWidget {
           children: List.generate(12, (index){
             return Center(
               child: Container( 
-                  width: 42 + textSize * 1.65,
-                  height: 42 + textSize * 1.65,
+                  width: 44 + textSize * 1.65,
+                  height: 44 + textSize * 1.65,
                   //decoration: BoxDecoration(, borderRadius: BorderRadius.circular(36)),
                 child:RaisedButton(
                   onPressed: (){
@@ -387,11 +399,11 @@ class NoteScreen extends StatelessWidget {
                   },
                   elevation: 1,
                   highlightElevation: 1,
-                  color: Color.fromRGBO(202, 242, 242, 0.9),
+                  color: Color.fromRGBO(202, 240, 240, 0.9),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
                   
-                  child:  Center(
-                      child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.normal),)),
+                  child: Center(
+                      child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.w400),)),
                     ),
                 ),
               );

@@ -27,7 +27,10 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Dorian b2", 17, [1, 2, 2, 2, 2, 1]),
   Scale("Augmented Lydian", 18, [2, 2, 2, 2, 1, 2]),
   Scale("Lydian b7", 19, [2, 2, 2, 1, 2, 1]),
-  Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2])
+  Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2]),
+  Scale("Locrian 6", 21, [1, 2, 2, 1, 3, 1]),
+  Scale("Augmented Ionian", 22, [2, 2, 1, 3, 1, 2]),
+  Scale("Dorian #4", 23, [2, 1, 3, 1, 2, 1])
 ];
 
 class ScalePrintScreen extends StatefulWidget{
@@ -92,6 +95,12 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         url = "$instr-lydian_b7-${notes[0].note[0]}-$n_or_sharp";
       else if(mode == "Mixolydian b6")
         url = "$instr-mixolydian_b6-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Locrian 6")
+        url = "$instr-locrian_6-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Augmented Ionian")
+        url = "$instr-augmented_ionian-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode == "Dorian #4")
+        url = "$instr-dorian_s4-${notes[0].note[0]}-$n_or_sharp";
       else
         url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp"; 
       return url;
@@ -188,6 +197,19 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[5] = "b6";
         nums[6] = "b7";
       }
+      else if(mode == "Locrian 6"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[4] = "b5";
+        nums[6] = "b7";
+      }
+      else if(mode == "Augmented Ionian")
+        nums[4] = "#5";
+      else if(mode == "Dorian #4"){
+        nums[2] = "b3";
+        nums[3] = "#4";
+        nums[6] = "b7";
+      }
     }
 
     tableNums(clickednotescale);
@@ -207,8 +229,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             play("$note");
           },
           child: Container(
-            decoration: BoxDecoration(color: Color.fromRGBO(200, 80, 80, 0.15)),
-              child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+            decoration: BoxDecoration(color: Color.fromRGBO(230, 80, 80, 0.12)),
+            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
             ),
         ),
       );

@@ -12,12 +12,12 @@ class PianoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double imgheight = 220;
+    Orientation ori = MediaQuery.of(context).orientation;
+    double imgheight = 225;
     audioc.loadAll(["notes/piano/A.mp3", "notes/piano/As.mp3", "notes/piano/B.mp3", "notes/piano/C.mp3", "notes/piano/Cs.mp3", "notes/piano/D.mp3", "notes/piano/Ds.mp3", "notes/piano/E.mp3", "notes/piano/F.mp3", "notes/piano/Fs.mp3", "notes/piano/G.mp3", "notes/piano/Gs.mp3"]);
 
     Column thepiano(){
-      if(width > 400){
+      if(ori == Orientation.landscape){
         return Column(
             children: <Widget>[
               Container(
