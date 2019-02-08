@@ -69,7 +69,6 @@ class MyHomePage extends StatefulWidget {
 String instrument;
 double textSize = 28.0;
 String speed;
-int typeselect;   //0 for scale, 1 for chord, 2 for progression
 
 double adpadding = 0;   //If banner ad will be used in the future
 int showad = 0;
@@ -116,6 +115,14 @@ class _MyHomePageState extends State<MyHomePage> {
     },
   );
 
+  InterstitialAd myInterstitial3 = InterstitialAd(
+    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
+    targetingInfo: targetingInfo,
+    listener: (MobileAdEvent event) {
+      print("InterstitialAd event is $event");
+    },
+  );
+
   @override
   void initState() {
     super.initState();
@@ -128,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose(){
     myInterstitial?.dispose();
     myInterstitial2?.dispose();
+    myInterstitial3?.dispose();
     super.dispose();
   }
 
@@ -161,13 +169,16 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId); //appid);
+    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
     myInterstitial..load();
     myInterstitial2..load();
-    if(showad == 3)
+    myInterstitial3..load();
+    if(showad == 2)
       myInterstitial..load()..show();
-    if(showad2 == 12)
+    if(showad == 6)
       myInterstitial2..load()..show();
+    if(showad == 14)
+      myInterstitial3..load()..show();
 
 
     
@@ -176,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child:
        Scaffold(
         appBar: AppBar(
-          title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1),)),
           elevation: 1,
         ),
         //bottomNavigationBar: Container(height: adpadding,),
@@ -254,15 +265,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                         showad++;
-                        showad2++;
-                        typeselect = 0;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                        clickednote = "A";
+                        clickedindex = 0;
+                        clickednotescale = "Major";
+                        clickedindexscale = 0;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
                       },
-                      color: Color.fromRGBO(50, 245, 250, 0.5),
+                      color: Color.fromRGBO(60, 245, 245, 0.55),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.music_notes, size: 110, color: Color.fromRGBO(195, 0, 0, 1),),
+                          Icon(CustomIcons.MyFlutterApp.music_notes, size: 110, color: Color.fromRGBO(200, 0, 0, 1),),
                           Padding(padding: EdgeInsets.only(bottom: 8), child:Text("Scales", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),))
                         ],
                       ),
@@ -270,11 +283,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                         showad++;
-                        showad2++;
-                        typeselect = 1;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                        clickednote = "A";
+                        clickedindex = 0;
+                        clickednotescale = "Major";
+                        clickedindexscale = 0;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
                       },
-                      color: Color.fromRGBO(120, 240, 120, 0.7),
+                      color: Color.fromRGBO(120, 240, 120, 0.65),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -286,11 +301,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                           showad++;
-                          showad2++;
-                          typeselect = 2;
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteScreen()));
+                          clickednote = "A";
+                          clickednotescale = "Major";
+                          myindex = 0;
+                          progmode = "M";
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProgPrintScreen()));
                         },
-                      color: Color.fromRGBO(150, 165, 250, 0.5),
+                      color: Color.fromRGBO(160, 185, 255, 0.65),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -302,7 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                           showad++;
-                          showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
                         },
                       color: Color.fromRGBO(250, 135, 20, 0.5),
@@ -317,7 +333,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                           showad++;
-                          showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ChordProbScreen()));
                         },
                       color: Color.fromRGBO(250, 100, 100, 0.7),
@@ -332,10 +347,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     RaisedButton(
                       onPressed: (){
                           showad++;
-                          showad2++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SongsListScreen()));
                         },
-                      color: Color.fromRGBO(250, 135, 250, 0.5),
+                      color: Color.fromRGBO(240, 135, 240, 0.5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -355,64 +369,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-class NoteScreen extends StatelessWidget {
-   @override
-  Widget build(BuildContext context) {
-
-    
-    return
-       Scaffold(
-        appBar: AppBar(
-          title: Text("Notes", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-        ),
-        
-        //bottomNavigationBar: Container(height: adpadding,),
-        body: GridView.count(
-          physics: BouncingScrollPhysics(),
-          crossAxisCount: 3,
-          childAspectRatio: 1,
-          padding: EdgeInsets.fromLTRB(12, 24, 12, 0),
-          children: List.generate(12, (index){
-            return Center(
-              child: Container( 
-                  width: 44 + textSize * 1.65,
-                  height: 44 + textSize * 1.65,
-                  //decoration: BoxDecoration(, borderRadius: BorderRadius.circular(36)),
-                child:RaisedButton(
-                  onPressed: (){
-                    showad++;
-                    showad2++;
-                    clickedindex = notes[index].index;
-                    clickednote = notes[index].note;
-                    key = notes[index].note;
-                    if(typeselect == 0 || typeselect == 1){
-                      clickedindexscale = 0;
-                      clickednotescale = "Major";
-                    }
-                    if(typeselect == 0) 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
-                    else if(typeselect == 1) 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
-                    else if(typeselect == 2) 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProgScreen()));
-                  },
-                  elevation: 1,
-                  highlightElevation: 1,
-                  color: Color.fromRGBO(202, 240, 240, 0.9),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(42)),
-                  
-                  child: Center(
-                      child: Text("${notes[index].note}", style: TextStyle(color: Color.fromRGBO(255, 19, 23, 1), fontSize: textSize * 1.2, fontWeight: FontWeight.w400),)),
-                    ),
-                ),
-              );
-            }
-          ),
-        ),
-      );
-    }
-}
 
 class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key key, this.title}) : super(key: key);

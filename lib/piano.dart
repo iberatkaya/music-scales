@@ -148,7 +148,7 @@ class PianoScreen extends StatelessWidget {
         return Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(0, 12, 0, 6),
+                padding: EdgeInsets.fromLTRB(0, 16, 0, 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

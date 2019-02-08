@@ -30,7 +30,18 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2]),
   Scale("Locrian 6", 21, [1, 2, 2, 1, 3, 1]),
   Scale("Augmented Ionian", 22, [2, 2, 1, 3, 1, 2]),
-  Scale("Dorian #4", 23, [2, 1, 3, 1, 2, 1])
+  Scale("Dorian #4", 23, [2, 1, 3, 1, 2, 1]),
+  Scale("Major Phrygian", 24, [1, 3, 1, 2, 1, 2]), 
+  Scale("Lydian #9", 25, [3, 1, 2, 1, 2, 2]), 
+  Scale("Diminished Lydian", 26, [2, 1, 3, 1, 2, 2]),
+  Scale("Minor Lydian", 27, [2, 2, 2, 1, 1, 2]),
+  Scale("Arabian", 28, [2, 2, 1, 1, 2, 2]),
+  Scale("Balinese", 29, [1, 2, 3, 2]),
+  Scale("Byzantine", 30, [1, 3, 1, 2, 1, 3]),
+  Scale("Chinese", 31, [4, 2, 1, 4]),
+  Scale("Egyptian", 32, [2, 3, 2, 3]),
+  Scale("Mongolian", 33, [2, 2, 3, 2]),
+  Scale("Hindu", 34, [2, 2, 1, 2, 1, 2])
 ];
 
 class ScalePrintScreen extends StatefulWidget{
@@ -77,32 +88,12 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         n_or_sharp = "sharp";
      if(mode == "Minor")
         url = "$instr-natural_minor-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Harmonic Minor")
-        url = "$instr-harmonic_minor-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Melodic Minor")
-        url = "$instr-melodic_minor-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Major Pentatonic")
-        url = "$instr-major_pentatonic-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Minor Pentatonic")
-        url = "$instr-minor_pentatonic-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Double Harmonic")
-        url = "$instr-double_harmonic-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Dorian b2")
-        url = "$instr-dorian_b2-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Augmented Lydian")
-        url = "$instr-augmented_lydian-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Lydian b7")
-        url = "$instr-lydian_b7-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Mixolydian b6")
-        url = "$instr-mixolydian_b6-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Locrian 6")
-        url = "$instr-locrian_6-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Augmented Ionian")
-        url = "$instr-augmented_ionian-${notes[0].note[0]}-$n_or_sharp";
-      else if(mode == "Dorian #4")
-        url = "$instr-dorian_s4-${notes[0].note[0]}-$n_or_sharp";
+      else if(mode.contains(" ")){
+        url = "$instr-${mode.toLowerCase().replaceFirst(" ", "_").replaceFirst("#", "s")}-${notes[0].note[0]}-$n_or_sharp";
+      }
       else
         url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp"; 
+      print(url);
       return url;
     }
     List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
@@ -210,6 +201,58 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[3] = "#4";
         nums[6] = "b7";
       }
+      else if(mode == "Major Phrygian"){
+        nums[1] = "b2";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Lydian #9"){
+        nums[1] = "#2";
+        nums[3] = "#4";
+      }
+      else if(mode == "Diminished Lydian"){
+        nums[2] = "b3";
+        nums[3] = "#4";
+      }
+      else if(mode == "Minor Lydian"){
+        nums[3] = "#4";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Arabian"){
+        nums[4] = "#4";
+        nums[5] = "#5";
+        nums[6] = "b7";
+      }
+      else if(mode == "Balinese"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[3] = "5";
+        nums[4] = "b6";
+      }
+      else if(mode == "Byzantine"){
+        nums[1] = "b2";
+        nums[5] = "b6";
+      }
+      else if(mode == "Chinese"){
+        nums[1] = "3";
+        nums[2] = "#4";
+        nums[3] = "5";
+        nums[4] = "7";
+      }
+      else if(mode == "Egyptian"){
+        nums[2] = "4";
+        nums[3] = "5";
+        nums[4] = "b7";
+      }
+      else if(mode == "Mongolian"){
+        nums[3] = "5";
+        nums[4] = "6";
+      }
+      else if(mode == "Hindu"){
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
     }
 
     tableNums(clickednotescale);
@@ -239,7 +282,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     Column scaletable(String mode){
       if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 28, 56 - textSize * 0.35, 18), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
               border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -292,9 +335,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             ),
         ]);
       }
-      else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic"){
+      else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic" || mode == "Balinese" || mode == "Chinese" || mode == "Egyptian" || mode == "Mongolian"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 28, 56 - textSize * 0.35, 18), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
               border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -345,7 +388,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       }
       else{
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 28, 56-textSize, 18), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 12, 56-textSize, 12), child: Table(
               border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -413,7 +456,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
     var scaleimg = (instrument == "Guitar") ? TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
-        loadingWidget: Padding(padding: EdgeInsets.all(6), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
+        loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -427,7 +470,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         fit: BoxFit.fitHeight,
       ) : TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
-        loadingWidget: Padding(padding: EdgeInsets.all(6), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
+        loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -492,8 +535,35 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 12),
+                  Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 8),
+                    color: Color.fromRGBO(255, 235, 235, 1),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Key:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
+                        DropdownButton(
+                          hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
+                          items: notes.map((Note value){
+                            return DropdownMenuItem<Note>(
+                              child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (Note newvalue){
+                            setState(() {
+                              clickedindex = newvalue.index;
+                              clickednote = newvalue.note;
+                            });
+                          },
+                        ),
+                      ],
+                      ),
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+                  Container(
+                    color: Color.fromRGBO(235, 250, 250, 1),
+                    padding: EdgeInsets.only(top: 10, bottom: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -516,14 +586,14 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                       ],
                       ),
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(2, 6, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
+                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
                   Padding(
-                  padding: EdgeInsets.fromLTRB(6, 16, 6, 0), 
-                  child: SingleChildScrollView(
-                    child: scaleimg,
-                    scrollDirection: scrollaxis,
+                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
+                    child: SingleChildScrollView(
+                      child: scaleimg,
+                      scrollDirection: scrollaxis,
+                      ),
                     ),
-                  ),
                   scaletable(clickednotescale),
                 //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),
               ],

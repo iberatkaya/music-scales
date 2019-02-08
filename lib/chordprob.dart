@@ -323,7 +323,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
           )
           ],
         ),
-        bottomNavigationBar: Container(padding: EdgeInsets.only(right: 5, bottom: 4), child: Text("Provided by hooktheory.com", style: TextStyle(color: Colors.grey,fontSize: 9), textAlign: TextAlign.right,),),
+        bottomNavigationBar: Container(color: Color.fromRGBO(250, 250, 250, 1), padding: EdgeInsets.only(right: 6, bottom: 2, top: 2), child: Text("Provided by hooktheory.com", style: TextStyle(color: Colors.grey,fontSize: 9), textAlign: TextAlign.right,),),
         backgroundColor: Colors.white,
         body: RefreshIndicator(
           onRefresh: (){
@@ -334,8 +334,9 @@ class _ChordProbScreen extends State<ChordProbScreen>{
           child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Padding(
-              padding: EdgeInsets.only(top: 12, bottom: 10),
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 8),
+              color: Color.fromRGBO(255, 235, 235, 1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -362,9 +363,10 @@ class _ChordProbScreen extends State<ChordProbScreen>{
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 6, 2, 0), child: Divider(height: 0, color: Colors.black54,)),
-              Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+              Container(
+                color: Color.fromRGBO(235, 250, 250, 1),
+                padding: EdgeInsets.only(top: 10, bottom: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -373,7 +375,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 6, 2, 10), child: Divider(height: 0, color: Colors.black54,)),
+              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 10), child: Divider(height: 0, color: Colors.black26,)),
               FutureBuilder<List<Post>>(
                 future: fetchPost("nodes", param),
                 builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshot){

@@ -53,19 +53,15 @@ List<Chord> dimChords = [
   Chord("G#dim", "dim", 11),
 ];
 
-String mode;
+String progmode;
 String key;
 int myindex;
 List<Chord> theScale;
-
+/*
 class ProgScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
   
-    List<Scale> scales = [
-      Scale("Major", 0, []),
-      Scale("Minor", 1, []),
-    ];
     return ListTileTheme(
       iconColor: Colors.red,
       child:
@@ -90,9 +86,9 @@ class ProgScreen extends StatelessWidget{
                       onTap:() {
                         myindex = clickedindex;
                         if(scales[index].index == 0)
-                          mode = "M";
+                          progmode = "M";
                         else if(scales[index].index == 1)
-                          mode = "m";
+                          progmode = "m";
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ProgPrintScreen()));
                       },
                       title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
@@ -107,50 +103,60 @@ class ProgScreen extends StatelessWidget{
       )
     );
   }
+}*/
+
+class ProgPrintScreen extends StatefulWidget{
+  @override
+  _ProgPrintScreen createState() => _ProgPrintScreen();
 }
 
-class ProgPrintScreen extends StatelessWidget{
+class _ProgPrintScreen extends State<ProgPrintScreen> {
   @override
   Widget build(BuildContext context){
+    
+    List<Scale> scales = [
+      Scale("Major", 0, []),
+      Scale("Minor", 1, []),
+    ];
+
     List<Chord> scaleChords(String themode, int thekey){
-    List<Chord> theChords = [];
-    int index = thekey;
-    if(themode == "M"){    
-      for(int i=0; i<7; i++){   //3 5 7 8 10 0 2
-		    if(i == 3)
-          index--;
-        if(index > 11)
-			    index %= 12;
-        if(i == 1 || i == 2 || i == 5){
-          theChords.add(minorChords[index]);
+      List<Chord> theChords = [];
+      int index = thekey;
+      if(themode == "M"){    
+        for(int i=0; i<7; i++){   //3 5 7 8 10 0 2
+          if(i == 3)
+            index--;
+          if(index > 11)
+            index %= 12;
+          if(i == 1 || i == 2 || i == 5){
+            theChords.add(minorChords[index]);
+            }
+          else if(i != 6)
+            theChords.add(majorChords[index]);
+          else 
+            theChords.add(dimChords[index]);
+          index += 2;
           }
-        else if(i != 6)
-          theChords.add(majorChords[index]);
-        else 
-          theChords.add(dimChords[index]);
-        index += 2;
-	    	}
-      }
-    if(themode == "m"){
-      for(int i=0; i<7; i++){   //0 2 3 5 7 8 10
-		    if(i == 2 || i == 5)
-          index--;
-        if(index > 11)
-			    index %= 12;
-        if(i == 0 || i == 3 || i == 4){
-          theChords.add(minorChords[index]);
-          }
-        else if(i != 1)
-          theChords.add(majorChords[index]);
-        else 
-          theChords.add(dimChords[index]);
-        index += 2;
-	    	}  
+        }
+      if(themode == "m"){
+        for(int i=0; i<7; i++){   //0 2 3 5 7 8 10
+          if(i == 2 || i == 5)
+            index--;
+          if(index > 11)
+            index %= 12;
+          if(i == 0 || i == 3 || i == 4){
+            theChords.add(minorChords[index]);
+            }
+          else if(i != 1)
+            theChords.add(majorChords[index]);
+          else 
+            theChords.add(dimChords[index]);
+          index += 2;
+          }  
     }
     return theChords;
     }
-  theScale = scaleChords(mode, myindex);
-
+  theScale = scaleChords(progmode, myindex);
 
   return Scaffold(
     appBar: AppBar(
@@ -187,7 +193,62 @@ class ProgPrintScreen extends StatelessWidget{
       child: Center(
         child: Column(
           children: <Widget>[
-          Padding(padding: EdgeInsets.fromLTRB(42 - textSize, 28, 42-textSize, 18), child: Table(
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 8),
+              color: Color.fromRGBO(255, 235, 235, 1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Key:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
+                  DropdownButton(
+                    hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
+                    items: notes.map((Note value){
+                      return DropdownMenuItem<Note>(
+                        child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                        value: value,
+                      );
+                    }).toList(),
+                    onChanged: (Note newvalue){
+                      setState(() {
+                        clickednote = newvalue.note;
+                        myindex = newvalue.index;
+                      });
+                    },
+                  ),
+                ],
+                ),
+            ),
+            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+            Container(
+              color: Color.fromRGBO(235, 250, 250, 1),
+              padding: EdgeInsets.only(top: 10, bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Chord:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
+                  DropdownButton(
+                    hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
+                    items: scales.map((Scale value){
+                      return DropdownMenuItem<Scale>(
+                        child: Text("${value.name}", style: TextStyle(fontSize: 18),),
+                        value: value,
+                      );
+                    }).toList(),
+                    onChanged: (Scale newvalue){
+                      setState(() {
+                        clickednotescale = newvalue.name;
+                        if(newvalue.name == "Major")
+                          progmode = "M";
+                        else
+                          progmode = "m";
+                      });
+                    },
+                  ),
+                ],
+                ),
+            ),
+            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+            Padding(padding: EdgeInsets.fromLTRB(42 - textSize, 16, 42-textSize, 14), child: Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
@@ -224,7 +285,7 @@ class ProgPrintScreen extends StatelessWidget{
               ),
               ],
            ),),
-           Padding(padding: EdgeInsets.fromLTRB(58 - textSize * 0.35, 0, 58 - textSize * 0.35, 0), child: Table(
+           Padding(padding: EdgeInsets.fromLTRB(58 - textSize * 0.35, 0, 58 - textSize * 0.35, 12), child: Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
@@ -269,9 +330,9 @@ class RandomProgScreen extends StatelessWidget{
   Widget build(BuildContext content){
     List<List> progs(){
       List<List> theProgs;
-      if(mode == "M")
+      if(progmode == "M")
         theProgs = [[1, 4, 5], [1, 5, 6, 4], [2, 5, 1], [1, 6, 4, 5], [1, 4, 2, 5], [1, 4, 1, 5], [1, 3, 4, 5], [1, 2, 5]];
-      else if(mode == "m")
+      else if(progmode == "m")
         theProgs = [[1, 6, 7], [1, 4, 6], [1, 4, 5], [1, 6, 3, 7], [1, 7, 6, 7], [6, 7, 1, 1], [1, 4, 5, 1]];
       return theProgs;
     }
