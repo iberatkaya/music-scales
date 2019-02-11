@@ -336,11 +336,11 @@ class _ChordProbScreen extends State<ChordProbScreen>{
             children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 10, bottom: 8),
-              color: Color.fromRGBO(255, 235, 235, 1),
+              color: Color.fromRGBO(255, 225, 225, 1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Number Of Chords:   ", style: TextStyle(fontSize: 24)),
+                  Text("Number Of Chords:  ", style: TextStyle(fontSize: 24)),
                   DropdownButton<int>(
                         hint: Text("$chordnum", style: TextStyle(fontSize: 24),),
                         items: <int>[1, 2, 3].map((int value) {
@@ -365,12 +365,12 @@ class _ChordProbScreen extends State<ChordProbScreen>{
               ),
               Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
               Container(
-                color: Color.fromRGBO(235, 250, 250, 1),
+                color: Color.fromRGBO(225, 250, 250, 1),
                 padding: EdgeInsets.only(top: 10, bottom: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Chords:   ", style: TextStyle(fontSize: 24)),
+                    Text("Chords:  ", style: TextStyle(fontSize: 24)),
                     chordlists(chordnum),
                   ],
                 ),

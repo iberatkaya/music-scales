@@ -316,11 +316,19 @@ class _SongsListScreen extends State<SongsListScreen>{
         headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
       );
       final responseJson2 = json.decode(response2.body);
+      
+      final response3 = await http.get(
+        'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=3',
+        headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+      );
+      final responseJson3 = json.decode(response3.body);
       List<Song> mysong = [];
       for(int i=0; i<5; i++) 
         mysong.add(Song.fromJson(responseJson[i]));
       for(int i=0; i<5; i++) 
         mysong.add(Song.fromJson(responseJson2[i]));
+      for(int i=0; i<5; i++) 
+        mysong.add(Song.fromJson(responseJson3[i]));
       return mysong;
     }
 
@@ -349,11 +357,11 @@ class _SongsListScreen extends State<SongsListScreen>{
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 10, bottom: 8),
-              color: Color.fromRGBO(255, 235, 235, 1),
+              color: Color.fromRGBO(255, 225, 225, 1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Number Of Chords:   ", style: TextStyle(fontSize: 24)),
+                  Text("Number Of Chords:  ", style: TextStyle(fontSize: 24)),
                   DropdownButton<int>(
                         hint: Text("$chordnum", style: TextStyle(fontSize: 24),),
                         items: <int>[2, 3, 4].map((int value) {
@@ -379,12 +387,12 @@ class _SongsListScreen extends State<SongsListScreen>{
               ),
               Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
               Container(
-                color: Color.fromRGBO(235, 250, 250, 1),
+                color: Color.fromRGBO(225, 250, 250, 1),
                 padding: EdgeInsets.only(top: 10, bottom: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Chords:   ", style: TextStyle(fontSize: 24)),
+                    Text("Chords:  ", style: TextStyle(fontSize: 24)),
                     chordlists(chordnum),
                   ],
                 ),

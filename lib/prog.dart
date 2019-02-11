@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
 import 'main.dart';
 import 'dart:math';
 
@@ -57,53 +59,6 @@ String progmode;
 String key;
 int myindex;
 List<Chord> theScale;
-/*
-class ProgScreen extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-  
-    return ListTileTheme(
-      iconColor: Colors.red,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text("Choose a Chord For $clickednote", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
-          elevation: 1,
-        ),
-        //bottomNavigationBar: Container(height: adpadding,),
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                child: ListView.separated(
-                  itemCount: scales.length,
-                  separatorBuilder:(BuildContext context, int index) => Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(24, -8 + textSize * 0.85, 0, -8 + textSize * 0.90),
-                      dense: true,
-                      onTap:() {
-                        myindex = clickedindex;
-                        if(scales[index].index == 0)
-                          progmode = "M";
-                        else if(scales[index].index == 1)
-                          progmode = "m";
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProgPrintScreen()));
-                      },
-                      title: Text(scales[index].name ?? 'broke', style: TextStyle(fontSize: textSize)),
-                      leading: Icon(FontAwesomeIcons.itunesNote),
-                    );
-                },
-              )
-              ),
-            ],
-        ),
-        ),
-      )
-    );
-  }
-}*/
 
 class ProgPrintScreen extends StatefulWidget{
   @override
@@ -111,6 +66,7 @@ class ProgPrintScreen extends StatefulWidget{
 }
 
 class _ProgPrintScreen extends State<ProgPrintScreen> {
+  AudioPlayer audio = new AudioPlayer();
   @override
   Widget build(BuildContext context){
     
@@ -158,6 +114,32 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
     }
   theScale = scaleChords(progmode, myindex);
 
+  String urlAudio(String chord){
+    return "https://www.scales-chords.com/chord-sounds/snd-guitar-chord-${chord.replaceFirst("#", "s")}.mp3";
+  }
+
+  Future<void> play(String chord) async{
+    await audio.play(urlAudio(chord));
+    print(urlAudio(chord));
+  }
+
+  TableCell tableCell(String chordname){
+    return TableCell(
+            child: FlatButton(
+              padding: EdgeInsets.zero,
+              color: Color.fromRGBO(230, 80, 80, 0.12),
+              onPressed: (){
+                play(chordname);
+              },
+              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), 
+                child: Center(
+                  child: Text("$chordname", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red, fontWeight: FontWeight.w400),)
+                )
+              ),
+            ),
+          );
+  }
+
   return Scaffold(
     appBar: AppBar(
       title: Text("The ${theScale[0].name} Diatonic Chords", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
@@ -170,7 +152,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               context: context,
               builder: (ctxt) => AlertDialog(
                 title: Text("Help", textAlign: TextAlign.center,),
-                content: Text("View the diatonic chords of ${theScale[0].name}. Click on the dice to view a random progression in the key of ${theScale[0].name}."),
+                content: Text("View the diatonic chords of the key. Click on the dice to view a random progression in the key. Click on the chords to hear them."),
               )
               );
             },
@@ -193,62 +175,66 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
       child: Center(
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 10, bottom: 8),
-              color: Color.fromRGBO(255, 235, 235, 1),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Key:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
-                  DropdownButton(
-                    hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
-                    items: notes.map((Note value){
-                      return DropdownMenuItem<Note>(
-                        child: Text("${value.note}", style: TextStyle(fontSize: 18),),
-                        value: value,
-                      );
-                    }).toList(),
-                    onChanged: (Note newvalue){
-                      setState(() {
-                        clickednote = newvalue.note;
-                        myindex = newvalue.index;
-                      });
-                    },
+            Row(children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                color: Color.fromRGBO(255, 225, 225, 1),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Key", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                    DropdownButton(
+                      hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
+                      items: notes.map((Note value){
+                        return DropdownMenuItem<Note>(
+                          child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                          value: value,
+                        );
+                      }).toList(),
+                      onChanged: (Note newvalue){
+                        setState(() {
+                          clickednote = newvalue.note;
+                          myindex = newvalue.index;
+                        });
+                      },
+                    ),
+                  ],
                   ),
-                ],
-                ),
-            ),
-            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
-            Container(
-              color: Color.fromRGBO(235, 250, 250, 1),
-              padding: EdgeInsets.only(top: 10, bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Chord:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
-                  DropdownButton(
-                    hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
-                    items: scales.map((Scale value){
-                      return DropdownMenuItem<Scale>(
-                        child: Text("${value.name}", style: TextStyle(fontSize: 18),),
-                        value: value,
-                      );
-                    }).toList(),
-                    onChanged: (Scale newvalue){
-                      setState(() {
-                        clickednotescale = newvalue.name;
-                        if(newvalue.name == "Major")
-                          progmode = "M";
-                        else
-                          progmode = "m";
-                      });
-                    },
+              ),
+              Expanded(
+                child: Container(
+                  color: Color.fromRGBO(225, 250, 250, 1),
+                  padding: EdgeInsets.only(top: 8, bottom: 2),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("Chord", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                      DropdownButton(
+                        hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
+                        items: scales.map((Scale value){
+                          return DropdownMenuItem<Scale>(
+                            child: Text("${value.name}", style: TextStyle(fontSize: 18),),
+                            value: value,
+                          );
+                        }).toList(),
+                        onChanged: (Scale newvalue){
+                          setState(() {
+                            clickednotescale = newvalue.name;
+                            if(newvalue.name == "Major")
+                              progmode = "M";
+                            else
+                              progmode = "m";
+                          });
+                        },
+                      ),
+                    ],
+                    ),
                   ),
-                ],
                 ),
+              ]
             ),
-            Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
-            Padding(padding: EdgeInsets.fromLTRB(42 - textSize, 16, 42-textSize, 14), child: Table(
+            Divider(height: 0, color: Colors.black26,),
+            Padding(padding: EdgeInsets.fromLTRB(36 - textSize, 16, 36-textSize, 14), child: Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
@@ -269,23 +255,15 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               ),
               TableRow(
                 children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[0].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[1].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[2].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[3].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
+                  tableCell(theScale[0].name),
+                  tableCell(theScale[1].name),
+                  tableCell(theScale[2].name),
+                  tableCell(theScale[3].name),
                 ],
               ),
               ],
            ),),
-           Padding(padding: EdgeInsets.fromLTRB(58 - textSize * 0.35, 0, 58 - textSize * 0.35, 12), child: Table(
+           Padding(padding: EdgeInsets.fromLTRB(46 - textSize * 0.35, 0, 46 - textSize * 0.35, 12), child: Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
@@ -303,15 +281,9 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               ),
               TableRow(
                 children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[4].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[5].name}", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[6].name}", style: TextStyle(fontSize: textSize * 0.85 , color: Colors.red),))),
-                  ),
+                  tableCell(theScale[4].name),
+                  tableCell(theScale[5].name),
+                  tableCell(theScale[6].name),
                 ],
               ),
               ],
@@ -328,6 +300,33 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
 
 class RandomProgScreen extends StatelessWidget{
   Widget build(BuildContext content){
+    AudioPlayer audio = new AudioPlayer();
+    String urlAudio(String chord){
+      return "https://www.scales-chords.com/chord-sounds/snd-guitar-chord-${chord.replaceFirst("#", "s")}.mp3";
+    }
+
+    Future<void> play(String chord) async{
+      await audio.play(urlAudio(chord));
+      print(urlAudio(chord));
+    }
+
+    TableCell tableCell(String chordname){
+      return TableCell(
+              child: FlatButton(
+                padding: EdgeInsets.zero,
+                color: Color.fromRGBO(230, 80, 80, 0.12),
+                onPressed: (){
+                  play(chordname);
+                },
+                child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), 
+                  child: Center(
+                    child: Text("$chordname", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red, fontWeight: FontWeight.w400),)
+                  )
+                ),
+              ),
+            );
+    }
+
     List<List> progs(){
       List<List> theProgs;
       if(progmode == "M")
@@ -362,15 +361,9 @@ class RandomProgScreen extends StatelessWidget{
               ),
               TableRow(
                 children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][0]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][1]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][2]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                  ),
+                  tableCell(theScale[progressions[number][0]-1].name),
+                  tableCell(theScale[progressions[number][1]-1].name),
+                  tableCell(theScale[progressions[number][2]-1].name),
                 ],
               ),
               ],
@@ -405,18 +398,10 @@ class RandomProgScreen extends StatelessWidget{
                   ),
                   TableRow(
                     children: <TableCell>[
-                      TableCell(
-                        child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][0]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                      ),
-                      TableCell(
-                        child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][1]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                      ),
-                      TableCell(
-                        child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][2]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                      ),
-                      TableCell(
-                        child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.5, 0, textSize * 0.55), child: Center(child: Text("${theScale[progressions[number][3]-1].name}", style: TextStyle(fontSize: textSize, color: Colors.red),))),
-                      ),
+                      tableCell(theScale[progressions[number][0]-1].name),
+                      tableCell(theScale[progressions[number][1]-1].name),
+                      tableCell(theScale[progressions[number][2]-1].name),
+                      tableCell(theScale[progressions[number][3]-1].name),
                     ],
                   ),
                   ],

@@ -267,13 +267,13 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
     TableCell noteCell(String note){
       return TableCell(
-        child: GestureDetector(
-          onTap: (){
+        child: FlatButton(
+          color: Color.fromRGBO(230, 80, 80, 0.12),
+          onPressed: (){
             play("$note");
           },
           child: Container(
-            decoration: BoxDecoration(color: Color.fromRGBO(230, 80, 80, 0.12)),
-            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red),))),
+            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red, fontWeight: FontWeight.w400),))),
             ),
         ),
       );
@@ -535,58 +535,62 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 8),
-                    color: Color.fromRGBO(255, 235, 235, 1),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Key:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
-                        DropdownButton(
-                          hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
-                          items: notes.map((Note value){
-                            return DropdownMenuItem<Note>(
-                              child: Text("${value.note}", style: TextStyle(fontSize: 18),),
-                              value: value,
-                            );
-                          }).toList(),
-                          onChanged: (Note newvalue){
-                            setState(() {
-                              clickedindex = newvalue.index;
-                              clickednote = newvalue.note;
-                            });
-                          },
+                  Row(children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                      color: Color.fromRGBO(255, 225, 225, 1),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                          DropdownButton(
+                            hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
+                            items: notes.map((Note value){
+                              return DropdownMenuItem<Note>(
+                                child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                                value: value,
+                              );
+                            }).toList(),
+                            onChanged: (Note newvalue){
+                              setState(() {
+                                clickedindex = newvalue.index;
+                                clickednote = newvalue.note;
+                              });
+                            },
+                          ),
+                        ],
                         ),
-                      ],
-                      ),
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
-                  Container(
-                    color: Color.fromRGBO(235, 250, 250, 1),
-                    padding: EdgeInsets.only(top: 10, bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Scale:   ", style: TextStyle(fontSize: 26, fontStyle: FontStyle.italic),),
-                        DropdownButton(
-                          hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
-                          items: scales.map((Scale value){
-                            return DropdownMenuItem<Scale>(
-                              child: Text("${value.name}", style: TextStyle(fontSize: 18),),
-                              value: value,
-                            );
-                          }).toList(),
-                          onChanged: (Scale newvalue){
-                            setState(() {
-                            clickednotescale = newvalue.name;
-                            clickedindexscale = newvalue.index; 
-                            });
-                          },
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Color.fromRGBO(225, 250, 250, 1),
+                        padding: EdgeInsets.only(top: 8, bottom: 2),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Scale", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                            DropdownButton(
+                              hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
+                              items: scales.map((Scale value){
+                                return DropdownMenuItem<Scale>(
+                                  child: Text("${value.name}", style: TextStyle(fontSize: 18),),
+                                  value: value,
+                                );
+                              }).toList(),
+                              onChanged: (Scale newvalue){
+                                setState(() {
+                                clickednotescale = newvalue.name;
+                                clickedindexscale = newvalue.index; 
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                      ),
+                      )
+                    ),
+                  ]
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+                  Divider(height: 0, color: Colors.black26,),
                   Padding(
                     padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
                     child: SingleChildScrollView(

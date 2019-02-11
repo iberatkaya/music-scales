@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           opacity: 1,
         ),
       ),
-      home: MyHomePage(title: 'Notes'),
+      home: MyHomePage(),
     );
   }
 }
@@ -169,17 +169,17 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
-    myInterstitial..load();
+//    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
+/*    myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
     if(showad == 2)
       myInterstitial..load()..show();
-    if(showad == 6)
+    if(showad == 7)
       myInterstitial2..load()..show();
-    if(showad == 14)
+    if(showad == 15)
       myInterstitial3..load()..show();
-
+*/
 
     
     return new ListTileTheme(
@@ -262,7 +262,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     StaggeredTile.count(2, 1),
                   ],
                   children: <Widget>[
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),    //Fixes empty white space in intersections
                       onPressed: (){
                         showad++;
                         clickednote = "A";
@@ -271,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         clickedindexscale = 0;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
                       },
-                      color: Color.fromRGBO(60, 245, 245, 0.55),
+                      color: Color.fromRGBO(40, 195, 195, 0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -280,7 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
                       onPressed: (){
                         showad++;
                         clickednote = "A";
@@ -289,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         clickedindexscale = 0;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ChordPrintScreen()));
                       },
-                      color: Color.fromRGBO(120, 240, 120, 0.65),
+                      color: Color.fromRGBO(85, 200, 85, 0.7),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -298,7 +300,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
                       onPressed: (){
                           showad++;
                           clickednote = "A";
@@ -307,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           progmode = "M";
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ProgPrintScreen()));
                         },
-                      color: Color.fromRGBO(160, 185, 255, 0.65),
+                      color: Color.fromRGBO(130, 155, 225, 0.75),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -316,12 +319,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
                       onPressed: (){
                           showad++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
                         },
-                      color: Color.fromRGBO(250, 135, 20, 0.5),
+                      color: Color.fromRGBO(180, 105, 10, 0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -330,12 +334,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
                       onPressed: (){
                           showad++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ChordProbScreen()));
                         },
-                      color: Color.fromRGBO(250, 100, 100, 0.7),
+                      color: Color.fromRGBO(220, 70, 70, 0.75),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -344,12 +349,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    RaisedButton(
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
                       onPressed: (){
                           showad++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SongsListScreen()));
                         },
-                      color: Color.fromRGBO(240, 135, 240, 0.5),
+                      color: Color.fromRGBO(180, 95, 180, 0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
