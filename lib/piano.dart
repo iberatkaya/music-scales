@@ -7,15 +7,19 @@ class PianoScreen extends StatelessWidget {
   
   final AudioCache audioc = new AudioCache();
   Future<void> playcache(String note) async{
-    await audioc.play("notes/piano/${note.replaceAll("#", "s")}.mp3", volume: 0.6);
+    int index;
+    if(note == "A" || note == "A#" || note == "B")
+      index = 5;
+    else
+      index = 4;
+    await audioc.play("notes/piano/${note.replaceAll("#", "s").toLowerCase()}$index.mp3");
   }
 
   @override
   Widget build(BuildContext context) {
     Orientation ori = MediaQuery.of(context).orientation;
     double imgheight = 230;
-    audioc.loadAll(["notes/piano/A.mp3", "notes/piano/As.mp3", "notes/piano/B.mp3", "notes/piano/C.mp3", "notes/piano/Cs.mp3", "notes/piano/D.mp3", "notes/piano/Ds.mp3", "notes/piano/E.mp3", "notes/piano/F.mp3", "notes/piano/Fs.mp3", "notes/piano/G.mp3", "notes/piano/Gs.mp3"]);
-
+    
     Column thepiano(){
       if(ori == Orientation.landscape){
         return Column(

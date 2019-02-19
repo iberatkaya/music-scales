@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -218,9 +217,9 @@ class _ChordProbScreen extends State<ChordProbScreen>{
               });
             },
           ),
-          Text("    "),
+          Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("    "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[1]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[1].map((String value) {
@@ -259,9 +258,9 @@ class _ChordProbScreen extends State<ChordProbScreen>{
               });
             },
           ),
-          Text("    "),
+          Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("    "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[1]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[1].map((String value) {
@@ -278,9 +277,9 @@ class _ChordProbScreen extends State<ChordProbScreen>{
               });
             },
           ),
-          Text("    "),
+          Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("    "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[2]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[2].map((String value) {

@@ -20,10 +20,12 @@ class MyFlutterApp {
 
   static const _kFontFam = 'MyFlutterApp';
 
+  static const IconData quiz = const IconData(0xe800, fontFamily: _kFontFam);
   static const IconData guitar = const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData piano = const IconData(0xe802, fontFamily: _kFontFam);
   static const IconData international_music = const IconData(0xe803, fontFamily: _kFontFam);
   static const IconData music_notation = const IconData(0xe804, fontFamily: _kFontFam);
   static const IconData music_notes = const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData prog = const IconData(0xe806, fontFamily: _kFontFam);
+  static const IconData x = const IconData(0xe807, fontFamily: _kFontFam);
 }

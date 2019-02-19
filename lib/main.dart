@@ -5,9 +5,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'chords.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_analytics/observer.dart';
 import "my_flutter_app_icons.dart" as CustomIcons;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'dart:math';
 import 'appid.dart';
+import 'quiz.dart';
 import 'scales.dart';
 import 'examplesongs.dart';
 import 'prog.dart';
@@ -41,6 +46,8 @@ class Scale{
 }
 
 class MyApp extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,15 +60,23 @@ class MyApp extends StatelessWidget {
           opacity: 1,
         ),
       ),
-      home: MyHomePage(),
+      navigatorObservers: <NavigatorObserver>[observer],
+      home: MyHomePage(
+        title: "Home Page",
+        analytics: analytics,
+        observer: observer,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  
+  MyHomePage({Key key, this.title, this.analytics, this.observer}) : super(key: key);
+
+  final FirebaseAnalyticsObserver observer;
+  final FirebaseAnalytics analytics;
   final String title;
+  
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -92,6 +107,7 @@ List<Note> notes = [
   Note("G", 10),
   Note("G#", 11),
 ];
+
 
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -126,7 +142,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    //_loadSize();
     _loadInstr();
     _loadSpeed();
   }
@@ -146,13 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  /*_loadSize() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      textSize = (prefs.getDouble('textSize') ?? 28.0);
-    });
-  }*/
-
   _loadSpeed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -161,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   bool loaded = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -169,23 +178,20 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-//    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
-/*    myInterstitial..load();
+    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
+    myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
     if(showad == 2)
       myInterstitial..load()..show();
     if(showad == 7)
       myInterstitial2..load()..show();
-    if(showad == 15)
+    if(showad == 13)
       myInterstitial3..load()..show();
-*/
+
 
     
-    return new ListTileTheme(
-      iconColor: Colors.red,
-      child:
-       Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1),)),
           elevation: 1,
@@ -259,7 +265,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
-                    StaggeredTile.count(2, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(1, 1),
                   ],
                   children: <Widget>[
                     FlatButton(
@@ -277,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Icon(CustomIcons.MyFlutterApp.music_notes, size: 110, color: Color.fromRGBO(200, 0, 0, 1),),
-                          Padding(padding: EdgeInsets.only(bottom: 8), child:Text("Scales", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),))
+                          Padding(padding: EdgeInsets.only(bottom: 8), child: Text("Scales", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),))
                         ],
                       ),
                     ),
@@ -315,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Padding(padding: EdgeInsets.only(right: 12), child:Icon(CustomIcons.MyFlutterApp.prog, size: 90, color: Colors.green,),),
-                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Progressions", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
+                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:AutoSizeText("Progressions", maxLines: 1, style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
                     ),
@@ -325,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           showad++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => PianoScreen()));
                         },
-                      color: Color.fromRGBO(180, 105, 10, 0.6),
+                      color: Color.fromRGBO(180, 105, 10, 0.55),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -345,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Padding(padding: EdgeInsets.only(right: 10),child: Icon(FontAwesomeIcons.dice, size: 70, color: Colors.blueGrey,),),
-                          Padding(padding: EdgeInsets.only(top: 14), child:Text("Chord\nPossibility", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                          Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Chord\nPossibility", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
                     ),
@@ -355,12 +362,62 @@ class _MyHomePageState extends State<MyHomePage> {
                           showad++;
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SongsListScreen()));
                         },
-                      color: Color.fromRGBO(180, 95, 180, 0.6),
+                      color: Color.fromRGBO(180, 95, 180, 0.55),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(FontAwesomeIcons.headphones, size: 90, color: Colors.brown,),
-                          Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Example Songs", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                          Icon(FontAwesomeIcons.headphones, size: 75, color: Colors.brown[400],),
+                          Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Example\nSongs", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
+                      onPressed: (){
+                        Random myrand = new Random();
+                        mynotes = [
+                          QNote("A", 0, 0),
+                          QNote("A#", 1, 0),
+                          QNote("B", 2, 0),
+                          QNote("C", 3, 0),
+                          QNote("C#", 4, 0),
+                          QNote("D", 5, 0),
+                          QNote("D#", 6, 0),
+                          QNote("E", 7, 0),
+                          QNote("F", 8, 0),
+                          QNote("F#", 9, 0),
+                          QNote("G", 10, 0),
+                          QNote("G#", 11, 0)
+                        ];
+                        int rand = myrand.nextInt(34);
+                        int randkey = myrand.nextInt(12);
+                        selectedScale = scales[rand];
+                        myScale = calculateScale(selectedScale, randkey);
+                        Set choicesset;
+                        int answerindex = myrand.nextInt(myScale.length);
+                        ansstr = myScale[answerindex].note;
+                        myScale[answerindex].note = "?";
+                        nums = ["1", "2", "3", "4", "5", "6", "7"];
+                        int randset;
+                        choicesset = myScale.toSet();
+                        QNote answer = new QNote(ansstr, -1, 0);
+                        choices = [answer];
+                        while(choicesset.length != 4 + myScale.length){
+                          randset = myrand.nextInt(12);
+                          if(choicesset.add(mynotes[randset]) == true){
+                            choices.add(mynotes[randset]);
+                          }
+                        }
+                        choices.shuffle();
+                        showad++;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen()));
+                        },
+                      color: Color.fromRGBO(226,165,13, 0.65),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(CustomIcons.MyFlutterApp.quiz, size: 70, color: Colors.blue,),
+                          Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Quiz", maxLines: 1, style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
                     ),
@@ -370,7 +427,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-      )
       );
     }
   }
@@ -384,20 +440,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreen extends State<SettingsScreen> {
-/*
-  _changeText(double temp) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setDouble('textSize', temp);
-    });
-  }
-  _loadSize() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      textSize = (prefs.getDouble('textSize') ?? 28.0);
-    });
-  }
-*/
   _changeInstr(String temp) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -461,7 +503,7 @@ class _SettingsScreen extends State<SettingsScreen> {
               ),
              ),
             Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
-             Container(
+            Container(
               margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
               padding: EdgeInsets.all(6),
               child: Row(              
@@ -484,29 +526,6 @@ class _SettingsScreen extends State<SettingsScreen> {
               ),
              ),
             Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
-            /*Container(
-              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
-              padding: EdgeInsets.all(5),
-              child: Row(              
-                children: <Widget>[
-                  Text("Select Text Size:  ", style: TextStyle(fontSize: 18),),
-                  DropdownButton<double>(
-                  hint: Text("${textSize.toInt()}", style: TextStyle(fontSize: 18),),
-                  items: <double>[24, 26, 28, 30].map((double value) {
-                    return DropdownMenuItem<double>(
-                      value: value,
-                      child: Text("${value.toInt()}"),
-                    );
-                  }).toList(),
-                  onChanged: (double newValueSelected) {
-                    _changeText(newValueSelected);
-                    _loadSize();
-                   },
-                  ),
-                ],
-              ),
-             ),
-                Divider(height: 1, color: Color.fromRGBO(0, 0, 200, 0.2),),*/
           ],
         ),
       ),

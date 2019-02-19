@@ -122,7 +122,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[1]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[1].map((String value) {
@@ -163,7 +163,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[1]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[1].map((String value) {
@@ -182,7 +182,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[2]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[2].map((String value) {
@@ -223,7 +223,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[1]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[1].map((String value) {
@@ -242,7 +242,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[2]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[2].map((String value) {
@@ -261,7 +261,7 @@ class _SongsListScreen extends State<SongsListScreen>{
           ),
           Text(" "),
           Container(width: 1, height: 30, color: Colors.grey,),
-          Text("  "),
+          Text(" "),
           DropdownButton<String>(
             hint: Text("${buttonhint[3]}", style: TextStyle(fontSize: 24),),
             items: buttonitems[3].map((String value) {

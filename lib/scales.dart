@@ -49,6 +49,29 @@ class ScalePrintScreen extends StatefulWidget{
   _ScalePrintScreen createState() => _ScalePrintScreen();
 }
 
+class SNote{
+  String note;
+  int index;
+  int audioindex;
+  SNote(this.note, this.index, this.audioindex);
+}
+
+List<SNote> notes = [
+  SNote("A", 0, 0),
+  SNote("A#", 1, 0),
+  SNote("B", 2, 0),
+  SNote("C", 3, 0),
+  SNote("C#", 4, 0),
+  SNote("D", 5, 0),
+  SNote("D#", 6, 0),
+  SNote("E", 7, 0),
+  SNote("F", 8, 0),
+  SNote("F#", 9, 0),
+  SNote("G", 10, 0),
+  SNote("G#", 11, 0),
+];
+
+
 class _ScalePrintScreen extends State<ScalePrintScreen> {
   AudioCache audio = new AudioCache();
   var instrimg;
@@ -59,8 +82,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     }
   @override
   Widget build(BuildContext context) {
-    List<Note> calculateScale(int mode, int key){
-    	List<Note> theScale = [];
+    List<SNote> calculateScale(int mode, int key){
+    	List<SNote> theScale = [];
+      int audioindx = 4;
       int index = key;
       Scale scaleObj;
       for(int i=0; i<scales.length; i++){
@@ -70,16 +94,19 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       for(int j=0; j<scaleObj.formula.length+1; j++){
         if(j != 0)
           index += scaleObj.formula[j-1];
-        if(index > 11)
+        if(index > 11){
           index %= 12;
+          audioindx = 5;
+        }
+        notes[index].audioindex = audioindx;
         theScale.add(notes[index]); 
       }
       return theScale;
     }
-    List<Note> myScale;
+    List<SNote> myScale;
     myScale = calculateScale(clickedindexscale, clickedindex);
     //print(myScale.length);
-    String urlScale(String mode, List<Note> notes, String instr){
+    String urlScale(String mode, List<SNote> notes, String instr){
       String url;
       String n_or_sharp;
       if(!notes[0].note.contains("#"))
@@ -258,19 +285,16 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     tableNums(clickednotescale);
 
 
-    Future<void> play(String note) async{
-      if(instrument == "Piano")
-        await audio.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3", volume: 0.6);
-      else
-        await audio.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s")}.mp3");
+    Future<void> play(String note, int index) async{
+      await audio.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s").toLowerCase()}$index.mp3");
       }
 
-    TableCell noteCell(String note){
+    TableCell noteCell(String note, int index){
       return TableCell(
         child: FlatButton(
           color: Color.fromRGBO(230, 80, 80, 0.12),
           onPressed: (){
-            play("$note");
+            play("$note", index);
           },
           child: Container(
             child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red, fontWeight: FontWeight.w400),))),
@@ -300,9 +324,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[0].note),
-                   noteCell(myScale[1].note),
-                   noteCell(myScale[2].note),
+                   noteCell(myScale[0].note, myScale[0].audioindex),
+                   noteCell(myScale[1].note, myScale[1].audioindex),
+                   noteCell(myScale[2].note, myScale[2].audioindex),
                   ],
                 ),
                 ],
@@ -325,9 +349,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[3].note),
-                   noteCell(myScale[4].note),
-                   noteCell(myScale[5].note),
+                   noteCell(myScale[3].note, myScale[3].audioindex),
+                   noteCell(myScale[4].note, myScale[4].audioindex),
+                   noteCell(myScale[5].note, myScale[5].audioindex),
                   ],
                 ),
                 ],
@@ -355,9 +379,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[0].note),
-                   noteCell(myScale[1].note),
-                   noteCell(myScale[2].note),
+                   noteCell(myScale[0].note, myScale[0].audioindex),
+                   noteCell(myScale[1].note, myScale[1].audioindex),
+                   noteCell(myScale[2].note, myScale[2].audioindex),
                   ],
                 ),
                 ],
@@ -377,8 +401,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[3].note),
-                   noteCell(myScale[4].note),
+                   noteCell(myScale[3].note, myScale[3].audioindex),
+                   noteCell(myScale[4].note, myScale[4].audioindex),
                   ],
                 ),
                 ],
@@ -409,10 +433,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    noteCell(myScale[0].note),
-                    noteCell(myScale[1].note),
-                    noteCell(myScale[2].note),
-                    noteCell(myScale[3].note),
+                    noteCell(myScale[0].note, myScale[0].audioindex),
+                    noteCell(myScale[1].note, myScale[1].audioindex),
+                    noteCell(myScale[2].note, myScale[2].audioindex),
+                    noteCell(myScale[3].note, myScale[3].audioindex),
                     ],
                 ),
                 ],
@@ -435,9 +459,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    noteCell(myScale[4].note),
-                    noteCell(myScale[5].note),
-                    noteCell(myScale[6].note),
+                    noteCell(myScale[4].note, myScale[4].audioindex),
+                    noteCell(myScale[5].note, myScale[5].audioindex),
+                    noteCell(myScale[6].note, myScale[6].audioindex),
                   ],
                 ),
                 ],
@@ -545,13 +569,13 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                           Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
                           DropdownButton(
                             hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
-                            items: notes.map((Note value){
-                              return DropdownMenuItem<Note>(
+                            items: notes.map((SNote value){
+                              return DropdownMenuItem<SNote>(
                                 child: Text("${value.note}", style: TextStyle(fontSize: 18),),
                                 value: value,
                               );
                             }).toList(),
-                            onChanged: (Note newvalue){
+                            onChanged: (SNote newvalue){
                               setState(() {
                                 clickedindex = newvalue.index;
                                 clickednote = newvalue.note;
