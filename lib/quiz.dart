@@ -577,7 +577,7 @@ class _QuizScreen extends State<QuizScreen> {
                     context: context,
                     builder: (ctxt) => AlertDialog(
                       title: Text("Help", textAlign: TextAlign.center,),
-                      content: Text("Find the missing note!\nWait for 2.5 seconds and the next screen question will apppear. Click the notes in the table to hear them in the."),
+                      content: Text("Find the missing note!\nWait for 2.5 seconds and the next screen question will apppear. Click the notes in the table to hear them."),
                     )
                     );
                   },

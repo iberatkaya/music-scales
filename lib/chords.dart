@@ -837,17 +837,16 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
                       child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
                     ),
-                    Icon(Icons.error, color: Colors.red),
+                    Icon(Icons.refresh, color: Colors.red, size: 52,),
                   ],
                 ),
+        enableRefresh: true,
       );
       return chordimg;
       }
 
     if(instrument == "Guitar"){
       int itemcount = 4;
-      if(clickednotescale == "11th" || clickednotescale == "Major 11th" || clickednotescale == "Minor 11th" || clickednotescale == "11b5" || clickednotescale == "11#5")
-        itemcount = 2;
       chordimg = Container(
         height: 135,
         padding: EdgeInsets.fromLTRB(10, 8, 10, 0),
@@ -877,13 +876,6 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         );
     }
 
-    Future<void> refimg() async{
-      await Future.delayed(new Duration(seconds: 2));
-      setState(() {
-        chordimg.reloadImage();                      
-        });
-    }
-    
     void playicon(){
       setState(() {
         if(playctr == 1){
@@ -902,8 +894,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           GestureDetector(
             onTap: (){
               setState(() {
-                  if(instrument == "Guitar")
+                  if(instrument == "Guitar"){
                     instrument = "Piano";
+                    imgctr = 0;
+                    }
                   else if(instrument == "Piano")
                     instrument = "Guitar";
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
@@ -932,114 +926,110 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       ),
       //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
-      body:  RefreshIndicator(
-        onRefresh: refimg,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+      body: Container(
+        child: SingleChildScrollView(
             child: Center(
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget> [
-                    Container(
-                      padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
-                      color: Color.fromRGBO(255, 225, 225, 1),
+            child: Column(
+              children: <Widget>[
+                Row(children: <Widget> [
+                  Container(
+                    padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                    color: Color.fromRGBO(255, 225, 225, 1),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                        DropdownButton(
+                          hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
+                          items: notes.map((CNote value){
+                            return DropdownMenuItem<CNote>(
+                              child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (CNote newvalue){
+                            setState(() {
+                              clickedindex = newvalue.index;
+                              clickednote = newvalue.note;
+                            });
+                          },
+                        ),
+                      ],
+                      ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Color.fromRGBO(225, 250, 250, 1),
+                      padding: EdgeInsets.only(top: 8, bottom: 2),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                          Text("Chord", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
                           DropdownButton(
-                            hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
-                            items: notes.map((CNote value){
-                              return DropdownMenuItem<CNote>(
+                            hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
+                            items: chords.map((Chord value){
+                              return DropdownMenuItem<Chord>(
                                 child: Text("${value.note}", style: TextStyle(fontSize: 18),),
                                 value: value,
                               );
                             }).toList(),
-                            onChanged: (CNote newvalue){
+                            onChanged: (Chord newvalue){
                               setState(() {
-                                clickedindex = newvalue.index;
-                                clickednote = newvalue.note;
+                              clickednotescale = newvalue.note;
+                              clickedindexscale = newvalue.index; 
+                              imgctr = 0;
                               });
                             },
                           ),
                         ],
-                        ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Color.fromRGBO(225, 250, 250, 1),
-                        padding: EdgeInsets.only(top: 8, bottom: 2),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Chord", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
-                            DropdownButton(
-                              hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
-                              items: chords.map((Chord value){
-                                return DropdownMenuItem<Chord>(
-                                  child: Text("${value.note}", style: TextStyle(fontSize: 18),),
-                                  value: value,
-                                );
-                              }).toList(),
-                              onChanged: (Chord newvalue){
-                                setState(() {
-                                clickednotescale = newvalue.note;
-                                clickedindexscale = newvalue.index; 
-                                });
-                              },
-                            ),
-                          ],
-                        ),
                       ),
                     ),
-                  ]
-                ),
-                Divider(height: 0, color: Colors.black26,),
-                chordimg,
-                mytable(clickedindexscale),
-                //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
-                
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 6, 0, 16),
-                  child: FlatButton(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    color: Color.fromRGBO(240, 50, 50, 0.9),
-                    child:Padding(padding: playpadding, child: myplay,),
-                    onPressed: (){
+                  ),
+                ]
+              ),
+              Divider(height: 0, color: Colors.black26,),
+              chordimg,
+              mytable(clickedindexscale),
+              //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
+              
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 16),
+                child: FlatButton(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(20),
+                  color: Color.fromRGBO(240, 50, 50, 0.9),
+                  child:Padding(padding: playpadding, child: myplay,),
+                  onPressed: (){
+                    playicon();
+                    if(playctr == 1){
+                      play();
+                      setState(() {
+                        playpadding = EdgeInsets.only(left: 0);
+                        playctr = 0;                            
+                      });
+                    }
+                    else{
+                      pause();
+                      setState(() {
+                        playpadding = EdgeInsets.only(left: 6);
+                        playctr = 1;
+                      });
+                    } 
+                    audio.completionHandler = (){
                       playicon();
-                      if(playctr == 1){
-                        play();
-                        setState(() {
-                          playpadding = EdgeInsets.only(left: 0);
-                          playctr = 0;                            
+                      setState(() {
+                        playpadding = EdgeInsets.only(left: 6);
+                        playctr = 1;
                         });
-                      }
-                      else{
-                        pause();
-                        setState(() {
-                          playpadding = EdgeInsets.only(left: 6);
-                          playctr = 1;
-                        });
-                      } 
-                      audio.completionHandler = (){
-                        playicon();
-                        setState(() {
-                          playpadding = EdgeInsets.only(left: 6);
-                          playctr = 1;
-                          });
-                      };
-                    },
-                  )
-                ),
-          ],
-          ),
-          ),
+                    };
+                  },
+                )
+              ),
+        ],
         ),
         ),
-      ),
+        ),
+        ),
     );
   }
 }

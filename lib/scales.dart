@@ -486,9 +486,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
                       child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
                     ),
-                    Icon(Icons.error, color: Colors.red),
+                    Icon(Icons.refresh, color: Colors.red, size: 52,),
                   ],
                 ),
+        enableRefresh: true,
         height: 100,
         alignment: Alignment(-1, -1),
         fit: BoxFit.fitHeight,
@@ -500,17 +501,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
                       child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
                     ),
-                    Icon(Icons.error, color: Colors.red),
+                    Icon(Icons.refresh, color: Colors.red, size: 52,),
                   ],
                 ),
+        enableRefresh: true,
       );
-
-    Future<void> refimg() async{
-      await Future.delayed(new Duration(seconds: 2));
-      setState(() {
-        scaleimg.reloadImage();                      
-        });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -550,83 +545,78 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       ),
       //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
-      body: RefreshIndicator(
-        onRefresh: refimg,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
-                      color: Color.fromRGBO(255, 225, 225, 1),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Row(children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                    color: Color.fromRGBO(255, 225, 225, 1),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                        DropdownButton(
+                          hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
+                          items: notes.map((SNote value){
+                            return DropdownMenuItem<SNote>(
+                              child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (SNote newvalue){
+                            setState(() {
+                              clickedindex = newvalue.index;
+                              clickednote = newvalue.note;
+                            });
+                          },
+                        ),
+                      ],
+                      ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Color.fromRGBO(225, 250, 250, 1),
+                      padding: EdgeInsets.only(top: 8, bottom: 2),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Root", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
+                          Text("Scale", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
                           DropdownButton(
-                            hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
-                            items: notes.map((SNote value){
-                              return DropdownMenuItem<SNote>(
-                                child: Text("${value.note}", style: TextStyle(fontSize: 18),),
+                            hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
+                            items: scales.map((Scale value){
+                              return DropdownMenuItem<Scale>(
+                                child: Text("${value.name}", style: TextStyle(fontSize: 18),),
                                 value: value,
                               );
                             }).toList(),
-                            onChanged: (SNote newvalue){
+                            onChanged: (Scale newvalue){
                               setState(() {
-                                clickedindex = newvalue.index;
-                                clickednote = newvalue.note;
+                              clickednotescale = newvalue.name;
+                              clickedindexscale = newvalue.index; 
                               });
                             },
                           ),
                         ],
-                        ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Color.fromRGBO(225, 250, 250, 1),
-                        padding: EdgeInsets.only(top: 8, bottom: 2),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Scale", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
-                            DropdownButton(
-                              hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
-                              items: scales.map((Scale value){
-                                return DropdownMenuItem<Scale>(
-                                  child: Text("${value.name}", style: TextStyle(fontSize: 18),),
-                                  value: value,
-                                );
-                              }).toList(),
-                              onChanged: (Scale newvalue){
-                                setState(() {
-                                clickednotescale = newvalue.name;
-                                clickedindexscale = newvalue.index; 
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ),
-                  ]
-                  ),
-                  Divider(height: 0, color: Colors.black26,),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
-                    child: SingleChildScrollView(
-                      child: scaleimg,
-                      scrollDirection: scrollaxis,
                       ),
+                    )
+                  ),
+                ]
+                ),
+                Divider(height: 0, color: Colors.black26,),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
+                  child: SingleChildScrollView(
+                    child: scaleimg,
+                    scrollDirection: scrollaxis,
                     ),
-                  scaletable(clickednotescale),
-                //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),
-              ],
-              ),  
-            ),
+                  ),
+                scaletable(clickednotescale),
+              //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),
+            ],
+            ),  
           ),
         ),
       ),

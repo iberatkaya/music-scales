@@ -184,7 +184,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                   children: <Widget>[
                     Text("Key", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
                     DropdownButton(
-                      hint: Text(clickednote, style: TextStyle(fontSize: 24, color: Colors.blue),),
+                      hint: Text(clickednote, style: TextStyle(fontSize: 20, color: Colors.blue),),
                       items: notes.map((Note value){
                         return DropdownMenuItem<Note>(
                           child: Text("${value.note}", style: TextStyle(fontSize: 18),),
@@ -210,7 +210,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                     children: <Widget>[
                       Text("Chord", style: TextStyle(fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),),
                       DropdownButton(
-                        hint: Text(clickednotescale, style: TextStyle(fontSize: 24, color: Colors.deepPurple),),
+                        hint: Text(clickednotescale, style: TextStyle(fontSize: 20, color: Colors.deepPurple),),
                         items: scales.map((Scale value){
                           return DropdownMenuItem<Scale>(
                             child: Text("${value.name}", style: TextStyle(fontSize: 18),),

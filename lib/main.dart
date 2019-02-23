@@ -10,8 +10,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_analytics/observer.dart';
 import "my_flutter_app_icons.dart" as CustomIcons;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'appid.dart';
+import 'search.dart';
 import 'quiz.dart';
 import 'scales.dart';
 import 'examplesongs.dart';
@@ -169,7 +172,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   bool loaded = false;
+
   
+  _launchURL() async {
+    const url = 'mailto:ibraberatkaya@gmail.com?subject=Report%20A%20Bug&body=';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
-    myInterstitial..load();
+    //FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
+    /*myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
     if(showad == 2)
@@ -188,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
       myInterstitial2..load()..show();
     if(showad == 13)
       myInterstitial3..load()..show();
-
+*/
 
     
     return Scaffold(
@@ -215,41 +228,59 @@ class _MyHomePageState extends State<MyHomePage> {
                ),
               ),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
                 title: Text('Settings', style: TextStyle(fontSize: 17)),
-                leading: Icon(Icons.settings),
+                trailing: Icon(Icons.settings, size: 28, color: Colors.grey[600]),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
                 },
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+              Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
                 title: Text('Rate App', style: TextStyle(fontSize: 17)),
-                leading: Icon(Icons.star),
+                trailing: Icon(Icons.star, size: 28, color: Colors.grey[600]),
                 onTap: () {
                   LaunchReview.launch(
                     androidAppId: "com.kaya.musicapp",
                   );
                   },
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+              Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 4, 15, 4),
+                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
+                title: Text('Share App', style: TextStyle(fontSize: 17)),
+                trailing: Icon(Icons.share, size: 28, color: Colors.grey[600]),
+                onTap: () {
+                  Share.share('Music Scales: https://play.google.com/store/apps/details?id=com.kaya.musicapp');
+                  },
+              ),
+              Divider(height: 0, color: Colors.black26,),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
+                title: Text('Report A Bug', style: TextStyle(fontSize: 17)),
+                trailing: Icon(Icons.error_outline, size: 28, color: Colors.grey[600]),
+                onTap: () {
+                  _launchURL();
+                  },
+              ),
+              Divider(height: 0, color: Colors.black26,),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
                 title: Text('About', style: TextStyle(fontSize: 17, color: Colors.black87)),
-                leading: Icon(Icons.help_outline),
-                onTap: () {showAboutDialog(
-                  applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
-                  applicationName: "Music Scales",
-                  context: context,
-                  children: <Widget>[
-                    Text("Music Scales is an app that shows the user the notes of a scale or a chord in a selected key, and shows chord progressions for free. The simple design lets the user quickly learn the chords, scales, and progressions on a piano and on a guitar."),
-                   ]
+                trailing: Icon(Icons.help_outline, size: 28, color: Colors.grey[600]),
+                onTap: () {
+                  showAboutDialog(
+                    applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
+                    applicationName: "Music Scales",
+                    context: context,
+                    children: <Widget>[
+                      Text("Music Scales is an app that shows the user the notes of a scale or a chord in a selected key, and shows chord progressions for free. The simple design lets the user quickly learn the chords, scales, and progressions on a piano and on a guitar."),
+                    ]
                   );
                 },
-              ),
-              
+              ),             
             ],
           ),
         ),
@@ -267,6 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
+                    StaggeredTile.count(2, 1),
                   ],
                   children: <Widget>[
                     FlatButton(
@@ -418,6 +450,75 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: <Widget>[
                           Icon(CustomIcons.MyFlutterApp.quiz, size: 70, color: Colors.blue,),
                           Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Quiz", maxLines: 1, style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
+                      onPressed: (){
+                          showad++;
+                          allScales = [
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                          ];
+
+                          void allScalesCalculate(){
+                            for(int i=0; i<12; i++){
+                              for(int j=0; j<35; j++){
+                                int index=i;
+                                for(int k=0; k<searchScales[j].formula.length+1; k++){
+                                  if(k != 0)
+                                    index += searchScales[j].formula[k-1];
+                                  if(index > 11)
+                                    index %= 12;
+                                  allScales[i][j].add(searchNotes[index]); 
+                                }
+                              }
+                            }
+                          }
+                          allScalesCalculate();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+                        },
+                      color: Color.fromRGBO(120, 155, 210, 0.55),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.search, size: 110, color: Colors.deepPurple[600],),
+                          Padding(padding: EdgeInsets.only(bottom: 4), child:Text("Scale Finder", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
                     ),
