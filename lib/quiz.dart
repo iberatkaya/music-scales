@@ -472,7 +472,7 @@ class _QuizScreen extends State<QuizScreen> {
         );
       }
     }
-    FirebaseAdMob.instance.initialize(appId: appid);//FirebaseAdMob.testAppId); 
+    FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     if(gamesplayed == 4)

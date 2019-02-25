@@ -41,11 +41,13 @@ List<Scale> searchScales = [    //A A# B C C# D D# E F F# G G#
   Scale("Augmented", 14, [3, 1, 3, 1, 3]),
   Scale("Double Harmonic", 15, [1, 3, 1, 2, 1, 3]),
   Scale("Altered", 16, [1, 2, 1, 2, 2, 2]),
+  Scale("Altered bb7", 39, [1, 2, 1, 2, 2, 1]),
   Scale("Dorian b2", 17, [1, 2, 2, 2, 2, 1]),
   Scale("Augmented Lydian", 18, [2, 2, 2, 2, 1, 2]),
   Scale("Lydian b7", 19, [2, 2, 2, 1, 2, 1]),
   Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2]),
   Scale("Locrian 6", 21, [1, 2, 2, 1, 3, 1]),
+  Scale("Locrian 2", 40, [2, 1, 2, 1, 2, 2]),
   Scale("Augmented Ionian", 22, [2, 2, 1, 3, 1, 2]),
   Scale("Dorian #4", 23, [2, 1, 3, 1, 2, 1]),
   Scale("Major Phrygian", 24, [1, 3, 1, 2, 1, 2]), 
@@ -58,7 +60,11 @@ List<Scale> searchScales = [    //A A# B C C# D D# E F F# G G#
   Scale("Chinese", 31, [4, 2, 1, 4]),
   Scale("Egyptian", 32, [2, 3, 2, 3]),
   Scale("Mongolian", 33, [2, 2, 3, 2]),
-  Scale("Hindu", 34, [2, 2, 1, 2, 1, 2])
+  Scale("Hindu", 34, [2, 2, 1, 2, 1, 2]),
+  Scale("Neopolitan", 35, [1, 2, 2, 2, 1, 3]),
+  Scale("Neopolitan Major", 36, [1, 2, 2, 2, 2, 2]),
+  Scale("Neopolitan Minor", 37, [1, 2, 2, 2, 1, 2]),
+  Scale("Persian", 38, [1, 3, 1, 1, 2, 3])
 ];
 
 class ScaleandKey{
@@ -79,13 +85,13 @@ class _SearchScreen extends State<SearchScreen> {
 
   List<int> noteindexs = [];
   List<int> scaleindexs = [];
-  void scaleSearcher(List<String> mynotes){
+  void scaleSearcher(List<String> mynotes){   //When adding new scales, change the j number of iteration; and from main.dart, add the new indexs to allScales and change j 
     noteindexs = [];
     scaleindexs = [];
     int ctr;
     for(int i=0; i<12; i++){
       //  print(searchNotes[i].note);
-      for(int j=0; j<35; j++){
+      for(int j=0; j<41; j++){
         ctr = 0;
         for(int k=0; k<searchScales[j].formula.length+1; k++){
           for(int l=0; l<mynotes.length; l++){
@@ -135,6 +141,7 @@ class _SearchScreen extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,  //Fixes keyboard overflow issue
       appBar: AppBar(
         title: Text("Search in a Scale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
         elevation: 1,

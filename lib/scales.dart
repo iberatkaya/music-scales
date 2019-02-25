@@ -24,11 +24,13 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Augmented", 14, [3, 1, 3, 1, 3]),
   Scale("Double Harmonic", 15, [1, 3, 1, 2, 1, 3]),
   Scale("Altered", 16, [1, 2, 1, 2, 2, 2]),
+  Scale("Altered bb7", 39, [1, 2, 1, 2, 2, 1]),
   Scale("Dorian b2", 17, [1, 2, 2, 2, 2, 1]),
   Scale("Augmented Lydian", 18, [2, 2, 2, 2, 1, 2]),
   Scale("Lydian b7", 19, [2, 2, 2, 1, 2, 1]),
   Scale("Mixolydian b6", 20, [2, 2, 1, 2, 1, 2]),
   Scale("Locrian 6", 21, [1, 2, 2, 1, 3, 1]),
+  Scale("Locrian 2", 40, [2, 1, 2, 1, 2, 2]),
   Scale("Augmented Ionian", 22, [2, 2, 1, 3, 1, 2]),
   Scale("Dorian #4", 23, [2, 1, 3, 1, 2, 1]),
   Scale("Major Phrygian", 24, [1, 3, 1, 2, 1, 2]), 
@@ -41,7 +43,11 @@ List<Scale> scales = [    //A A# B C C# D D# E F F# G G#
   Scale("Chinese", 31, [4, 2, 1, 4]),
   Scale("Egyptian", 32, [2, 3, 2, 3]),
   Scale("Mongolian", 33, [2, 2, 3, 2]),
-  Scale("Hindu", 34, [2, 2, 1, 2, 1, 2])
+  Scale("Hindu", 34, [2, 2, 1, 2, 1, 2]),
+  Scale("Neopolitan", 35, [1, 2, 2, 2, 1, 3]),
+  Scale("Neopolitan Major", 36, [1, 2, 2, 2, 2, 2]),
+  Scale("Neopolitan Minor", 37, [1, 2, 2, 2, 1, 2]),
+  Scale("Persian", 38, [1, 3, 1, 1, 2, 3])  //Continue from 41
 ];
 
 class ScalePrintScreen extends StatefulWidget{
@@ -170,6 +176,12 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[5] = "b6";
         nums[6] = "b7";
       }
+      else if(mode == "Locrian 2"){
+        nums[2] = "b3";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
       else if(mode == "Major Pentatonic"){
         nums[3] = "5";
         nums[4] = "6";  
@@ -197,6 +209,14 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         nums[4] = "b5";
         nums[5] = "b6";
         nums[6] = "b7";
+      }
+      else if(mode == "Altered bb7"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[3] = "b4";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "bb7";
       }
       else if(mode == "Dorian b2"){
         nums[1] = "b2";
@@ -279,6 +299,26 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       else if(mode == "Hindu"){
         nums[5] = "b6";
         nums[6] = "b7";
+      }
+      else if(mode == "Neopolitan"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[5] = "b6";
+      }
+      else if(mode == "Neopolitan Major"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+      }
+      else if(mode == "Neopolitan Minor"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Persian"){
+        nums[1] = "b2";
+        nums[4] = "b5";
+        nums[5] = "b6";
       }
     }
 
@@ -546,8 +586,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
       body: Container(
-        child: SingleChildScrollView(
-          child: Center(
+        child: Center(
             child: Column(
               children: <Widget>[
                 Row(children: <Widget>[
@@ -606,20 +645,27 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ]
                 ),
                 Divider(height: 0, color: Colors.black26,),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
+                Flexible(
                   child: SingleChildScrollView(
-                    child: scaleimg,
-                    scrollDirection: scrollaxis,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
+                          child: SingleChildScrollView(
+                            child: scaleimg,
+                            scrollDirection: scrollaxis,
+                            ),
+                          ),
+                        scaletable(clickednotescale),
+                      ]
                     ),
                   ),
-                scaletable(clickednotescale),
+                ),
               //Text('$clickednotescale ${myScale[0].note}  ${urlScale(clickednotescale, myScale[0].note, instrument.toLowerCase())}'),
             ],
             ),  
           ),
         ),
-      ),
     );
   }
 }

@@ -142,7 +142,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
 
   return Scaffold(
     appBar: AppBar(
-      title: Text("The ${theScale[0].name} Diatonic Chords", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+      title: Text("${theScale[0].name} Diatonic Chords", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
       elevation: 1,
       actions: <Widget>[
           GestureDetector(
@@ -171,8 +171,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
       },
     ),
     
-    body: SingleChildScrollView(
-      child: Center(
+    body: Center(
         child: Column(
           children: <Widget>[
             Row(children: <Widget>[
@@ -234,64 +233,72 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               ]
             ),
             Divider(height: 0, color: Colors.black26,),
-            Padding(padding: EdgeInsets.fromLTRB(36 - textSize, 16, 36-textSize, 14), child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
-             children: <TableRow>[
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("2", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("3", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("4", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: <TableCell>[
-                  tableCell(theScale[0].name),
-                  tableCell(theScale[1].name),
-                  tableCell(theScale[2].name),
-                  tableCell(theScale[3].name),
-                ],
-              ),
-              ],
-           ),),
-           Padding(padding: EdgeInsets.fromLTRB(46 - textSize * 0.35, 0, 46 - textSize * 0.35, 12), child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
-             children: <TableRow>[
-              TableRow(
-                children: <TableCell>[
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("6", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                  TableCell(
-                    child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("7", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
-                  ),
-                ],
-              ),
-              TableRow(
-                children: <TableCell>[
-                  tableCell(theScale[4].name),
-                  tableCell(theScale[5].name),
-                  tableCell(theScale[6].name),
-                ],
-              ),
-              ],
-           ),
-           ),
-         ],
-       ),
-       ),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.fromLTRB(36 - textSize, 16, 36-textSize, 14), 
+                    child: Table(
+                      border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+                      children: <TableRow>[
+                        TableRow(
+                          children: <TableCell>[
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("1", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.75)),))),
+                            ),
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("2", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("3", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("4", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: <TableCell>[
+                            tableCell(theScale[0].name),
+                            tableCell(theScale[1].name),
+                            tableCell(theScale[2].name),
+                            tableCell(theScale[3].name),
+                          ],
+                        ),
+                        ],
+                    ),),
+                    Padding(padding: EdgeInsets.fromLTRB(46 - textSize * 0.35, 0, 46 - textSize * 0.35, 12), child: Table(
+                      border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+                      children: <TableRow>[
+                        TableRow(
+                          children: <TableCell>[
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("5", style: TextStyle(fontSize: textSize * 0.85, color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("6", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                            TableCell(
+                              child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.3, 0, textSize * 0.35), child: Center(child: Text("7", style: TextStyle(fontSize: textSize * 0.85,  color: Color.fromRGBO(20, 20, 20, 0.55)),))),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: <TableCell>[
+                            tableCell(theScale[4].name),
+                            tableCell(theScale[5].name),
+                            tableCell(theScale[6].name),
+                          ],
+                        ),
+                        ],
+                    ),
+                   ),
+                  ]
+                )
+              )
+            )
+            ],
+          ),
       ),
     );
   }

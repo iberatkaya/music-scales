@@ -19,6 +19,7 @@ List<Chord> chords = [    //A A# B C C# D D# E F F# G G#
   Chord("7th", 6, [4, 3, 3]),
   Chord("Major 7th", 2, [4, 3, 4]),
   Chord("Minor 7th", 5, [3, 4, 3]),
+  Chord("m(maj7)", 27, [3, 4, 4]),
   Chord("m7b5", 13, [3, 3, 4]), 
   Chord("m7#5", 21, [3, 5, 2]),
   Chord("7b5", 15, [4, 2, 4]),
@@ -29,14 +30,16 @@ List<Chord> chords = [    //A A# B C C# D D# E F F# G G#
   Chord("6th/9th", 12, [4, 3, 2, 5]),
   Chord("9th", 9, [4, 3, 3, 4]),  
   Chord("Major 9th", 18, [4, 3, 4, 3]),   //A A# B C C# D D# E F F# G G# 
-  Chord("Minor 9th", 17, [3, 4, 3, 4]),
+  Chord("Minor 9th", 17, [3, 4, 3, 4]), 
+  Chord("m(maj9)", 28, [3, 4, 4, 3]),
   Chord("9b5", 20, [4, 2, 4, 4]),
   Chord("9#5", 19, [4, 4, 2, 4]),
   Chord("11th", 22, [4, 3, 3, 4, 3]),
   Chord("Major 11th", 23, [4, 3, 4, 3, 3]),
   Chord("Minor 11th", 24, [3, 4, 3, 4, 3]),
+  Chord("m(maj11)", 29, [3, 4, 4, 3, 3]),
   Chord("11b5", 25, [4, 2, 4, 4, 3]),
-  Chord("11#5", 26, [4, 4, 2, 4, 3])
+  Chord("11#5", 26, [4, 4, 2, 4, 3])  //Continue from 30
 ];
 
 class CNote{
@@ -143,6 +146,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         nums[1] = "b3";
         nums[3] = "b7";
       }
+      else if(chord == "m(maj7)")
+        nums[1] = "b3";
       else if(chord == "Sus2")
         nums[1] = "2";
       else if(chord == "Sus4")
@@ -170,6 +175,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         nums[1] = "b3";
         nums[3] = "b7";
       }
+      else if(chord == "m(maj9)")
+        nums[1] = "b3";
       else if(chord == "6th/9th")
         nums[3] = "b6";
       else if(chord == "m7b5"){
@@ -204,6 +211,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         nums[1] = "b3";
         nums[3] = "b7";
       }
+      else if(chord == "m(maj11)")
+        nums[1] = "b3";
       else if(chord == "11b5"){
         nums[2] = "b5";
         nums[3] = "b7";        
@@ -218,7 +227,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
 
     Padding mytable(int mode){
       Padding thetable;
-      if(mode == 2 || mode == 5 || mode == 6 || mode == 10 || mode == 11 || mode == 13 || mode == 14 || mode == 15 || mode == 16 || mode == 21){
+      if(mode == 2 || mode == 5 || mode == 6 || mode == 10 || mode == 11 || mode == 13 || mode == 14 || mode == 15 || mode == 16 || mode == 21 || mode == 27){
         thetable = Padding(padding: EdgeInsets.fromLTRB(50 - textSize * 0.6, 12, 50 - textSize * 0.6, 10), 
           child:Table(
              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
@@ -251,7 +260,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             ),
            );
         }
-      else if(mode == 9 || mode == 12 || mode == 17 || mode == 18 || mode == 19 || mode == 20){
+      else if(mode == 9 || mode == 12 || mode == 17 || mode == 18 || mode == 19 || mode == 20 || mode == 28){
         thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 12, 56 - textSize * 0.45, 10),
           child: Column(
             children: <Widget>[ 
@@ -307,7 +316,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
            )
            );
       }
-      else if(mode == 22 || mode == 23 || mode == 24 || mode == 25 || mode == 26){
+      else if(mode == 22 || mode == 23 || mode == 24 || mode == 25 || mode == 26 || mode == 29){
         thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 12, 56 - textSize * 0.45, 10),
           child: Column(
             children: <Widget>[ 
@@ -400,60 +409,66 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     }
     String titleText(String key, String mode){
       if(mode == "Major")
-        return "The $key Chord";
+        return "$key Chord";
       else if(mode == "Minor")
-        return "The ${key}m Chord";
+        return "${key}m Chord";
       else if(mode == "Major 7th")
-        return "The ${key}maj7 Chord";
+        return "${key}maj7 Chord";
       else if(mode == "Sus2")
-        return "The ${key}sus2 Chord";
+        return "${key}sus2 Chord";
       else if(mode == "Sus4")
-        return "The ${key}sus4 Chord"; 
+        return "${key}sus4 Chord"; 
       else if(mode == "Minor 7th")
-        return "The ${key}m7 Chord"; 
+        return "${key}m7 Chord"; 
       else if(mode == "7th")
-        return "The ${key}7 Chord";  
+        return "${key}7 Chord";  
       else if(mode == "Diminished")
-        return "The ${key}dim Chord"; 
+        return "${key}dim Chord"; 
       else if(mode == "Augmented")
-        return "The ${key}aug Chord"; 
+        return "${key}aug Chord"; 
       else if(mode == "9th")
-        return "The ${key}9 Chord";  
+        return "${key}9 Chord";  
       else if(mode == "6th")
-        return "The ${key}6 Chord";  
+        return "${key}6 Chord";  
       else if(mode == "Minor 6th")
-        return "The ${key}m6 Chord";  
+        return "${key}m6 Chord";  
       else if(mode == "6th/9th")
-        return "The ${key}6/9 Chord";  
+        return "${key}6/9 Chord";  
       else if(mode == "m7b5")
-        return "The ${key}m7b5 Chord";  
+        return "${key}m7b5 Chord";  
       else if(mode == "Diminished 7th")
-        return "The ${key}dim7 Chord";  
+        return "${key}dim7 Chord";  
       else if(mode == "7b5")
-        return "The ${key}7b5 Chord";  
+        return "${key}7b5 Chord";  
       else if(mode == "7#5")
-        return "The ${key}7#5 Chord";  
+        return "${key}7#5 Chord";  
       else if(mode == "Minor 9th")
-        return "The ${key}m9 Chord";  
+        return "${key}m9 Chord";  
+      else if(mode == "m(maj9)")
+        return "${key}m(maj9) Chord";  
       else if(mode == "Major 9th")
-        return "The ${key}maj9 Chord";  
+        return "${key}maj9 Chord";  
       else if(mode == "9#5")
-        return "The ${key}9#5 Chord";  
+        return "${key}9#5 Chord";  
       else if(mode == "9b5")
-        return "The ${key}9b5 Chord";  
+        return "${key}9b5 Chord";  
       else if(mode == "m7#5")
-        return "The ${key}m7#5 Chord";  
+        return "${key}m7#5 Chord";  
       else if(mode == "11th")
-        return "The ${key}11 Chord";  
+        return "${key}11 Chord";  
       else if(mode == "Major 11th")
-        return "The ${key}maj11 Chord";  
+        return "${key}maj11 Chord";  
       else if(mode == "Minor 11th")
-        return "The ${key}m11 Chord";  
+        return "${key}m11 Chord";  
+      else if(mode == "m(maj11)")
+        return "${key}m(maj11) Chord";  
       else if(mode == "11b5")
-        return "The ${key}11b5 Chord";  
+        return "${key}11b5 Chord";  
       else if(mode == "11#5")
-        return "The ${key}11#5 Chord";  
-      return "The $key $mode Chord";
+        return "${key}11#5 Chord";  
+      else if(mode == "m(maj7)")
+        return "${key}m(maj7) Chord";  
+      return "$key $mode Chord";
     }
 
     String urlChord(String mode, List<CNote> notes, String instr, int img){
@@ -468,6 +483,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
           else if(mode == "Minor 7th")
             url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "m(maj7)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
           else if(mode == "Sus2")
             url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
           else if(mode == "Sus4")
@@ -498,6 +515,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}m9-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
           else if(mode == "Major 9th")
             url = "${instr.toLowerCase()}-${notes[0].note}maj9-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
+          else if(mode == "m(maj9)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
           else if(mode == "9#5")
             url = "${instr.toLowerCase()}-${notes[0].note}9s5-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
           else if(mode == "9b5")
@@ -510,6 +529,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}maj911-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
           else if(mode == "Minor 11th")
             url = "${instr.toLowerCase()}-${notes[0].note}m911-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
+          else if(mode == "m(maj11)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
           else if(mode == "11b5")
             url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
           else if(mode == "11#5")
@@ -525,6 +546,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
           else if(mode == "Minor 7th")
             url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "m(maj7)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
           else if(mode == "Sus2")
             url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
           else if(mode == "Sus4")
@@ -555,6 +578,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}m9-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}";
           else if(mode == "Major 9th")
             url = "${instr.toLowerCase()}-${notes[0].note}maj9-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}";
+          else if(mode == "m(maj9)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}";
           else if(mode == "9#5")
             url = "${instr.toLowerCase()}-${notes[0].note}9s5-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}";
           else if(mode == "9b5")
@@ -567,6 +592,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}maj911-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
           else if(mode == "Minor 11th")
             url = "${instr.toLowerCase()}-${notes[0].note}m911-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
+          else if(mode == "m(maj11)")
+            url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
           else if(mode == "11b5")
             url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
           else if(mode == "11#5")
@@ -584,6 +611,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
           url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][3].replaceAll(" ", "-")}";
+        else if(mode == "m(maj7)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][22].replaceAll(" ", "-")}";
         else if(mode == "Sus2")
           url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
@@ -614,6 +643,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}m9-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][17].replaceAll(" ", "-")}";
         else if(mode == "Major 9th")
           url = "${instr.toLowerCase()}-${notes[0].note}maj9-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][18].replaceAll(" ", "-")}";
+        else if(mode == "m(maj9)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][23].replaceAll(" ", "-")}";
         else if(mode == "9#5")
           url = "${instr.toLowerCase()}-${notes[0].note}9s5-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][19].replaceAll(" ", "-")}";
         else if(mode == "9b5")
@@ -626,6 +657,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj911-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Minor 11th")
           url = "${instr.toLowerCase()}-${notes[0].note}m911-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][2].replaceAll(" ", "-")}";
+        else if(mode == "m(maj11)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][5].replaceAll(" ", "-")}";
         else if(mode == "11b5")
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "11#5")
@@ -641,6 +674,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
           url = "${instr.toLowerCase()}-${notes[0].note}m7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][3].replaceAll(" ", "-")}";
+        else if(mode == "m(maj7)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][22].replaceAll(" ", "-")}";
         else if(mode == "Sus2")
           url = "${instr.toLowerCase()}-${notes[0].note}sus2-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
@@ -671,6 +706,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}m9-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][17].replaceAll(" ", "-")}";
         else if(mode == "Major 9th")
           url = "${instr.toLowerCase()}-${notes[0].note}maj9-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][18].replaceAll(" ", "-")}";
+        else if(mode == "m(maj9)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][23].replaceAll(" ", "-")}";
         else if(mode == "9#5")
           url = "${instr.toLowerCase()}-${notes[0].note}9s5-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][19].replaceAll(" ", "-")}";
         else if(mode == "9b5")
@@ -683,6 +720,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj911-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][1].replaceAll(" ", "-")}";
         else if(mode == "Minor 11th")
           url = "${instr.toLowerCase()}-${notes[0].note}m911-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][2].replaceAll(" ", "-")}";
+        else if(mode == "m(maj11)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][5].replaceAll(" ", "-")}";
         else if(mode == "11b5")
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "11#5")
@@ -703,6 +742,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
         else if(mode == "Minor 7th")
           url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+        else if(mode == "Minor 7th")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
         else if(mode == "Sus2")
           url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}";
         else if(mode == "Sus4")
@@ -733,6 +774,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}m9-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
         else if(mode == "Major 9th")
           url = "${instr.toLowerCase()}-${notes[0].note}maj9-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
+        else if(mode == "m(maj9)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
         else if(mode == "9#5")
           url = "${instr.toLowerCase()}-${notes[0].note}9s5-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}"; 
         else if(mode == "9b5")
@@ -745,6 +788,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj911-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
         else if(mode == "Minor 11th")
           url = "${instr.toLowerCase()}-${notes[0].note}m911-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
+        else if(mode == "m(maj11)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
         else if(mode == "11b5")
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
         else if(mode == "11#5")
@@ -759,6 +804,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj7-$speed-${strings[img][notes[0].index][2].replaceAll(" ", "-")}";
         else if(mode == "Minor 7th")
           url = "${instr.toLowerCase()}-${notes[0].note}m7-$speed-${strings[img][notes[0].index][3].replaceAll(" ", "-")}"; 
+        else if(mode == "m(maj7)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj7-$speed-${strings[img][notes[0].index][22].replaceAll(" ", "-")}"; 
         else if(mode == "Sus2")
           url = "${instr.toLowerCase()}-${notes[0].note}sus2-$speed-${strings[img][notes[0].index][4].replaceAll(" ", "-")}";
         else if(mode == "Sus4")
@@ -789,6 +836,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}m9-$speed-${strings[img][notes[0].index][17].replaceAll(" ", "-")}"; 
         else if(mode == "Major 9th")
           url = "${instr.toLowerCase()}-${notes[0].note}maj9-$speed-${strings[img][notes[0].index][18].replaceAll(" ", "-")}"; 
+        else if(mode == "m(maj9)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj9-$speed-${strings[img][notes[0].index][23].replaceAll(" ", "-")}"; 
         else if(mode == "9#5")
           url = "${instr.toLowerCase()}-${notes[0].note}9s5-$speed-${strings[img][notes[0].index][19].replaceAll(" ", "-")}"; 
         else if(mode == "9b5")
@@ -801,6 +850,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}maj911-$speed-${shortstrings[img][notes[0].index][1].replaceAll(" ", "-")}"; 
         else if(mode == "Minor 11th")
           url = "${instr.toLowerCase()}-${notes[0].note}m911-$speed-${shortstrings[img][notes[0].index][2].replaceAll(" ", "-")}"; 
+        else if(mode == "m(maj11)")
+          url = "${instr.toLowerCase()}-${notes[0].note}mmaj911-$speed-${shortstrings[img][notes[0].index][5].replaceAll(" ", "-")}"; 
         else if(mode == "11b5")
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-$speed-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}"; 
         else if(mode == "11#5")
@@ -927,8 +978,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       //bottomNavigationBar: Container(height: adpadding,),
       backgroundColor: Colors.white,
       body: Container(
-        child: SingleChildScrollView(
-            child: Center(
+        child: Center(
             child: Column(
               children: <Widget>[
                 Row(children: <Widget> [
@@ -988,48 +1038,53 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                 ]
               ),
               Divider(height: 0, color: Colors.black26,),
-              chordimg,
-              mytable(clickedindexscale),
-              //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
-              
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 6, 0, 16),
-                child: FlatButton(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(20),
-                  color: Color.fromRGBO(240, 50, 50, 0.9),
-                  child:Padding(padding: playpadding, child: myplay,),
-                  onPressed: (){
-                    playicon();
-                    if(playctr == 1){
-                      play();
-                      setState(() {
-                        playpadding = EdgeInsets.only(left: 0);
-                        playctr = 0;                            
-                      });
-                    }
-                    else{
-                      pause();
-                      setState(() {
-                        playpadding = EdgeInsets.only(left: 6);
-                        playctr = 1;
-                      });
-                    } 
-                    audio.completionHandler = (){
-                      playicon();
-                      setState(() {
-                        playpadding = EdgeInsets.only(left: 6);
-                        playctr = 1;
-                        });
-                    };
-                  },
-                )
+              Flexible(child: SingleChildScrollView(
+                child: Column(children: <Widget>[
+                  chordimg,
+                  mytable(clickedindexscale),
+                  //Text("${urlAudio(clickednotescale, myNotes, "piano", "fast")}", style: TextStyle(fontSize: 24)),
+                  
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 6, 0, 16),
+                    child: FlatButton(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      color: Color.fromRGBO(240, 50, 50, 0.9),
+                      child:Padding(padding: playpadding, child: myplay,),
+                      onPressed: (){
+                        playicon();
+                        if(playctr == 1){
+                          play();
+                          setState(() {
+                            playpadding = EdgeInsets.only(left: 0);
+                            playctr = 0;                            
+                          });
+                        }
+                        else{
+                          pause();
+                          setState(() {
+                            playpadding = EdgeInsets.only(left: 6);
+                            playctr = 1;
+                          });
+                        } 
+                        audio.completionHandler = (){
+                          playicon();
+                          setState(() {
+                            playpadding = EdgeInsets.only(left: 6);
+                            playctr = 1;
+                            });
+                        };
+                      },
+                    )
+                  ),
+                ]
               ),
-        ],
+            ),
+            ),
+          ],
         ),
         ),
-        ),
-        ),
+      ),
     );
   }
 }

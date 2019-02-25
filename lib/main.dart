@@ -191,8 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    //FirebaseAdMob.instance.initialize(appId: /*FirebaseAdMob.testAppId);*/ appid);
-    /*myInterstitial..load();
+    FirebaseAdMob.instance.initialize(appId: appid);
+    myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
     if(showad == 2)
@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
       myInterstitial2..load()..show();
     if(showad == 13)
       myInterstitial3..load()..show();
-*/
+
 
     
     return Scaffold(
@@ -228,9 +228,9 @@ class _MyHomePageState extends State<MyHomePage> {
                ),
               ),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
-                title: Text('Settings', style: TextStyle(fontSize: 17)),
-                trailing: Icon(Icons.settings, size: 28, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
+                title: Text('Settings', style: TextStyle(fontSize: 16)),
+                leading: Icon(Icons.settings, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
@@ -238,9 +238,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
-                title: Text('Rate App', style: TextStyle(fontSize: 17)),
-                trailing: Icon(Icons.star, size: 28, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
+                title: Text('Rate App', style: TextStyle(fontSize: 16)),
+                leading: Icon(Icons.star, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   LaunchReview.launch(
                     androidAppId: "com.kaya.musicapp",
@@ -249,27 +249,27 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
-                title: Text('Share App', style: TextStyle(fontSize: 17)),
-                trailing: Icon(Icons.share, size: 28, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
+                title: Text('Share App', style: TextStyle(fontSize: 16)),
+                leading: Icon(Icons.share, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   Share.share('Music Scales: https://play.google.com/store/apps/details?id=com.kaya.musicapp');
                   },
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
-                title: Text('Report A Bug', style: TextStyle(fontSize: 17)),
-                trailing: Icon(Icons.error_outline, size: 28, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
+                title: Text('Report A Bug', style: TextStyle(fontSize: 16)),
+                leading: Icon(Icons.warning, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   _launchURL();
                   },
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(22, 2, 22, 2),
-                title: Text('About', style: TextStyle(fontSize: 17, color: Colors.black87)),
-                trailing: Icon(Icons.help_outline, size: 28, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
+                title: Text('About', style: TextStyle(fontSize: 16, color: Colors.black87)),
+                leading: Icon(Icons.help_outline, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   showAboutDialog(
                     applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
@@ -459,46 +459,46 @@ class _MyHomePageState extends State<MyHomePage> {
                           showad++;
                           allScales = [
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                             [
-                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
                             ],
                           ];
 
                           void allScalesCalculate(){
                             for(int i=0; i<12; i++){
-                              for(int j=0; j<35; j++){
+                              for(int j=0; j<41; j++){
                                 int index=i;
                                 for(int k=0; k<searchScales[j].formula.length+1; k++){
                                   if(k != 0)
