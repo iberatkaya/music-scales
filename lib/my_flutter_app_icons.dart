@@ -28,4 +28,5 @@ class MyFlutterApp {
   static const IconData music_notes = const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData prog = const IconData(0xe806, fontFamily: _kFontFam);
   static const IconData x = const IconData(0xe807, fontFamily: _kFontFam);
+  static const IconData metronome = const IconData(0xe808, fontFamily: _kFontFam);
 }

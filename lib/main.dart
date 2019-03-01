@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'appid.dart';
 import 'search.dart';
+import 'metronome.dart';
 import 'quiz.dart';
 import 'scales.dart';
 import 'examplesongs.dart';
@@ -191,16 +192,16 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: appid);
+    /*FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
     if(showad == 2)
       myInterstitial..load()..show();
-    if(showad == 7)
+    if(showad == 6)
       myInterstitial2..load()..show();
-    if(showad == 13)
-      myInterstitial3..load()..show();
+    if(showad == 11)
+      myInterstitial3..load()..show();*/
 
 
     
@@ -259,8 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(height: 0, color: Colors.black26,),
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('Report A Bug', style: TextStyle(fontSize: 16)),
-                leading: Icon(Icons.warning, size: 26, color: Colors.grey[600]),
+                title: Text('Feedback', style: TextStyle(fontSize: 16)),
+                leading: Icon(Icons.mail_outline, size: 26, color: Colors.grey[600]),
                 onTap: () {
                   _launchURL();
                   },
@@ -298,7 +299,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
                     StaggeredTile.count(1, 1),
-                    StaggeredTile.count(2, 1),
+                    StaggeredTile.count(1, 1),
+                    StaggeredTile.count(1, 1),
                   ],
                   children: <Widget>[
                     FlatButton(
@@ -517,8 +519,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.search, size: 110, color: Colors.deepPurple[600],),
-                          Padding(padding: EdgeInsets.only(bottom: 4), child:Text("Scale Finder", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
+                          Icon(Icons.search, size: 90, color: Colors.deepPurple[600],),
+                          Padding(padding: EdgeInsets.only(bottom: 6), child:AutoSizeText("Scale\nFinder", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(),
+                      onPressed: (){
+                          showad++;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => MetronomeScreen()));
+                        },
+                      color: Color.fromRGBO(80, 190, 105, 0.6),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(CustomIcons.MyFlutterApp.metronome, size: 90, color: Colors.pink[600],),
+                          Padding(padding: EdgeInsets.only(bottom: 4, top: 6), child:Text("Metronome", style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
                     ),
