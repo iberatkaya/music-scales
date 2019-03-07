@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    /*FirebaseAdMob.instance.initialize(appId: appid);
+    FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if(showad == 6)
       myInterstitial2..load()..show();
     if(showad == 11)
-      myInterstitial3..load()..show();*/
+      myInterstitial3..load()..show();
 
 
     

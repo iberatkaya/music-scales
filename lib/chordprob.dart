@@ -106,7 +106,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
           Padding(
           padding: EdgeInsets.fromLTRB(22, 6, 22, 6),
           child: Table(
-            border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+            border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
             children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -140,7 +140,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
           Padding(
             padding: EdgeInsets.fromLTRB(22, 6, 22, 6), 
             child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[

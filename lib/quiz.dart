@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'scales.dart';
 import 'my_flutter_app_icons.dart' as CustomIcons;
 import 'package:firebase_admob/firebase_admob.dart';
@@ -25,6 +26,7 @@ int score;
 int deaths = 0;
 bool reload;
 int gamesplayed = 0;
+int highscore;
 
 class QNote{
   String note;
@@ -67,12 +69,28 @@ List<QNote> calculateScale(Scale scale, int index){     //Change Note to Qnote
 class _QuizScreen extends State<QuizScreen> {
   Random myrand = new Random();
   List<Color> buttoncolors;
+
+  _setHighScore(int temp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setInt('highscore', temp);
+    });
+  }
+  _loadHighScore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      highscore = (prefs.getInt('highscore') ?? 0);
+    });
+  }
+
+
   @override
   void initState() {
     score = 0;
     deaths = 0;
     print(gamesplayed);
     reload = true;
+    _loadHighScore();
     buttoncolors = [Color.fromRGBO(200, 250, 250, 1), Color.fromRGBO(200, 250, 250, 1), Color.fromRGBO(200, 250, 250, 1), Color.fromRGBO(200, 250, 250, 1), Color.fromRGBO(200, 250, 250, 1)];
     clickable = true;
     mynotes = [
@@ -308,7 +326,7 @@ class _QuizScreen extends State<QuizScreen> {
       if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
             Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -333,7 +351,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ],
             ),),
             Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 0, 56 - textSize * 0.35, 10), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -363,7 +381,7 @@ class _QuizScreen extends State<QuizScreen> {
       else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic" || mode == "Balinese" || mode == "Chinese" || mode == "Egyptian" || mode == "Mongolian"){
         return Column(children: <Widget>[            
             Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -388,7 +406,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ],
             ),),
             Padding(padding: EdgeInsets.fromLTRB(92 - textSize * 0.35, 0, 92 - textSize * 0.35, 10), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -414,7 +432,7 @@ class _QuizScreen extends State<QuizScreen> {
       else{
         return Column(children: <Widget>[            
             Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 12, 56-textSize, 12), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -443,7 +461,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ],
             ),),
             Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 10), child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
                   children: <TableCell>[
@@ -472,6 +490,7 @@ class _QuizScreen extends State<QuizScreen> {
         );
       }
     }
+    
     FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
@@ -590,9 +609,37 @@ class _QuizScreen extends State<QuizScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 6, bottom: 4), child: Text("Score: $score", style: TextStyle(fontSize: 32, color: Colors.grey[600]), textAlign: TextAlign.center,),),
-            lifeicons,
-            Padding(padding: EdgeInsets.only(bottom: 12),),
+            Padding(
+              padding: EdgeInsets.only(top: 6, bottom: 4), 
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 4),
+                        child: Column(children: <Widget>[
+                          Text("Score: $score", style: TextStyle(fontSize: 30, color: Colors.grey[600]), textAlign: TextAlign.center,),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child:Column(
+                        children: <Widget>[
+                          Text("High Score: $highscore", style: TextStyle(fontSize: 22, color: Colors.grey[600]), textAlign: TextAlign.right,),
+                          ],
+                        )
+                      )
+                    ],
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 6),),
+                  lifeicons,
+                  
+                  
+                ],
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 6),),
             Divider(height: 0, color: Colors.black45,),
             scaletable(selectedScale.name),
             Padding(padding: EdgeInsets.only(bottom: 6),),
@@ -607,6 +654,9 @@ class _QuizScreen extends State<QuizScreen> {
                         score++;
                         buttoncolors[0] = Colors.green[300]; 
                         clickable = false;
+                        if(score > highscore)
+                          _setHighScore(score);
+                        _loadHighScore();
                       });
                     }
                     else{
@@ -683,6 +733,9 @@ class _QuizScreen extends State<QuizScreen> {
                         score++;
                         buttoncolors[1] = Colors.green[300]; 
                         clickable = false;
+                        if(score > highscore)
+                          _setHighScore(score);
+                        _loadHighScore();
                       });
                     }
                     else{
@@ -759,6 +812,9 @@ class _QuizScreen extends State<QuizScreen> {
                         score++;
                         buttoncolors[2] = Colors.green[300]; 
                         clickable = false;
+                        if(score > highscore)
+                          _setHighScore(score);
+                        _loadHighScore();
                       });
                     }
                     else{
@@ -839,6 +895,9 @@ class _QuizScreen extends State<QuizScreen> {
                         score++;
                         buttoncolors[3] = Colors.green[300]; 
                         clickable = false;
+                        if(score > highscore)
+                          _setHighScore(score);
+                        _loadHighScore();
                       });
                     }
                     else{
@@ -915,6 +974,9 @@ class _QuizScreen extends State<QuizScreen> {
                         score++;
                         buttoncolors[4] = Colors.green[300]; 
                         clickable = false;
+                        if(score > highscore)
+                          _setHighScore(score);
+                        _loadHighScore();
                       });
                     }
                     else{

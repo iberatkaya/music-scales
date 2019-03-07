@@ -19,6 +19,7 @@ class _MetronomeScreen extends State<MetronomeScreen> {
   Duration bpmdur;
   Icon myplay;
   EdgeInsets playpadding;
+  List<Color> circlecolors;
 
   @override
   void initState() {
@@ -28,7 +29,8 @@ class _MetronomeScreen extends State<MetronomeScreen> {
     bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
     myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
     playpadding = EdgeInsets.only(left: 6);
-    audiostr = "hat1";
+    audiostr = "snare";
+    circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
     super.initState();
   }
 
@@ -43,23 +45,27 @@ class _MetronomeScreen extends State<MetronomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    audio.loadAll(["hats/hat1.mp3", "hats/hat2.mp3"]);
+    audio.loadAll(["metronome/hat1.mp3", "metronome/hat2.mp3", "metronome/snare1.mp3", "metronome/snare2.mp3", "metronome/kick1.mp3", "metronome/kick2.mp3"]);
 
-    Future<void> play(String hat) async{
-      await audio.play("hats/$hat.mp3");
+    Future<void> play(String astr) async{
+      await audio.play("metronome/$astr.mp3");
       }
 
 
     t = Timer.periodic(bpmdur, (Timer t){
       print(ctr);
+      String temp;
+      circlecolors[ctr%4] = Colors.red[400]; 
       if(ctr % 4 == 0){
-        audiostr = "hat1";
+        circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
+        temp = "${audiostr}1";
         ctr = 0;
       }
       else
-        audiostr = "hat2";
+        temp = "${audiostr}2";
       if(playbool){
-        play(audiostr);
+        circlecolors[ctr] = Colors.red[400]; 
+        play(temp);
         ctr++;
       }
       setState(() {
@@ -71,6 +77,19 @@ class _MetronomeScreen extends State<MetronomeScreen> {
       t.cancel();
       Navigator.of(context).pop();
     }
+
+    Row beatctricons =Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(FontAwesomeIcons.solidCircle, color: circlecolors[0], size: 36,),
+        Padding(padding: EdgeInsets.only(right: 2),),
+        Icon(FontAwesomeIcons.solidCircle, color: circlecolors[1], size: 36,),
+        Padding(padding: EdgeInsets.only(right: 2),),
+        Icon(FontAwesomeIcons.solidCircle, color: circlecolors[2], size: 36,),
+        Padding(padding: EdgeInsets.only(right: 2),),
+        Icon(FontAwesomeIcons.solidCircle, color: circlecolors[3], size: 36,)
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -117,12 +136,34 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                   ),
                 ),
                 Divider(height: 0, color: Colors.black26,),
-                Padding(padding: EdgeInsets.only(top: 6, bottom: 12),
+                Padding(padding: EdgeInsets.only(top: 6, bottom: 8),
                   child: Column(
                     children: <Widget>[
-                      Text("$ctr", style: TextStyle(fontSize: 36, fontWeight: FontWeight.w600)),
+                      Padding(padding:EdgeInsets.only(top: 4, bottom: 12), child: beatctricons),
                       Text("Beat Counter", style: TextStyle(fontSize: 21, color: Colors.grey[600], fontWeight: FontWeight.w300)),
                     ]
+                  ),
+                ),
+                Divider(height: 0, color: Colors.black26,),
+                Padding(
+                  padding: EdgeInsets.only(top: 6, bottom: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("Sound:  ", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 22),),
+                      DropdownButton<String>(
+                        hint: Text("${audiostr.replaceRange(0, 1, audiostr[0].toUpperCase())}", style: TextStyle(fontSize: 18),),
+                        items: <String>["Snare", "Hat", "Kick"].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text("$value"),
+                          );
+                        }).toList(),
+                        onChanged: (String newValueSelected) {
+                          audiostr = newValueSelected.toLowerCase();
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Divider(height: 0, color: Colors.black26,),
@@ -142,6 +183,7 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                                     bpm--; 
                                     bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
                                     ctr = 0;
+                                    circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
                                     t.cancel();
                                   }
                                 });
@@ -151,15 +193,16 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                               child: Container(
                                 child: Slider(
                                   value: bpm,
-                                  divisions: 201,
+                                  divisions: 231,
                                   min: 10,
-                                  max: 220,
+                                  max: 240,
                                   activeColor: Colors.orange,
                                   inactiveColor: Colors.orange[100],
                                   onChanged: (double newval){
                                     setState(() {
                                       bpm = newval; 
                                       bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
+                                      circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
                                       ctr = 0;
                                       t.cancel();
                                     });
@@ -175,9 +218,10 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                               color: Colors.orange[300],
                               onPressed: (){
                                 setState(() {
-                                  if(bpm < 220){
+                                  if(bpm < 240){
                                     bpm++; 
                                     bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
+                                    circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
                                     ctr = 0;
                                     t.cancel();
                                   }

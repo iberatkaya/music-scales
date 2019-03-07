@@ -239,7 +239,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                   children: <Widget>[
                     Padding(padding: EdgeInsets.fromLTRB(36 - textSize, 16, 36-textSize, 14), 
                     child: Table(
-                      border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+                      border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
                       children: <TableRow>[
                         TableRow(
                           children: <TableCell>[
@@ -268,7 +268,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                         ],
                     ),),
                     Padding(padding: EdgeInsets.fromLTRB(46 - textSize * 0.35, 0, 46 - textSize * 0.35, 12), child: Table(
-                      border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+                      border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
                       children: <TableRow>[
                         TableRow(
                           children: <TableCell>[
@@ -347,11 +347,11 @@ class RandomProgScreen extends StatelessWidget{
       if(progressions[number].length == 3){
         return Column(children: <Widget>[
           Padding(padding: EdgeInsets.fromLTRB(0, 26, 0, 6), child:Text("Formula: ${progressions[number][0]} - ${progressions[number][1]} - ${progressions[number][2]}", style: TextStyle(fontSize: 28, color: Color.fromRGBO(70, 70, 70, 0.8)),),),
-          Padding(padding: EdgeInsets.fromLTRB(8, 2, 8, 0), child: Divider(color: Color.fromRGBO(30, 30, 30, 0.7),),),
+          Divider(height: 0, color: Colors.black26,),
           Padding(
             padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 20, 56 - textSize * 0.45, 0),
             child: Table(
-              border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -382,10 +382,10 @@ class RandomProgScreen extends StatelessWidget{
         if(progressions[number].length == 4){
           return Column(children: <Widget>[
             Padding(padding: EdgeInsets.fromLTRB(0, 26, 0, 6), child:Text("Formula: ${progressions[number][0]} - ${progressions[number][1]} - ${progressions[number][2]} - ${progressions[number][3]}", style: TextStyle(fontSize: 28, color: Color.fromRGBO(70, 70, 70, 0.8)),),),
-            Padding(padding: EdgeInsets.fromLTRB(8, 2, 8, 0), child: Divider(color: Color.fromRGBO(30, 30, 30, 0.7),),),
+            Divider(height: 0, color: Colors.black26,),
             Padding(padding: EdgeInsets.fromLTRB(44 - textSize * 0.6, 20, 44 - textSize * 0.6, 0), 
               child:Table(
-                border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+                border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
                 children: <TableRow>[
                   TableRow(
                     children: <TableCell>[

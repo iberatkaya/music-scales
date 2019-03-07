@@ -55,7 +55,7 @@ class _SongsListScreen extends State<SongsListScreen>{
   ListView mylist(List<Song> mysongs){
     return ListView.separated(
       separatorBuilder: (BuildContext context, int index){
-        return Padding(padding: EdgeInsets.fromLTRB(4, 0, 4, 0), child: Divider(height: 0, color: Colors.black54,));
+        return Divider(height: 0, color: Colors.black26,);
       },
       itemCount: mysongs.length,
       physics: AlwaysScrollableScrollPhysics(),

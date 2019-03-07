@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'main.dart';
-import 'scales.dart';
 
 class SearchScreen extends StatefulWidget{
   @override
@@ -76,12 +75,29 @@ class ScaleandKey{
 
 var allScales;
 
+
 class _SearchScreen extends State<SearchScreen> {
+
 
   final myController = TextEditingController();
   String searchText = "";
-
-
+  List<Note> calculateScale(int mode, int key){
+    List<Note> theScale = [];
+    int index = key;
+    Scale scaleObj;
+    for(int i=0; i<searchScales.length; i++){
+      if(mode == searchScales[i].index)
+        scaleObj = searchScales[i];
+    }
+    for(int j=0; j<scaleObj.formula.length+1; j++){
+      if(j != 0)
+        index += scaleObj.formula[j-1];
+      if(index > 11)
+        index %= 12;
+      theScale.add(searchNotes[index]); 
+    }
+    return theScale;
+  }
 
   List<int> noteindexs = [];
   List<int> scaleindexs = [];
@@ -131,6 +147,18 @@ class _SearchScreen extends State<SearchScreen> {
     return temptoreturn;
   }
 
+  Text scaleNotesText(List<Note> mynotes){
+    if(mynotes.length == 7){
+      return Text("${mynotes[0].note} ${mynotes[1].note} ${mynotes[2].note} ${mynotes[3].note} ${mynotes[4].note} ${mynotes[5].note} ${mynotes[6].note}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),);
+    }
+    else if(mynotes.length == 6){
+      return Text("${mynotes[0].note} ${mynotes[1].note} ${mynotes[2].note} ${mynotes[3].note} ${mynotes[4].note} ${mynotes[5].note}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),);
+    }
+    else if(mynotes.length == 5){
+      return Text("${mynotes[0].note} ${mynotes[1].note} ${mynotes[2].note} ${mynotes[3].note} ${mynotes[4].note}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),);
+    }
+  }
+
 
   @override
   void dispose() {
@@ -155,7 +183,7 @@ class _SearchScreen extends State<SearchScreen> {
                     context: context,
                     builder: (ctxt) => AlertDialog(
                       title: Text("Help", textAlign: TextAlign.center,),
-                      content: Text("Write the notes in the search bar. Use '#' for sharp notes and 'b' for flat notes. Click the scale to view it."),
+                      content: Text("Write the notes in the search bar. Use '#' for sharp notes and 'b' for flat notes."),    // Click the scale to view it. (Buggy)
                     )
                     );
                   },
@@ -208,18 +236,29 @@ class _SearchScreen extends State<SearchScreen> {
                     return Divider(height: 0, color: Colors.black26,);
                   },
                   itemBuilder: (BuildContext context, int index){
+                    List<List<Note>> scaleNotes = [];
+                    for(int j=0; j<noteindexs.length; j++){
+                      scaleNotes.add(calculateScale(searchScales[scaleindexs[index]].index, searchNotes[noteindexs[index]].index));
+                    }
                     return ListTile(
                       title:Container( 
-                        child: Text("${searchNotes[noteindexs[index]].note} ${searchScales[scaleindexs[index]].name}", style: TextStyle(fontSize: 23),),
-                        padding: EdgeInsets.fromLTRB(4, 20, 0, 22),
+                        padding: EdgeInsets.fromLTRB(3, 11, 0, 13),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("${searchNotes[noteindexs[index]].note} ${searchScales[scaleindexs[index]].name}", style: TextStyle(fontSize: 26),),
+                            Padding(padding: EdgeInsets.only(bottom: 5),),
+                            scaleNotesText(scaleNotes[index]),
+                          ],
+                        ),
                       ),
-                      onTap: (){
+                      /*onTap: (){                  //Causes a bug
                         clickednote = searchNotes[noteindexs[index]].note;
                         clickedindex = searchNotes[noteindexs[index]].index;
                         clickednotescale = searchScales[scaleindexs[index]].name;
                         clickedindexscale = searchScales[scaleindexs[index]].index;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
-                      },
+                      },*/
                     );
                   },
                 ),

@@ -230,7 +230,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       if(mode == 2 || mode == 5 || mode == 6 || mode == 10 || mode == 11 || mode == 13 || mode == 14 || mode == 15 || mode == 16 || mode == 21 || mode == 27){
         thetable = Padding(padding: EdgeInsets.fromLTRB(50 - textSize * 0.6, 12, 50 - textSize * 0.6, 10), 
           child:Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -265,7 +265,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           child: Column(
             children: <Widget>[ 
             Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -291,7 +291,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             ),
           Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 0),
             child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -321,7 +321,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           child: Column(
             children: <Widget>[ 
             Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -347,7 +347,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             ),
           Padding(padding: EdgeInsets.only(top: 12),
             child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[
@@ -379,7 +379,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       else{ 
         thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 12, 56 - textSize * 0.45, 10),
             child: Table(
-             border: TableBorder.all(width: 1.5, color: Color.fromRGBO(20, 0, 160, 0.2)),
+             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
               TableRow(
                 children: <TableCell>[

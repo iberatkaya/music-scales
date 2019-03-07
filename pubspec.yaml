@@ -56,7 +56,7 @@ flutter:
     - lib/assets/imgs/
     - assets/notes/guitar/
     - assets/notes/piano/
-    - assets/hats/
+    - assets/metronome/
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
