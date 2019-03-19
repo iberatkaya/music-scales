@@ -385,7 +385,6 @@ class _SongsListScreen extends State<SongsListScreen>{
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
               Container(
                 color: Color.fromRGBO(225, 250, 250, 1),
                 padding: EdgeInsets.only(top: 10, bottom: 8),
@@ -397,7 +396,7 @@ class _SongsListScreen extends State<SongsListScreen>{
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.fromLTRB(2, 0, 2, 0), child: Divider(height: 0, color: Colors.black26,)),
+              Divider(height: 0, color: Colors.black26,),
               FutureBuilder<List<Song>>(
                 future: fetchSong("songs", param),
                 builder: (BuildContext context, AsyncSnapshot<List<Song>> snapshot){

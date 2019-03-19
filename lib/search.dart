@@ -227,7 +227,7 @@ class _SearchScreen extends State<SearchScreen> {
                 ],
               ),
             ),
-            Divider(height: 0, color: Colors.black,),
+            Divider(height: 0, color: Colors.black26,),
             Container(
               child: Expanded(
                 child: ListView.separated(

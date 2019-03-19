@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'chords.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -192,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
 
-    FirebaseAdMob.instance.initialize(appId: appid);
+/*    FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
@@ -202,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
       myInterstitial2..load()..show();
     if(showad == 11)
       myInterstitial3..load()..show();
-
+*/
 
     
     return Scaffold(
@@ -599,7 +598,7 @@ class _SettingsScreen extends State<SettingsScreen> {
         child: Column(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
+              margin: EdgeInsets.fromLTRB(12, 6, 0, 8),
               padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[
@@ -622,7 +621,7 @@ class _SettingsScreen extends State<SettingsScreen> {
              ),
             Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
             Container(
-              margin: EdgeInsets.fromLTRB(12, 10, 0, 12),
+              margin: EdgeInsets.fromLTRB(12, 6, 0, 8),
               padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[

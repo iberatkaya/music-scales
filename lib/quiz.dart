@@ -296,6 +296,40 @@ class _QuizScreen extends State<QuizScreen> {
         nums[5] = "b6";
         nums[6] = "b7";
       }
+      else if(mode == "Neopolitan"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[5] = "b6";
+      }
+      else if(mode == "Neopolitan Major"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+      }
+      else if(mode == "Neopolitan Minor"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
+      else if(mode == "Persian"){
+        nums[1] = "b2";
+        nums[4] = "b5";
+        nums[5] = "b6";
+      }
+      else if(mode == "Altered bb7"){
+        nums[1] = "b2";
+        nums[2] = "b3";
+        nums[3] = "b4";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "bb7";
+      }
+      else if(mode == "Locrian 2"){
+        nums[2] = "b3";
+        nums[4] = "b5";
+        nums[5] = "b6";
+        nums[6] = "b7";
+      }
     }
 
     tableNums(selectedScale.name);
@@ -490,14 +524,14 @@ class _QuizScreen extends State<QuizScreen> {
         );
       }
     }
-    
+    /*
     FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     if(gamesplayed == 4)
       myInterstitial..show();
     if(gamesplayed == 9)
-      myInterstitial2..show();
+      myInterstitial2..show();*/
 
     var lifeicons;
     Row _lifeicons(){
@@ -609,40 +643,41 @@ class _QuizScreen extends State<QuizScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 6, bottom: 4), 
-              child: Column(
+              Column(
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(left: 4),
+                        color: Color.fromRGBO(255, 225, 225, 1),
+                        padding: EdgeInsets.only(left: 27, right: 27, top: 14, bottom: 14),
                         child: Column(children: <Widget>[
-                          Text("Score: $score", style: TextStyle(fontSize: 30, color: Colors.grey[600]), textAlign: TextAlign.center,),
+                          Text("Score: $score", style: TextStyle(fontSize: 26, color: Colors.blue), textAlign: TextAlign.center,),
                           ],
                         ),
                       ),
-                      Container(
-                        child:Column(
-                        children: <Widget>[
-                          Text("High Score: $highscore", style: TextStyle(fontSize: 22, color: Colors.grey[600]), textAlign: TextAlign.right,),
-                          ],
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(top: 14, bottom: 14),
+                          color: Color.fromRGBO(225, 250, 250, 1),
+                          child:Column(
+                            children: <Widget>[
+                              Text("High Score: $highscore", style: TextStyle(fontSize: 26, color: Colors.deepPurple), textAlign: TextAlign.right,),
+                              ],
+                            )
                         )
-                      )
+                      ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 6),),
-                  lifeicons,
-                  
-                  
+                  Container(
+                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                    child: lifeicons,
+                    color: Colors.green[50],
+                  )
                 ],
               ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 6),),
-            Divider(height: 0, color: Colors.black45,),
+            Divider(height: 0, color: Colors.black26,),
             scaletable(selectedScale.name),
-            Padding(padding: EdgeInsets.only(bottom: 6),),
+            Padding(padding: EdgeInsets.only(bottom: 2),),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -720,9 +755,9 @@ class _QuizScreen extends State<QuizScreen> {
                   }
                 },
                 shape: CircleBorder(),
-                padding: EdgeInsets.all(26),
+                padding: EdgeInsets.all(24),
                 color: buttoncolors[0],
-                child: Text("${choices[0].note}", style: TextStyle(fontSize: 28),),
+                child: Text("${choices[0].note}", style: TextStyle(fontSize: 26),),
               ),
               Padding(padding: EdgeInsets.only(right: 8),),
               FlatButton(
@@ -799,9 +834,9 @@ class _QuizScreen extends State<QuizScreen> {
                   }
                 },
                 shape: CircleBorder(),
-                padding: EdgeInsets.all(26),
+                padding: EdgeInsets.all(24),
                 color: buttoncolors[1],
-                child: Text("${choices[1].note}", style: TextStyle(fontSize: 28),),
+                child: Text("${choices[1].note}", style: TextStyle(fontSize: 26),),
               ),
               Padding(padding: EdgeInsets.only(right: 8),),
               FlatButton(
@@ -878,9 +913,9 @@ class _QuizScreen extends State<QuizScreen> {
                   }
                 },
                 shape: CircleBorder(),
-                padding: EdgeInsets.all(26),
+                padding: EdgeInsets.all(24),
                 color: buttoncolors[2],
-                child: Text("${choices[2].note}", style: TextStyle(fontSize: 28),),
+                child: Text("${choices[2].note}", style: TextStyle(fontSize: 26),),
               ),
             ],),
             Padding(padding: EdgeInsets.only(top: 4),),
@@ -961,9 +996,9 @@ class _QuizScreen extends State<QuizScreen> {
                   }
                 },
                 shape: CircleBorder(),
-                padding: EdgeInsets.all(26),
+                padding: EdgeInsets.all(24),
                 color: buttoncolors[3],
-                child: Text("${choices[3].note}", style: TextStyle(fontSize: 28),),
+                child: Text("${choices[3].note}", style: TextStyle(fontSize: 26),),
               ),
               Padding(padding: EdgeInsets.only(right: 8),),
               FlatButton(
@@ -1040,12 +1075,12 @@ class _QuizScreen extends State<QuizScreen> {
                   }
                 },
                 shape: CircleBorder(),
-                padding: EdgeInsets.all(26),
+                padding: EdgeInsets.all(24),
                 color: buttoncolors[4],
-                child: Text("${choices[4].note}", style: TextStyle(fontSize: 28),),
+                child: Text("${choices[4].note}", style: TextStyle(fontSize: 26),),
               ),
             ],),
-            Padding(padding: EdgeInsets.only(bottom: 12),),
+            Padding(padding: EdgeInsets.only(bottom: 6),),
           ],
         ),
       ),
