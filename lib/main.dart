@@ -85,6 +85,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 String instrument;
+String defaultinstrument;
 double textSize = 28.0;
 String speed;
 
@@ -160,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _loadInstr() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      instrument = (prefs.getString('instrument') ?? "Piano");
+      defaultinstrument = (prefs.getString('defaultinstrument') ?? "Piano");
     });
   }
 
@@ -175,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   
   _launchURL() async {
-    const url = 'mailto:ibraberatkaya@gmail.com?subject=Report%20A%20Bug&body=';
+    const url = 'mailto:ibraberatkaya@gmail.com?subject=Feedback&body=';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -183,6 +184,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  _launchPrivPol() async {
+    const url = "https://kayaib17.github.io/MusicScalesPrivacyPolicy/";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,8 +199,9 @@ class _MyHomePageState extends State<MyHomePage> {
       precacheImage(AssetImage('lib/assets/imgs/logo.jpg'), context);
       loaded = true;
     }
-
-/*    FirebaseAdMob.instance.initialize(appId: appid);
+    instrument = defaultinstrument;
+/*
+    FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
     myInterstitial3..load();
@@ -200,10 +210,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if(showad == 6)
       myInterstitial2..load()..show();
     if(showad == 11)
-      myInterstitial3..load()..show();
-*/
+      myInterstitial3..load()..show();*/
 
-    
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Music Scales", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1),)),
@@ -277,6 +286,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     context: context,
                     children: <Widget>[
                       Text("Music Scales is an app that shows the user the notes of a scale or a chord in a selected key, and shows chord progressions for free. The simple design lets the user quickly learn the chords, scales, and progressions on a piano and on a guitar."),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 16, 14, 0),
+                        child: FlatButton(
+                          color: Color.fromRGBO(250, 240, 240, 0.6),
+                          child: Text("Privacy Policy", style: TextStyle(color: Colors.grey[800], fontSize: 11)),
+                          onPressed: (){
+                            _launchPrivPol();
+                          }
+                        ) 
+                      ),
                     ]
                   );
                 },
@@ -560,13 +579,13 @@ class _SettingsScreen extends State<SettingsScreen> {
   _changeInstr(String temp) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      prefs.setString('instrument', temp);
+      prefs.setString('defaultinstrument', temp);
     });
   }
   _loadInstr() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      instrument = (prefs.getString('instrument') ?? "Piano");
+      defaultinstrument = (prefs.getString('defaultinstrument') ?? "Piano");
     });
   }
   
@@ -604,7 +623,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                 children: <Widget>[
                   Text("Default Instrument:    ", style: TextStyle(fontSize: 18),),
                   DropdownButton<String>(
-                    hint: Text("$instrument", style: TextStyle(fontSize: 18),),
+                    hint: Text("$defaultinstrument", style: TextStyle(fontSize: 18),),
                     items: <String>["Piano", "Guitar"].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

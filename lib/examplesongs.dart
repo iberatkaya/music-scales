@@ -65,18 +65,18 @@ class _SongsListScreen extends State<SongsListScreen>{
                   url = mysongs[index].url;
                   _launchURL();
                 },
-                contentPadding: EdgeInsets.fromLTRB(16, 14, 0, 12),
+                contentPadding: EdgeInsets.fromLTRB(14, 9, 0, 8),
                 leading: Column(
                   children: <Widget>[
                     Row(children: <Widget>[
                       Flexible(
                         child: Container(
-                          child: Text("${mysongs[index].song}", style: TextStyle(fontSize: 23), overflow: TextOverflow.ellipsis,)
+                          child: Text("${mysongs[index].song}", style: TextStyle(fontSize: 22), overflow: TextOverflow.ellipsis,)
                           )
                         )
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 10),
+                    Padding(padding: EdgeInsets.only(top: 7),
                     child: Row(children: <Widget>[
                       Flexible(
                         child: Container(
@@ -334,7 +334,7 @@ class _SongsListScreen extends State<SongsListScreen>{
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Songs Containing $globalappbarprog", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          title: Text("Progression: $globalappbarprog", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
           elevation: 1,
           actions: <Widget>[
             GestureDetector(

@@ -133,7 +133,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               },
               child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), 
                 child: Center(
-                  child: Text("$chordname", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red, fontWeight: FontWeight.w400),)
+                  child: Text("$chordname", style: TextStyle(fontSize: textSize * 0.8, color: Colors.red, fontWeight: FontWeight.w400),)
                 )
               ),
             ),
@@ -176,7 +176,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
           children: <Widget>[
             Row(children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                padding: EdgeInsets.only(top: 10, bottom: 2, left: 28, right: 28),
                 color: Color.fromRGBO(255, 225, 225, 1),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +203,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
               Expanded(
                 child: Container(
                   color: Color.fromRGBO(225, 250, 250, 1),
-                  padding: EdgeInsets.only(top: 8, bottom: 2),
+                  padding: EdgeInsets.only(top: 10, bottom: 2),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -325,7 +325,7 @@ class RandomProgScreen extends StatelessWidget{
                 onPressed: (){
                   play(chordname);
                 },
-                child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), 
+                child: Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), 
                   child: Center(
                     child: Text("$chordname", style: TextStyle(fontSize: textSize * 0.85, color: Colors.red, fontWeight: FontWeight.w400),)
                   )

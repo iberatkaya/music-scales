@@ -25,6 +25,8 @@ List<Chord> chords = [    //A A# B C C# D D# E F F# G G#
   Chord("7b5", 15, [4, 2, 4]),
   Chord("7#5", 16, [4, 4, 2]),
   Chord("Diminished 7th", 14, [3, 3, 3]),
+  Chord("Add2", 30, [2, 2, 3]),
+  Chord("Add4", 31, [4, 1, 2]),
   Chord("6th", 10, [4, 3, 2]),
   Chord("Minor 6th", 11, [3, 4, 2]), 
   Chord("6th/9th", 12, [4, 3, 2, 5]),
@@ -39,7 +41,7 @@ List<Chord> chords = [    //A A# B C C# D D# E F F# G G#
   Chord("Minor 11th", 24, [3, 4, 3, 4, 3]),
   Chord("m(maj11)", 29, [3, 4, 4, 3, 3]),
   Chord("11b5", 25, [4, 2, 4, 4, 3]),
-  Chord("11#5", 26, [4, 4, 2, 4, 3])  //Continue from 30
+  Chord("11#5", 26, [4, 4, 2, 4, 3])  //Continue from 32
 ];
 
 class CNote{
@@ -130,7 +132,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             playcache("$note", index);
           },
           child: Container(
-              child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red, fontWeight: FontWeight.w400),))),
+              child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize, color: Colors.red, fontWeight: FontWeight.w400),))),
             ),
         ),
       );
@@ -221,14 +223,23 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         nums[2] = "#5";
         nums[3] = "b7";        
       }
+      else if(chord == "Add2"){
+        nums[1] = "2";
+        nums[2] = "3";
+        nums[3] = "5";        
+      }
+      else if(chord == "Add4"){
+        nums[2] = "4";
+        nums[3] = "5";        
+      }
     }
 
     tablenums(clickednotescale);
 
     Padding mytable(int mode){
       Padding thetable;
-      if(mode == 2 || mode == 5 || mode == 6 || mode == 10 || mode == 11 || mode == 13 || mode == 14 || mode == 15 || mode == 16 || mode == 21 || mode == 27){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(50 - textSize * 0.6, 12, 50 - textSize * 0.6, 10), 
+      if(mode == 2 || mode == 5 || mode == 6 || mode == 10 || mode == 11 || mode == 13 || mode == 14 || mode == 15 || mode == 16 || mode == 21 || mode == 27 || mode == 30 || mode == 31){
+        thetable = Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 10), 
           child:Table(
              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
@@ -261,7 +272,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
            );
         }
       else if(mode == 9 || mode == 12 || mode == 17 || mode == 18 || mode == 19 || mode == 20 || mode == 28){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 12, 56 - textSize * 0.45, 10),
+        thetable = Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 10),
           child: Column(
             children: <Widget>[ 
             Table(
@@ -289,7 +300,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
               ),
               ],
             ),
-          Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 0),
+          Padding(padding: EdgeInsets.fromLTRB(40, 12, 40, 0),
             child: Table(
              border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
              children: <TableRow>[
@@ -317,7 +328,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
            );
       }
       else if(mode == 22 || mode == 23 || mode == 24 || mode == 25 || mode == 26 || mode == 29){
-        thetable = Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.45, 12, 56 - textSize * 0.45, 10),
+        thetable = Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 10),
           child: Column(
             children: <Widget>[ 
             Table(
@@ -468,6 +479,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         return "${key}11#5 Chord";  
       else if(mode == "m(maj7)")
         return "${key}m(maj7) Chord";  
+      else if(mode == "Add2")
+        return "${key}add2 Chord";  
+      else if(mode == "Add4")
+        return "${key}add4 Chord";  
       return "$key $mode Chord";
     }
 
@@ -535,6 +550,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
           else if(mode == "11#5")
             url = "${instr.toLowerCase()}-${notes[0].note}911s5-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
+          else if(mode == "Add2")
+            url = "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
+          else if(mode == "Add4")
+            url = "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}"; 
           return url.replaceAll("#", "s");
         }
       else{
@@ -598,6 +617,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
           else if(mode == "11#5")
             url = "${instr.toLowerCase()}-${notes[0].note}911s5-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}";
+          else if(mode == "Add2")
+            url = "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+          else if(mode == "Add4")
+            url = "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
           return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
         }
       }
@@ -663,6 +686,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "11#5")
           url = "${instr.toLowerCase()}-${notes[0].note}911s5-${notes[0].note.toLowerCase()}-n-l-h-${shortstrings[img][notes[0].index][4].replaceAll(" ", "-")}";
+        else if(mode == "Add2")
+          url = "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][24].replaceAll(" ", "-")}";
+        else if(mode == "Add4")
+          url = "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][25].replaceAll(" ", "-")}";
         return url.replaceAll("#", "s");
         }
       else{
@@ -726,6 +753,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}";
         else if(mode == "11#5")
           url = "${instr.toLowerCase()}-${notes[0].note}911s5-${notes[0].note.toLowerCase()}-l-h-${shortstrings[img][notes[0].index][4].replaceAll(" ", "-")}";
+        else if(mode == "Add2")
+          url = "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][24].replaceAll(" ", "-")}";
+        else if(mode == "Add4")
+          url = "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][25].replaceAll(" ", "-")}";
         return url.replaceFirst("#", "s").replaceFirst("#", "-sharp").replaceAll("#", "s");  
         }
       }
@@ -794,6 +825,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
         else if(mode == "11#5")
           url = "${instr.toLowerCase()}-${notes[0].note}911s5-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}-${notes[4].note.toLowerCase()}-${notes[5].note.toLowerCase()}"; 
+        else if(mode == "Add2")
+          url = "${instr.toLowerCase()}-${notes[0].note}add2-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
+        else if(mode == "Add4")
+          url = "${instr.toLowerCase()}-${notes[0].note}add4-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
         }
     else if(instr == "Guitar"){
       if(mode == "Major")
@@ -856,6 +891,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           url = "${instr.toLowerCase()}-${notes[0].note}911b5-$speed-${shortstrings[img][notes[0].index][3].replaceAll(" ", "-")}"; 
         else if(mode == "11#5")
           url = "${instr.toLowerCase()}-${notes[0].note}911s5-$speed-${shortstrings[img][notes[0].index][4].replaceAll(" ", "-")}"; 
+        else if(mode == "Add2")
+          url = "${instr.toLowerCase()}-${notes[0].note}add2-$speed-${strings[img][notes[0].index][24].replaceAll(" ", "-")}"; 
+        else if(mode == "Add4")
+          url = "${instr.toLowerCase()}-${notes[0].note}add4-$speed-${strings[img][notes[0].index][25].replaceAll(" ", "-")}"; 
         }
     //print(url);
     if(!notes[0].note.contains("#"))
@@ -954,7 +993,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 8, 8), 
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 6, 8), 
               child: Image(
                 color: Colors.black,
                 image: instrimg,
@@ -962,7 +1001,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
               ),
             ),
           GestureDetector(
-            child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+            child: Padding(padding: EdgeInsets.only(right: 6), child: Icon(Icons.help, size: 30,)),
             onTap: (){
               showDialog(
               context: context,
@@ -983,7 +1022,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
               children: <Widget>[
                 Row(children: <Widget> [
                   Container(
-                    padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                    padding: EdgeInsets.only(top: 10, bottom: 2, left: 28, right: 28),
                     color: Color.fromRGBO(255, 225, 225, 1),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1010,7 +1049,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                   Expanded(
                     child: Container(
                       color: Color.fromRGBO(225, 250, 250, 1),
-                      padding: EdgeInsets.only(top: 8, bottom: 2),
+                      padding: EdgeInsets.only(top: 10, bottom: 2),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

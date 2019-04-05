@@ -104,7 +104,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
     return Column(
         children: <Widget>[
           Padding(
-          padding: EdgeInsets.fromLTRB(22, 6, 22, 6),
+          padding: EdgeInsets.fromLTRB(22, 10, 22, 6),
           child: Table(
             border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
             children: <TableRow>[
@@ -305,7 +305,7 @@ class _ChordProbScreen extends State<ChordProbScreen>{
   Widget build(BuildContext context){
     return Scaffold(
         appBar: AppBar(
-          title: Text("Next Chord Possibility", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+          title: Text("Next Chord Possibility", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1), fontSize: 19)),
           elevation: 1,
           actions: <Widget>[
             GestureDetector(

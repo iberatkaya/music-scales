@@ -127,6 +127,13 @@ class _QuizScreen extends State<QuizScreen> {
       print("InterstitialAd event is $event");
     },
   );
+  var myInterstitial3 = InterstitialAd(
+    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
+    targetingInfo: targetingInfo,
+    listener: (MobileAdEvent event) {
+      print("InterstitialAd event is $event");
+    },
+  );
 
   @override
   void dispose(){
@@ -350,7 +357,7 @@ class _QuizScreen extends State<QuizScreen> {
             play("$note", index);
           },
           child: Container(
-            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red, fontWeight: FontWeight.w400),))),
+            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize, color: Colors.red, fontWeight: FontWeight.w400),))),
             ),
         ),
       );
@@ -359,7 +366,7 @@ class _QuizScreen extends State<QuizScreen> {
     Column scaletable(String mode){
       if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 10, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -384,7 +391,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 0, 56 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 0, 18, 10), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -414,7 +421,7 @@ class _QuizScreen extends State<QuizScreen> {
       }
       else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic" || mode == "Balinese" || mode == "Chinese" || mode == "Egyptian" || mode == "Mongolian"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 10, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -439,7 +446,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(92 - textSize * 0.35, 0, 92 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(60, 0, 60, 10), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -465,7 +472,7 @@ class _QuizScreen extends State<QuizScreen> {
       }
       else{
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 12, 56-textSize, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 10, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -494,7 +501,7 @@ class _QuizScreen extends State<QuizScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(40, 0, 40, 10), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -524,14 +531,16 @@ class _QuizScreen extends State<QuizScreen> {
         );
       }
     }
-    /*
+    
     FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
-    if(gamesplayed == 4)
+    if(gamesplayed == 3)
       myInterstitial..show();
-    if(gamesplayed == 9)
-      myInterstitial2..show();*/
+    if(gamesplayed == 8)
+      myInterstitial2..show();
+    if(gamesplayed == 15)
+      myInterstitial3..show();
 
     var lifeicons;
     Row _lifeicons(){
@@ -649,7 +658,7 @@ class _QuizScreen extends State<QuizScreen> {
                     children: <Widget>[
                       Container(
                         color: Color.fromRGBO(255, 225, 225, 1),
-                        padding: EdgeInsets.only(left: 27, right: 27, top: 14, bottom: 14),
+                        padding: EdgeInsets.only(left: 27, right: 27, top: 15, bottom: 15),
                         child: Column(children: <Widget>[
                           Text("Score: $score", style: TextStyle(fontSize: 26, color: Colors.blue), textAlign: TextAlign.center,),
                           ],
@@ -657,7 +666,7 @@ class _QuizScreen extends State<QuizScreen> {
                       ),
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.only(top: 14, bottom: 14),
+                          padding: EdgeInsets.only(top: 15, bottom: 15),
                           color: Color.fromRGBO(225, 250, 250, 1),
                           child:Column(
                             children: <Widget>[
@@ -669,7 +678,7 @@ class _QuizScreen extends State<QuizScreen> {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                    padding: EdgeInsets.only(top: 13, bottom: 13),
                     child: lifeicons,
                     color: Colors.green[50],
                   )

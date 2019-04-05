@@ -337,7 +337,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             play("$note", index);
           },
           child: Container(
-            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.6, 0, textSize * 0.65), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize * 1.1, color: Colors.red, fontWeight: FontWeight.w400),))),
+            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize, color: Colors.red, fontWeight: FontWeight.w400),))),
             ),
         ),
       );
@@ -346,7 +346,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     Column scaletable(String mode){
       if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -371,7 +371,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 0, 56 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 0, 18, 10), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -401,7 +401,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       }
       else if(mode == "Major Pentatonic" || mode == "Minor Pentatonic" || mode == "Balinese" || mode == "Chinese" || mode == "Egyptian" || mode == "Mongolian"){
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize * 0.35, 12, 56 - textSize * 0.35, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -426,7 +426,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(92 - textSize * 0.35, 0, 92 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(60, 0, 45, 60), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -452,7 +452,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       }
       else{
         return Column(children: <Widget>[            
-            Padding(padding: EdgeInsets.fromLTRB(56 - textSize, 12, 56-textSize, 12), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 12), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -481,7 +481,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 ],
             ),),
-            Padding(padding: EdgeInsets.fromLTRB(72 - textSize * 0.35, 0, 72 - textSize * 0.35, 10), child: Table(
+            Padding(padding: EdgeInsets.fromLTRB(40, 0, 40, 10), child: Table(
               border: TableBorder.all(width: 1, color: Color.fromRGBO(20, 0, 160, 0.2)),
               children: <TableRow>[
                 TableRow(
@@ -549,7 +549,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("$clickednote $clickednotescale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
+        title: Text("$clickednote $clickednotescale", style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1)), overflow: TextOverflow.fade,),
         elevation: 1,
         actions: <Widget>[
           GestureDetector(
@@ -562,7 +562,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                   instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
                 });
             },
-            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
+            child: Padding(padding: EdgeInsets.fromLTRB(0, 8, 6, 8),
               child: Image(
                 color: Colors.black,
                 image: instrimg,
@@ -570,7 +570,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
               ),
             ),
             GestureDetector(
-              child: Padding(padding: EdgeInsets.only(right: 10), child: Icon(Icons.help, size: 30,)),
+              child: Padding(padding: EdgeInsets.only(right: 6), child: Icon(Icons.help, size: 30,)),
               onTap: (){
                 showDialog(
                 context: context,
@@ -591,7 +591,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
               children: <Widget>[
                 Row(children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(top: 8, bottom: 2, left: 28, right: 28),
+                    padding: EdgeInsets.only(top: 10, bottom: 2, left: 28, right: 28),
                     color: Color.fromRGBO(255, 225, 225, 1),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -618,7 +618,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                   Expanded(
                     child: Container(
                       color: Color.fromRGBO(225, 250, 250, 1),
-                      padding: EdgeInsets.only(top: 8, bottom: 2),
+                      padding: EdgeInsets.only(top: 10, bottom: 2),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

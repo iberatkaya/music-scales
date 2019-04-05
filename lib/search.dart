@@ -197,7 +197,7 @@ class _SearchScreen extends State<SearchScreen> {
           children: <Widget>[
             Container(
               color: Color.fromRGBO(255, 195, 195, 0.5),
-              padding: EdgeInsets.only(bottom: 20, top: 2),
+              padding: EdgeInsets.only(bottom: 17, top: 1),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -242,12 +242,12 @@ class _SearchScreen extends State<SearchScreen> {
                     }
                     return ListTile(
                       title:Container( 
-                        padding: EdgeInsets.fromLTRB(3, 11, 0, 13),
+                        padding: EdgeInsets.fromLTRB(0, 6, 0, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text("${searchNotes[noteindexs[index]].note} ${searchScales[scaleindexs[index]].name}", style: TextStyle(fontSize: 26),),
-                            Padding(padding: EdgeInsets.only(bottom: 5),),
+                            Padding(padding: EdgeInsets.only(bottom: 6),),
                             scaleNotesText(scaleNotes[index]),
                           ],
                         ),
