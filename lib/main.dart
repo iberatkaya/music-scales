@@ -86,6 +86,7 @@ class MyHomePage extends StatefulWidget {
 
 String instrument;
 String defaultinstrument;
+String usebemolle;
 double textSize = 28.0;
 String speed;
 
@@ -148,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _loadInstr();
     _loadSpeed();
+    _loadFlat();
   }
   
   @override
@@ -171,6 +173,14 @@ class _MyHomePageState extends State<MyHomePage> {
       speed = (prefs.getString('speed') ?? "Fast");
     });
   }
+
+  _loadFlat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      usebemolle = (prefs.getString('usebemolle') ?? "No");
+    });
+  }
+
 
   bool loaded = false;
 
@@ -200,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
       loaded = true;
     }
     instrument = defaultinstrument;
-/*
+
     FirebaseAdMob.instance.initialize(appId: appid);
     myInterstitial..load();
     myInterstitial2..load();
@@ -210,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if(showad == 6)
       myInterstitial2..load()..show();
     if(showad == 11)
-      myInterstitial3..load()..show();*/
+      myInterstitial3..load()..show();
 
 
     return Scaffold(
@@ -335,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.music_notes, size: 110, color: Color.fromRGBO(200, 0, 0, 1),),
+                          Icon(CustomIcons.MyFlutterApp.music_notes, size: 108, color: Color.fromRGBO(200, 0, 0, 1),),
                           Padding(padding: EdgeInsets.only(bottom: 8), child: Text("Scales", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w300),))
                         ],
                       ),
@@ -354,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.guitar, size: 100, color: Colors.deepPurple,),
+                          Icon(CustomIcons.MyFlutterApp.guitar, size: 98, color: Colors.deepPurple,),
                           Padding(padding: EdgeInsets.only(bottom: 8, top: 6), child:Text("Chords", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300),))
                         ],
                       ),
@@ -373,7 +383,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(right: 12), child:Icon(CustomIcons.MyFlutterApp.prog, size: 90, color: Colors.green,),),
+                          Padding(padding: EdgeInsets.only(right: 12), child:Icon(CustomIcons.MyFlutterApp.prog, size: 86, color: Colors.green,),),
                           Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:AutoSizeText("Progressions", maxLines: 1, style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
@@ -388,7 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.piano, size: 90, color: Colors.black,),
+                          Icon(CustomIcons.MyFlutterApp.piano, size: 88, color: Colors.black,),
                           Padding(padding: EdgeInsets.only(bottom: 4, top: 10), child:Text("Piano", style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
@@ -403,7 +413,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(right: 10),child: Icon(FontAwesomeIcons.dice, size: 70, color: Colors.blueGrey,),),
+                          Padding(padding: EdgeInsets.only(right: 10),child: Icon(FontAwesomeIcons.dice, size: 68, color: Colors.blueGrey,),),
                           Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Chord\nPossibility", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
@@ -418,7 +428,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(FontAwesomeIcons.headphones, size: 75, color: Colors.brown[400],),
+                          Icon(FontAwesomeIcons.headphones, size: 72, color: Colors.brown[400],),
                           Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Example\nSongs", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
@@ -468,7 +478,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.quiz, size: 70, color: Colors.blue,),
+                          Icon(CustomIcons.MyFlutterApp.quiz, size: 68, color: Colors.blue,),
                           Padding(padding: EdgeInsets.only(top: 14), child:AutoSizeText("Quiz", maxLines: 1, style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
@@ -537,7 +547,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.search, size: 90, color: Colors.deepPurple[600],),
+                          Icon(Icons.search, size: 88, color: Colors.deepPurple[600],),
                           Padding(padding: EdgeInsets.only(bottom: 6), child:AutoSizeText("Scale\nFinder", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
                         ],
                       ),
@@ -552,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(CustomIcons.MyFlutterApp.metronome, size: 90, color: Colors.pink[600],),
+                          Icon(CustomIcons.MyFlutterApp.metronome, size: 88, color: Colors.pink[600],),
                           Padding(padding: EdgeInsets.only(bottom: 4, top: 6), child:Text("Metronome", style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
@@ -603,6 +613,20 @@ class _SettingsScreen extends State<SettingsScreen> {
     });
   }
 
+  _changeFlat(String temp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setString('usebemolle', temp);
+    });
+  }
+
+  _loadFlat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      usebemolle = (prefs.getString('usebemolle') ?? "No");
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -618,12 +642,12 @@ class _SettingsScreen extends State<SettingsScreen> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(12, 6, 0, 8),
-              padding: EdgeInsets.all(6),
+              padding: EdgeInsets.all(5),
               child: Row(              
                 children: <Widget>[
-                  Text("Default Instrument:    ", style: TextStyle(fontSize: 18),),
+                  Text("Default Instrument:    ", style: TextStyle(fontSize: 17),),
                   DropdownButton<String>(
-                    hint: Text("$defaultinstrument", style: TextStyle(fontSize: 18),),
+                    hint: Text("$defaultinstrument", style: TextStyle(fontSize: 17),),
                     items: <String>["Piano", "Guitar"].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -644,9 +668,9 @@ class _SettingsScreen extends State<SettingsScreen> {
               padding: EdgeInsets.all(6),
               child: Row(              
                 children: <Widget>[
-                  Text("Chord Audio Speed:    ", style: TextStyle(fontSize: 18),),
+                  Text("Chord Audio Speed:    ", style: TextStyle(fontSize: 17),),
                   DropdownButton<String>(
-                  hint: Text("$speed", style: TextStyle(fontSize: 18),),
+                  hint: Text("$speed", style: TextStyle(fontSize: 17),),
                   items: <String>["Fast", "Slow"].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -656,6 +680,29 @@ class _SettingsScreen extends State<SettingsScreen> {
                   onChanged: (String newValueSelected) {
                     _changeSpeed(newValueSelected);
                     _loadSpeed();
+                   },
+                  ),
+                ],
+              ),
+             ),
+            Divider(height: 0, color: Color.fromRGBO(0, 0, 200, 0.2),),
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 6, 0, 8),
+              padding: EdgeInsets.all(6),
+              child: Row(              
+                children: <Widget>[
+                  Text("Show Flats in Scales:    ", style: TextStyle(fontSize: 17),),
+                  DropdownButton<String>(
+                  hint: Text("$usebemolle", style: TextStyle(fontSize: 17),),
+                  items: <String>["No", "Yes"].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text("$value"),
+                    );
+                  }).toList(),
+                  onChanged: (String newValueSelected) {
+                    _changeFlat(newValueSelected);
+                    _loadFlat();
                    },
                   ),
                 ],

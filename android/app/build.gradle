@@ -40,10 +40,10 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.kaya.musicapp"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         multiDexEnabled true
-        versionCode 50
-        versionName "1.5.6.1"
+        versionCode 51
+        versionName "1.5.6.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

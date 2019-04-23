@@ -57,24 +57,26 @@ class ScalePrintScreen extends StatefulWidget{
 
 class SNote{
   String note;
+  String bemolle;
   int index;
   int audioindex;
-  SNote(this.note, this.index, this.audioindex);
+  bool isBemolle = false;
+  SNote(this.note, this.index, this.audioindex, this.bemolle);
 }
 
 List<SNote> notes = [
-  SNote("A", 0, 0),
-  SNote("A#", 1, 0),
-  SNote("B", 2, 0),
-  SNote("C", 3, 0),
-  SNote("C#", 4, 0),
-  SNote("D", 5, 0),
-  SNote("D#", 6, 0),
-  SNote("E", 7, 0),
-  SNote("F", 8, 0),
-  SNote("F#", 9, 0),
-  SNote("G", 10, 0),
-  SNote("G#", 11, 0),
+  SNote("A", 0, 0, "N"),
+  SNote("A#", 1, 0, "Bb"),
+  SNote("B", 2, 0, "N"),
+  SNote("C", 3, 0, "N"),
+  SNote("C#", 4, 0, "Db"),
+  SNote("D", 5, 0, "N"),
+  SNote("D#", 6, 0, "Eb"),
+  SNote("E", 7, 0, "N"),
+  SNote("F", 8, 0, "N"),
+  SNote("F#", 9, 0, "Gb"),
+  SNote("G", 10, 0, "N"),
+  SNote("G#", 11, 0, "Ab"),
 ];
 
 
@@ -82,12 +84,31 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   AudioCache audio = new AudioCache();
   var instrimg;
   @override
-    void initState() {
-      instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
-      super.initState();
-    }
+  void initState() {
+    instrimg = AssetImage('lib/assets/imgs/${instrument.toLowerCase()}.png');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    List<SNote> sharpToBemolle(List<SNote> thenotes){
+      List<SNote> tempscale = [];
+      for(int i=0; i<thenotes.length; i++){
+        SNote tempnote = new SNote(thenotes[i].note, thenotes[i].index, thenotes[i].audioindex, thenotes[i].bemolle);
+        if(tempnote.note.contains("#")){
+          for(int j=0; j<thenotes.length; j++){
+            if(j != i){
+              if(thenotes[j].note.contains(tempnote.note[0])){
+                print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
+                tempnote.isBemolle = true;
+                break;
+              }
+            }
+          }
+        }
+        tempscale.add(tempnote);
+      }
+      return tempscale;
+    }
     List<SNote> calculateScale(int mode, int key){
     	List<SNote> theScale = [];
       int audioindx = 4;
@@ -107,7 +128,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         notes[index].audioindex = audioindx;
         theScale.add(notes[index]); 
       }
-      return theScale;
+      return sharpToBemolle(theScale);
     }
     List<SNote> myScale;
     myScale = calculateScale(clickedindexscale, clickedindex);
@@ -334,6 +355,15 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         child: FlatButton(
           color: Color.fromRGBO(230, 80, 80, 0.12),
           onPressed: (){
+            if(note.contains("b")){
+              int tempint;
+              tempint = note.codeUnitAt(0);
+              tempint--;
+              if(tempint < 65)
+                tempint += 7;
+              note = String.fromCharCode(tempint) + "#";
+            }
+            print("note is $note");
             play("$note", index);
           },
           child: Container(
@@ -344,6 +374,20 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     }
 
     Column scaletable(String mode){
+      List<SNote> printScale = [];
+      if(usebemolle == "Yes"){
+        for(int i=0; i<myScale.length; i++){
+          SNote temp = new SNote(myScale[i].note, myScale[i].index, myScale[i].audioindex, myScale[i].bemolle);
+          temp.isBemolle = myScale[i].isBemolle;
+          if(temp.isBemolle){
+            print("Temp is bemolle; ${temp.bemolle}");
+            temp.note = temp.bemolle;
+          }
+          printScale.add(temp);
+        }
+      }
+      else
+        printScale = myScale;
       if(mode == "Blues" || mode == "Augmented"){
         return Column(children: <Widget>[            
             Padding(padding: EdgeInsets.fromLTRB(18, 12, 18, 12), child: Table(
@@ -364,9 +408,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[0].note, myScale[0].audioindex),
-                   noteCell(myScale[1].note, myScale[1].audioindex),
-                   noteCell(myScale[2].note, myScale[2].audioindex),
+                   noteCell(printScale[0].note, myScale[0].audioindex),
+                   noteCell(printScale[1].note, myScale[1].audioindex),
+                   noteCell(printScale[2].note, myScale[2].audioindex),
                   ],
                 ),
                 ],
@@ -389,9 +433,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[3].note, myScale[3].audioindex),
-                   noteCell(myScale[4].note, myScale[4].audioindex),
-                   noteCell(myScale[5].note, myScale[5].audioindex),
+                   noteCell(printScale[3].note, myScale[3].audioindex),
+                   noteCell(printScale[4].note, myScale[4].audioindex),
+                   noteCell(printScale[5].note, myScale[5].audioindex),
                   ],
                 ),
                 ],
@@ -419,9 +463,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[0].note, myScale[0].audioindex),
-                   noteCell(myScale[1].note, myScale[1].audioindex),
-                   noteCell(myScale[2].note, myScale[2].audioindex),
+                   noteCell(printScale[0].note, myScale[0].audioindex),
+                   noteCell(printScale[1].note, myScale[1].audioindex),
+                   noteCell(printScale[2].note, myScale[2].audioindex),
                   ],
                 ),
                 ],
@@ -441,8 +485,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                   noteCell(myScale[3].note, myScale[3].audioindex),
-                   noteCell(myScale[4].note, myScale[4].audioindex),
+                   noteCell(printScale[3].note, myScale[3].audioindex),
+                   noteCell(printScale[4].note, myScale[4].audioindex),
                   ],
                 ),
                 ],
@@ -473,10 +517,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    noteCell(myScale[0].note, myScale[0].audioindex),
-                    noteCell(myScale[1].note, myScale[1].audioindex),
-                    noteCell(myScale[2].note, myScale[2].audioindex),
-                    noteCell(myScale[3].note, myScale[3].audioindex),
+                    noteCell(printScale[0].note, myScale[0].audioindex),
+                    noteCell(printScale[1].note, myScale[1].audioindex),
+                    noteCell(printScale[2].note, myScale[2].audioindex),
+                    noteCell(printScale[3].note, myScale[3].audioindex),
                     ],
                 ),
                 ],
@@ -499,9 +543,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
                 TableRow(
                   children: <TableCell>[
-                    noteCell(myScale[4].note, myScale[4].audioindex),
-                    noteCell(myScale[5].note, myScale[5].audioindex),
-                    noteCell(myScale[6].note, myScale[6].audioindex),
+                    noteCell(printScale[4].note, myScale[4].audioindex),
+                    noteCell(printScale[5].note, myScale[5].audioindex),
+                    noteCell(printScale[6].note, myScale[6].audioindex),
                   ],
                 ),
                 ],

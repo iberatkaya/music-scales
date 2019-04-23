@@ -66,7 +66,7 @@ class _SongsListScreen extends State<SongsListScreen>{
                   _launchURL();
                 },
                 contentPadding: EdgeInsets.fromLTRB(14, 9, 0, 8),
-                leading: Column(
+                title: Column(
                   children: <Widget>[
                     Row(children: <Widget>[
                       Flexible(
@@ -329,6 +329,9 @@ class _SongsListScreen extends State<SongsListScreen>{
         mysong.add(Song.fromJson(responseJson2[i]));
       for(int i=0; i<5; i++) 
         mysong.add(Song.fromJson(responseJson3[i]));
+      for(int i=0; i<15; i++){
+        print(mysong[i].song);
+      }
       return mysong;
     }
 

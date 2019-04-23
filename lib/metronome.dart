@@ -23,19 +23,20 @@ class _MetronomeScreen extends State<MetronomeScreen> {
 
   @override
   void initState() {
-    bpm = 120;
+    bpm = 90;
     ctr = 0;
     playbool = false;
     bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
     myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
     playpadding = EdgeInsets.only(left: 6);
-    audiostr = "snare";
+    audiostr = "kick";
     circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
     super.initState();
   }
 
   @override
   void dispose() {
+    t.cancel();
     t.cancel();
     super.dispose();
   }
@@ -45,7 +46,7 @@ class _MetronomeScreen extends State<MetronomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    audio.loadAll(["metronome/hat1.mp3", "metronome/hat2.mp3", "metronome/snare1.mp3", "metronome/snare2.mp3", "metronome/kick1.mp3", "metronome/kick2.mp3"]);
+    audio.loadAll(["metronome/hat1.mp3", "metronome/hat2.mp3", "metronome/kick1.mp3", "metronome/kick2.mp3"]);
 
     Future<void> play(String astr) async{
       await audio.play("metronome/$astr.mp3");
@@ -153,7 +154,7 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                       Text("Sound:  ", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 22),),
                       DropdownButton<String>(
                         hint: Text("${audiostr.replaceRange(0, 1, audiostr[0].toUpperCase())}", style: TextStyle(fontSize: 18),),
-                        items: <String>["Snare", "Hat", "Kick"].map((String value) {
+                        items: <String>["Kick", "Hat"].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text("$value"),
@@ -193,9 +194,9 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                               child: Container(
                                 child: Slider(
                                   value: bpm,
-                                  divisions: 231,
+                                  divisions: 171,
                                   min: 10,
-                                  max: 240,
+                                  max: 180,
                                   activeColor: Colors.orange,
                                   inactiveColor: Colors.orange[100],
                                   onChanged: (double newval){
@@ -218,7 +219,7 @@ class _MetronomeScreen extends State<MetronomeScreen> {
                               color: Colors.orange[300],
                               onPressed: (){
                                 setState(() {
-                                  if(bpm < 240){
+                                  if(bpm < 180){
                                     bpm++; 
                                     bpmdur = Duration(milliseconds: ((60 / bpm) * 1000).toInt());
                                     circlecolors = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
