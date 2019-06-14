@@ -14,13 +14,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'appid.dart';
 import 'search.dart';
-import 'metronome.dart';
+//import 'metronome.dart';
 import 'quiz.dart';
 import 'scales.dart';
 import 'examplesongs.dart';
 import 'prog.dart';
 import 'chordprob.dart';
 import 'piano.dart';
+import 'searchchord.dart';
 
 
 void main() { 
@@ -556,7 +557,79 @@ class _MyHomePageState extends State<MyHomePage> {
                       shape: RoundedRectangleBorder(),
                       onPressed: (){
                           showad++;
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => MetronomeScreen()));
+                          allChords = [
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                            [
+                              [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
+                            ],
+                          ];
+
+                          void allChordsCalculate(){
+                            for(int i=0; i<12; i++){
+                              for(int j=0; j<32; j++){
+                                int index=i;
+                                for(int k=0; k<searchChords[j].formula.length+1; k++){
+                                  if(k != 0)
+                                    index += searchChords[j].formula[k-1];
+                                  if(index > 11)
+                                    index %= 12;
+                                  allChords[i][j].add(searchNotesC[index]); 
+                                }
+                              }
+                            }
+                          }
+                          allChordsCalculate();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchChordScreen()));
+
+                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => MetronomeScreen()));
+                        },
+                      color: Color.fromRGBO(80, 190, 105, 0.6),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.search, size: 88, color: Colors.pink[600],),
+                          Padding(padding: EdgeInsets.only(bottom: 6), child:AutoSizeText("Chord\nFinder", maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,))
+                        ],
+                      ),
+                    ),
+                    /*
+                    FlatButton(   There is a problem with the metronome, so it is on hold
+                      shape: RoundedRectangleBorder(),
+                      onPressed: (){
+                          showad++;
+                        //  Navigator.push(context, MaterialPageRoute(builder: (context) => MetronomeScreen()));
                         },
                       color: Color.fromRGBO(80, 190, 105, 0.6),
                       child: Column(
@@ -566,7 +639,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(padding: EdgeInsets.only(bottom: 4, top: 6), child:Text("Metronome", style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300), overflow: TextOverflow.ellipsis,))
                         ],
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ),

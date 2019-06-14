@@ -65,17 +65,17 @@ class SNote{
 }
 
 List<SNote> notes = [
-  SNote("A", 0, 0, "N"),
+  SNote("A", 0, 0, "G##"),
   SNote("A#", 1, 0, "Bb"),
-  SNote("B", 2, 0, "N"),
-  SNote("C", 3, 0, "N"),
+  SNote("B", 2, 0, "A##"),
+  SNote("C", 3, 0, "B#"),
   SNote("C#", 4, 0, "Db"),
-  SNote("D", 5, 0, "N"),
+  SNote("D", 5, 0, "C##"),
   SNote("D#", 6, 0, "Eb"),
-  SNote("E", 7, 0, "N"),
-  SNote("F", 8, 0, "N"),
+  SNote("E", 7, 0, "D##"),
+  SNote("F", 8, 0, "E#"),
   SNote("F#", 9, 0, "Gb"),
-  SNote("G", 10, 0, "N"),
+  SNote("G", 10, 0, "F##"),
   SNote("G#", 11, 0, "Ab"),
 ];
 
