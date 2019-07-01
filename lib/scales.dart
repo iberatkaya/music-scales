@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart';
 import 'package:flutter_advanced_networkimage/transition_to_image.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'main.dart';
 import 'dart:async';
 
@@ -58,6 +58,7 @@ class ScalePrintScreen extends StatefulWidget{
 class SNote{
   String note;
   String bemolle;
+  String alternative;
   int index;
   int audioindex;
   bool isBemolle = false;
@@ -65,17 +66,17 @@ class SNote{
 }
 
 List<SNote> notes = [
-  SNote("A", 0, 0, "G##"),
+  SNote("A", 0, 0, "Bbb"),
   SNote("A#", 1, 0, "Bb"),
-  SNote("B", 2, 0, "A##"),
+  SNote("B", 2, 0, "Cb"),
   SNote("C", 3, 0, "B#"),
   SNote("C#", 4, 0, "Db"),
-  SNote("D", 5, 0, "C##"),
+  SNote("D", 5, 0, "Ebb"),
   SNote("D#", 6, 0, "Eb"),
-  SNote("E", 7, 0, "D##"),
+  SNote("E", 7, 0, "Fb"),
   SNote("F", 8, 0, "E#"),
   SNote("F#", 9, 0, "Gb"),
-  SNote("G", 10, 0, "F##"),
+  SNote("G", 10, 0, "Abb"),
   SNote("G#", 11, 0, "Ab"),
 ];
 
@@ -92,9 +93,27 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   Widget build(BuildContext context) {
     List<SNote> sharpToBemolle(List<SNote> thenotes){
       List<SNote> tempscale = [];
-      for(int i=0; i<thenotes.length; i++){
+      tempscale.add(thenotes[0]); 
+      for(int i=1; i<thenotes.length; i++){
         SNote tempnote = new SNote(thenotes[i].note, thenotes[i].index, thenotes[i].audioindex, thenotes[i].bemolle);
-        if(tempnote.note.contains("#")){
+        for(int j=0; j<i; j++){
+          print(tempscale[j].note + " ?= " + tempnote.note);
+          if(tempscale[j].isBemolle == false){
+            if(tempscale[j].note.contains(tempnote.note[0])){
+              print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
+              tempnote.isBemolle = true;
+              break;
+            }
+          }
+          else{
+            if(tempscale[j].bemolle.contains(tempnote.note[0])){
+              print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
+              tempnote.isBemolle = true;
+              break;
+            }
+          }
+        }
+        /*if(tempnote.note.contains(thenotes[i].note)){
           for(int j=0; j<thenotes.length; j++){
             if(j != i){
               if(thenotes[j].note.contains(tempnote.note[0])){
@@ -104,7 +123,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
               }
             }
           }
-        }
+        }*/
         tempscale.add(tempnote);
       }
       return tempscale;
@@ -355,19 +374,24 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         child: FlatButton(
           color: Color.fromRGBO(230, 80, 80, 0.12),
           onPressed: (){
-            if(note.contains("b")){
-              int tempint;
-              tempint = note.codeUnitAt(0);
-              tempint--;
-              if(tempint < 65)
-                tempint += 7;
-              note = String.fromCharCode(tempint) + "#";
+            if(note.length > 1){
+              if(note[1] == "b"){
+                int tempint;
+                tempint = note.codeUnitAt(0);
+                tempint--;
+                if(tempint < 65)
+                  tempint += 7;
+                if(note.length == 3)
+                  note = String.fromCharCode(tempint);
+                else
+                  note = String.fromCharCode(tempint) + "#";
+              }
             }
             print("note is $note");
             play("$note", index);
           },
           child: Container(
-            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), child: Center(child: Text("$note", style: TextStyle(fontSize: textSize, color: Colors.red, fontWeight: FontWeight.w400),))),
+            child:  Padding(padding: EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75), child: AutoSizeText("$note", maxLines: 1, style: TextStyle(fontSize: textSize, color: Colors.red, fontWeight: FontWeight.w400),)),
             ),
         ),
       );

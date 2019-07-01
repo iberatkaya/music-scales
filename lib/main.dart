@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   InterstitialAd myInterstitial = InterstitialAd(
-    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
+    adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   InterstitialAd myInterstitial2 = InterstitialAd(
-    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
+    adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   InterstitialAd myInterstitial3 = InterstitialAd(
-    adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
+    adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
       print("InterstitialAd event is $event");
@@ -218,9 +218,9 @@ class _MyHomePageState extends State<MyHomePage> {
     myInterstitial3..load();
     if(showad == 2)
       myInterstitial..load()..show();
-    if(showad == 6)
+    if(showad == 5)
       myInterstitial2..load()..show();
-    if(showad == 11)
+    if(showad == 9)
       myInterstitial3..load()..show();
 
 
