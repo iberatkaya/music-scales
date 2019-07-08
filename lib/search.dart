@@ -141,7 +141,7 @@ class _SearchScreen extends State<SearchScreen> {
           tempfinal = "$temp#";
         }
       }
-      print(tempfinal);
+      //print(tempfinal);
       temptoreturn.add(tempfinal);
     }
     return temptoreturn;

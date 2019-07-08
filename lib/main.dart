@@ -58,7 +58,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Music Scales',  //Notes
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: MaterialColor(0xffffaf00, {
+            50:  Color(0xffffaf00),
+            100: Color(0xffffaf00),
+            200: Color(0xffffaf00),
+            300: Color(0xffffaf00),
+            400: Color(0xffffaf00),
+            500: Color(0xffffaf00),
+            600: Color(0xffffaf00),
+            700: Color(0xffffaf00),
+            800: Color(0xffffaf00),
+            900: Color(0xffffaf00),
+              }),
         iconTheme: IconThemeData(
           size: 25,
           opacity: 1,
@@ -125,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
     adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
 
@@ -133,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
     adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
 
@@ -141,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
     adUnitId: interstitialid,// InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
 
@@ -248,9 +259,9 @@ class _MyHomePageState extends State<MyHomePage> {
                ),
               ),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('Settings', style: TextStyle(fontSize: 16)),
-                leading: Icon(Icons.settings, size: 26, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('Settings', style: TextStyle(fontSize: 15)),
+                leading: Icon(Icons.settings, size: 24, color: Colors.grey[600]),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
@@ -258,9 +269,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('Rate App', style: TextStyle(fontSize: 16)),
-                leading: Icon(Icons.star, size: 26, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('Rate App', style: TextStyle(fontSize: 15)),
+                leading: Icon(Icons.star, size: 24, color: Colors.grey[600]),
                 onTap: () {
                   LaunchReview.launch(
                     androidAppId: "com.kaya.musicapp",
@@ -269,27 +280,38 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('Share App', style: TextStyle(fontSize: 16)),
-                leading: Icon(Icons.share, size: 26, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('Share App', style: TextStyle(fontSize: 15)),
+                leading: Icon(Icons.share, size: 24, color: Colors.grey[600]),
                 onTap: () {
                   Share.share('Music Scales: https://play.google.com/store/apps/details?id=com.kaya.musicapp');
                   },
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('Feedback', style: TextStyle(fontSize: 16)),
-                leading: Icon(Icons.mail_outline, size: 26, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('Get Ad Free', style: TextStyle(fontSize: 15)),
+                leading: Icon(Icons.shop, size: 24, color: Colors.grey[600]),
+                onTap: () {
+                  LaunchReview.launch(
+                    androidAppId: "com.kaya.musicapppro",
+                  );
+                  },
+              ),
+              Divider(height: 0, color: Colors.black26,),
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('Feedback', style: TextStyle(fontSize: 15)),
+                leading: Icon(Icons.mail_outline, size: 24, color: Colors.grey[600]),
                 onTap: () {
                   _launchURL();
                   },
               ),
               Divider(height: 0, color: Colors.black26,),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(14, 2, 0, 2),
-                title: Text('About', style: TextStyle(fontSize: 16, color: Colors.black87)),
-                leading: Icon(Icons.help_outline, size: 26, color: Colors.grey[600]),
+                contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+                title: Text('About', style: TextStyle(fontSize: 15, color: Colors.black87)),
+                leading: Icon(Icons.help_outline, size: 24, color: Colors.grey[600]),
                 onTap: () {
                   showAboutDialog(
                     applicationIcon: Tab(icon: Image.asset("lib/assets/imgs/appicon.png"),),
@@ -342,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         clickedindexscale = 0;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ScalePrintScreen()));
                       },
-                      color: Color.fromRGBO(40, 195, 195, 0.6),
+                      color: Color.fromRGBO(30, 195, 195, 0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -380,7 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           progmode = "M";
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ProgPrintScreen()));
                         },
-                      color: Color.fromRGBO(130, 155, 225, 0.75),
+                      color: Color.fromRGBO(130, 155, 240, 0.75),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -475,7 +497,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         showad++;
                         Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen()));
                         },
-                      color: Color.fromRGBO(226,165,13, 0.65),
+                      color: Color.fromRGBO(226,175,13, 0.65),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

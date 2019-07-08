@@ -97,17 +97,17 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       for(int i=1; i<thenotes.length; i++){
         SNote tempnote = new SNote(thenotes[i].note, thenotes[i].index, thenotes[i].audioindex, thenotes[i].bemolle);
         for(int j=0; j<i; j++){
-          print(tempscale[j].note + " ?= " + tempnote.note);
+          //print(tempscale[j].note + " ?= " + tempnote.note);
           if(tempscale[j].isBemolle == false){
             if(tempscale[j].note.contains(tempnote.note[0])){
-              print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
+              //print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
               tempnote.isBemolle = true;
               break;
             }
           }
           else{
             if(tempscale[j].bemolle.contains(tempnote.note[0])){
-              print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
+              //print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
               tempnote.isBemolle = true;
               break;
             }
@@ -166,7 +166,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       }
       else
         url = "$instr-${mode.toLowerCase()}-${notes[0].note[0]}-$n_or_sharp"; 
-      print(url);
+      //print(url);
       return url;
     }
     List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
@@ -387,7 +387,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                   note = String.fromCharCode(tempint) + "#";
               }
             }
-            print("note is $note");
+            //print("note is $note");
             play("$note", index);
           },
           child: Container(
@@ -404,7 +404,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
           SNote temp = new SNote(myScale[i].note, myScale[i].index, myScale[i].audioindex, myScale[i].bemolle);
           temp.isBemolle = myScale[i].isBemolle;
           if(temp.isBemolle){
-            print("Temp is bemolle; ${temp.bemolle}");
+            //print("Temp is bemolle; ${temp.bemolle}");
             temp.note = temp.bemolle;
           }
           printScale.add(temp);
@@ -586,22 +586,26 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     else 
       scrollaxis = Axis.vertical;
 
-    var scaleimg = (instrument == "Guitar") ? TransitionToImage(
-        AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
-        loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
-        placeholder: Column(children: <Widget>[
-                    Padding( 
-                      padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
-                      child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
-                    ),
-                    Icon(Icons.refresh, color: Colors.red, size: 52,),
-                  ],
-                ),
-        enableRefresh: true,
-        height: 100,
-        alignment: Alignment(-1, -1),
-        fit: BoxFit.fitHeight,
-      ) : TransitionToImage(
+    var scaleimg = (){
+      if(instrument == "Guitar"){
+        return TransitionToImage(
+          AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
+          loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
+          placeholder: Column(children: <Widget>[
+                      Padding( 
+                        padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
+                        child:Text("No Internet Connection!", style: TextStyle(color: Color.fromRGBO(50, 50, 50, 0.6), fontSize: 20),),
+                      ),
+                      Icon(Icons.refresh, color: Colors.red, size: 52,),
+                    ],
+                  ),
+          enableRefresh: true,
+          height: 100,
+          alignment: Alignment(-1, -1),
+          fit: BoxFit.fitHeight,
+        );
+      }
+      return TransitionToImage(
         AdvancedNetworkImage("https://www.scales-chords.com/music-scales/${urlScale(clickednotescale, myScale, instrument.toLowerCase())}.jpg", useDiskCache: true),
         loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
@@ -614,6 +618,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 ),
         enableRefresh: true,
       );
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -720,7 +725,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(6, 8, 6, 0), 
                           child: SingleChildScrollView(
-                            child: scaleimg,
+                            child: scaleimg(),
                             scrollDirection: scrollaxis,
                             ),
                           ),

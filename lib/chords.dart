@@ -120,7 +120,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     int audioctr = 0;
 
     Future<void> playcache(String note, int index) async{
-      print("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s").toLowerCase()}$index.mp3");
+      //print("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s").toLowerCase()}$index.mp3");
       await audioc.play("notes/${instrument.toLowerCase()}/${note.replaceAll("#", "s").toLowerCase()}$index.mp3");
       }
 
@@ -921,7 +921,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       chordimg =  TransitionToImage(
         AdvancedNetworkImage(totalurl, useDiskCache: true),
         fit: BoxFit.fill,
-        loadingWidget: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
+        loadingWidget: Container(padding: EdgeInsets.all(20),alignment: Alignment.center, child: CircularProgressIndicator(strokeWidth: 3, backgroundColor: Colors.orangeAccent,)),
         placeholder: Column(children: <Widget>[
                     Padding( 
                       padding: EdgeInsets.fromLTRB(0, 4, 0, 6),

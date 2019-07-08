@@ -117,21 +117,21 @@ class _QuizScreen extends State<QuizScreen> {
     adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
   var myInterstitial2 = InterstitialAd(
     adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
   var myInterstitial3 = InterstitialAd(
     adUnitId: interstitialid, //InterstitialAd.testAdUnitId,
     targetingInfo: targetingInfo,
     listener: (MobileAdEvent event) {
-      print("InterstitialAd event is $event");
+      //print("InterstitialAd event is $event");
     },
   );
 
