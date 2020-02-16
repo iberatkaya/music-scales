@@ -5,7 +5,9 @@
 
 > Music Scales is a mobile app that shows music scales, chords, and progressions with visuals and audios.
 
-### 🏠 [Homepage](https://play.google.com/store/apps/details?id=com.kaya.musicapp)
+### 🏠 [Play Store](https://play.google.com/store/apps/details?id=com.kaya.musicapp)
+### 🏠 [App Store](https://apps.apple.com/us/app/music-scales/id1498463498)
+
 
 ## Author
 
