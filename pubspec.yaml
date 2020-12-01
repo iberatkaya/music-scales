@@ -1,45 +1,52 @@
-name: music_app
+name: music_scales
 description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^0.5.3+1
-  font_awesome_flutter: ^8.4.0
-  audioplayers: ^0.8.1
-  flutter_advanced_networkimage: ^0.3.13
-  firebase_admob: ^0.9.0+1
+  flutter_advanced_networkimage:
+    git: https://github.com/mchome/flutter_advanced_networkimage
+  audioplayers: ^0.17.0
+  auto_size_text: ^2.1.0
+  cupertino_icons: ^1.0.0
+  firebase_admob: ^0.10.2
+  firebase_analytics: ^6.2.0
+  firebase_core: ^0.5.2+1
+  flutter_redux: ^0.7.0
+  flutter_staggered_grid_view: ^0.3.2
   flutter_swiper: ^1.1.6
+  font_awesome_flutter: ^8.10.0
   launch_review: ^2.0.0
-  flutter_staggered_grid_view: ^0.2.7
-  firebase_core: ^0.4.0+6
-  firebase_analytics: ^3.0.3
-  auto_size_text: ^2.0.1
-  share: ^0.6.1+1
-  url_launcher: ^5.0.3
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  redux: ^4.0.0+3
+  share: ^0.6.5+4
+  shared_preferences: ^0.5.12+4
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
+# following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.
 flutter:
 
@@ -48,23 +55,22 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   fonts:
-    - family:  MyFlutterApp
+    - family: MyFlutterApp
       fonts:
-       - asset: assets/fonts/MyFlutterApp.ttf
+        - asset: assets/fonts/MyFlutterApp.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/imgs/
+    - assets/imgs/
     - assets/notes/guitar/
     - assets/notes/piano/
-  #  - assets/metronome/
-  #  - images/a_dot_ham.jpeg
-
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
-
+  # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
-
+  # https://flutter.dev/assets-and-images/#from-packages
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -83,4 +89,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages
+  # see https://flutter.dev/custom-fonts/#from-packages
