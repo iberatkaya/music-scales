@@ -22,6 +22,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   String selectedNoteName = "A";
   int selectedNoteIndex = 0;
   List<SNote> myScale = [];
+  List<String> scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
 
   @override
   void initState() {
@@ -94,9 +95,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     return url;
   }
 
-  List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
-
-  void updateTableNums(String mode) {
+  List<String> updateTableNums(String mode) {
+    List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
     if (mode == "Minor") {
       nums[2] = "b3";
       nums[5] = "b6";
@@ -251,6 +251,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       nums[4] = "b5";
       nums[5] = "b6";
     }
+    return nums;
   }
 
   Future<void> play(String note, int index) async {
@@ -321,7 +322,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[0]}",
+                          "${scaleNums[0]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -333,7 +334,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[1]}",
+                          "${scaleNums[1]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -345,7 +346,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[2]}",
+                          "${scaleNums[2]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -377,7 +378,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[3]}",
+                          "${scaleNums[3]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -389,7 +390,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[4]}",
+                          "${scaleNums[4]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -401,7 +402,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[5]}",
+                          "${scaleNums[5]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -441,7 +442,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[0]}",
+                          "${scaleNums[0]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -453,7 +454,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[1]}",
+                          "${scaleNums[1]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -465,7 +466,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[2]}",
+                          "${scaleNums[2]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -497,7 +498,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[3]}",
+                          "${scaleNums[3]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -509,7 +510,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[4]}",
+                          "${scaleNums[4]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -544,7 +545,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[0]}",
+                            "${scaleNums[0]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -556,7 +557,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[1]}",
+                            "${scaleNums[1]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -568,7 +569,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[2]}",
+                            "${scaleNums[2]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -580,7 +581,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[3]}",
+                            "${scaleNums[3]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -613,7 +614,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[4]}",
+                            "${scaleNums[4]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -625,7 +626,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[5]}",
+                            "${scaleNums[5]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -637,7 +638,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[6]}",
+                            "${scaleNums[6]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -812,9 +813,9 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         }).toList(),
                         onChanged: (SNote newvalue) {
                           setState(() {
-                            updateTableNums(selectedScaleName);
                             selectedNoteIndex = newvalue.index;
                             selectedNoteName = newvalue.note;
+                            scaleNums = updateTableNums(selectedScaleName);
                             myScale = calculateScale(
                                 selectedScaleIndex, selectedNoteIndex);
                           });
@@ -852,9 +853,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         }).toList(),
                         onChanged: (Scale newvalue) {
                           setState(() {
-                            updateTableNums(selectedScaleName);
                             selectedScaleName = newvalue.name;
                             selectedScaleIndex = newvalue.index;
+                            print(scaleNums);
+                            scaleNums = updateTableNums(selectedScaleName);
+                            print(scaleNums);
                             myScale = calculateScale(
                                 selectedScaleIndex, selectedNoteIndex);
                           });

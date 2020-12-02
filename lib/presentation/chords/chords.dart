@@ -34,6 +34,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
   List<ChordNote> myNotes = [];
   int imgctr = 0; //Ctr for guitar strings
   int audioctr = 0;
+  List<String> scaleNums = ["1", "3", "5", "7", "9", "11"];
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     instrument = store.state.instrument;
     instrimg =
         AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
-    tablenums(selectedChordName);
+    scaleNums = tablenums(selectedChordName);
     myNotes = calculateChord(selectedChordIndex, selectedNoteIndex);
     super.initState();
   }
@@ -100,8 +101,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     );
   }
 
-  List<String> nums = ["1", "3", "5", "7", "9", "11"];
-  void tablenums(String chord) {
+  List<String> tablenums(String chord) {
+    List<String> nums = ["1", "3", "5", "7", "9", "11"];
     if (chord == "Minor")
       nums[1] = "b3";
     else if (chord == "7th")
@@ -179,6 +180,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       nums[2] = "4";
       nums[3] = "5";
     }
+    return nums;
   }
 
   Padding mytable(int mode) {
@@ -210,7 +212,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[0]}",
+                        "${scaleNums[0]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -222,7 +224,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[1]}",
+                        "${scaleNums[1]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -234,7 +236,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[2]}",
+                        "${scaleNums[2]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -246,7 +248,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[3]}",
+                        "${scaleNums[3]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -287,7 +289,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[0]}",
+                            "${scaleNums[0]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -299,7 +301,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[1]}",
+                            "${scaleNums[1]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -311,7 +313,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[2]}",
+                            "${scaleNums[2]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -342,7 +344,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                                 0, textSize * 0.3, 0, textSize * 0.35),
                             child: Center(
                                 child: Text(
-                              "${nums[3]}",
+                              "${scaleNums[3]}",
                               style: TextStyle(
                                   fontSize: textSize * 0.85,
                                   color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -354,7 +356,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                                 0, textSize * 0.3, 0, textSize * 0.35),
                             child: Center(
                                 child: Text(
-                              "${nums[4]}",
+                              "${scaleNums[4]}",
                               style: TextStyle(
                                   fontSize: textSize * 0.85,
                                   color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -393,7 +395,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[0]}",
+                            "${scaleNums[0]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -405,7 +407,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[1]}",
+                            "${scaleNums[1]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -417,7 +419,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[2]}",
+                            "${scaleNums[2]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -448,7 +450,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                                 0, textSize * 0.3, 0, textSize * 0.35),
                             child: Center(
                                 child: Text(
-                              "${nums[3]}",
+                              "${scaleNums[3]}",
                               style: TextStyle(
                                   fontSize: textSize * 0.85,
                                   color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -460,7 +462,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                                 0, textSize * 0.3, 0, textSize * 0.35),
                             child: Center(
                                 child: Text(
-                              "${nums[4]}",
+                              "${scaleNums[4]}",
                               style: TextStyle(
                                   fontSize: textSize * 0.85,
                                   color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -472,7 +474,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                                 0, textSize * 0.3, 0, textSize * 0.35),
                             child: Center(
                                 child: Text(
-                              "${nums[5]}",
+                              "${scaleNums[5]}",
                               style: TextStyle(
                                   fontSize: textSize * 0.85,
                                   color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -507,7 +509,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[0]}",
+                        "${scaleNums[0]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -519,7 +521,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[1]}",
+                        "${scaleNums[1]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -531,7 +533,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           0, textSize * 0.3, 0, textSize * 0.35),
                       child: Center(
                           child: Text(
-                        "${nums[2]}",
+                        "${scaleNums[2]}",
                         style: TextStyle(
                             fontSize: textSize * 0.85,
                             color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -1400,7 +1402,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           setState(() {
                             selectedNoteIndex = newvalue.index;
                             selectedNoteName = newvalue.note;
-                            tablenums(selectedChordName);
+
+                            scaleNums = tablenums(selectedChordName);
                             myNotes = calculateChord(
                                 selectedChordIndex, selectedNoteIndex);
                           });
@@ -1442,7 +1445,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               selectedChordName = newvalue.note;
                               selectedChordIndex = newvalue.index;
                               imgctr = 0;
-                              tablenums(selectedChordName);
+                              scaleNums = tablenums(selectedChordName);
+
                               myNotes = calculateChord(
                                   selectedChordIndex, selectedNoteIndex);
                             });
