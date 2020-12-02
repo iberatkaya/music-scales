@@ -40,32 +40,18 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       SNote tempnote = new SNote(thenotes[i].note, thenotes[i].index,
           thenotes[i].audioindex, thenotes[i].bemolle);
       for (int j = 0; j < i; j++) {
-        //print(tempscale[j].note + " ?= " + tempnote.note);
         if (tempscale[j].isBemolle == false) {
           if (tempscale[j].note.contains(tempnote.note[0])) {
-            //print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
             tempnote.isBemolle = true;
             break;
           }
         } else {
           if (tempscale[j].bemolle.contains(tempnote.note[0])) {
-            //print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
             tempnote.isBemolle = true;
             break;
           }
         }
       }
-      /*if(tempnote.note.contains(thenotes[i].note)){
-          for(int j=0; j<thenotes.length; j++){
-            if(j != i){
-              if(thenotes[j].note.contains(tempnote.note[0])){
-                print("Since ${thenotes[j].note}, ${tempnote.note} is bemolle ${tempnote.bemolle}");
-                tempnote.isBemolle = true;
-                break;
-              }
-            }
-          }
-        }*/
       tempscale.add(tempnote);
     }
     return tempscale;
@@ -91,7 +77,6 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     return sharpToBemolle(theScale);
   }
 
-  //print(myScale.length);
   String urlScale(String mode, List<SNote> notes, String instr) {
     String url;
     String n_or_sharp;

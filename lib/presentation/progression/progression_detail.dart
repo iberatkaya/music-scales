@@ -27,6 +27,12 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
     Scale("Minor", 1, []),
   ];
 
+  @override
+  void initState() {
+    theScale = scaleChords(progmode, myindex);
+    super.initState();
+  }
+
   List<SmallChord> scaleChords(String themode, int thekey) {
     List<SmallChord> theChords = [];
     int index = thekey;
@@ -131,14 +137,16 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
         tooltip: "Generate a random progression",
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => RandomProgScreen(
-                        musicKey: selectedKey,
-                        myindex: myindex,
-                        progmode: progmode,
-                        theScale: theScale,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => RandomProgScreen(
+                musicKey: selectedKey,
+                myindex: myindex,
+                progmode: progmode,
+                theScale: theScale,
+              ),
+            ),
+          );
         },
       ),
 
