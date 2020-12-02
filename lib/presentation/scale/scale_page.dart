@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/infrastructure/ads/ads.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:audioplayers/audio_cache.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:music_scales/application/store/store.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/domain/notes/notes.dart';
@@ -283,7 +282,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
           child: Padding(
               padding:
                   EdgeInsets.fromLTRB(0, textSize * 0.7, 0, textSize * 0.75),
-              child: AutoSizeText(
+              child: Text(
                 "$note",
                 maxLines: 1,
                 style: TextStyle(

@@ -26,7 +26,6 @@ dependencies:
   flutter_advanced_networkimage:
     git: https://github.com/mchome/flutter_advanced_networkimage
   audioplayers: ^0.17.0
-  auto_size_text: ^2.1.0
   cupertino_icons: ^1.0.0
   firebase_admob: ^0.10.2
   firebase_analytics: ^6.2.0
