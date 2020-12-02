@@ -1,16 +1,20 @@
-# music_scales
+<h1 align="center">Welcome to Music Scales 👋</h1>
 
-A new Flutter project.
+> Music Scales is a music theory mobile application that shows scales and chords for the piano and guitar. Check out the <a href="https://play.google.com/store/apps/details?id=com.kaya.musicapp">Android app</a> and the <a href="https://apps.apple.com/us/app/music-scales/id1498463498">iOS app</a>.
 
-## Getting Started
+<p align="center">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/0.png" width="240" height="480">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/1.png" width="240" height="480">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/2.png" width="240" height="480">
+</p>
 
-This project is a starting point for a Flutter application.
+## Authors
 
-A few resources to get you started if this is your first Flutter project:
+👤 **Ibrahim Berat Kaya**
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Github: [@iberatkaya](https://github.com/iberatkaya)
+- LinkedIn: [@linkedin.com/in/ibrahim-berat-kaya/](https://linkedin.com/in/ibrahim-berat-kaya/)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/iberatkaya/music-scales/issues).
