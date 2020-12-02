@@ -21,7 +21,7 @@ class _ProgressionPageState extends State<ProgressionPage> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          physics: ClampingScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
