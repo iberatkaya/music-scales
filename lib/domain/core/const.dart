@@ -13,4 +13,5 @@ MaterialColor myColor = MaterialColor(0xffffaf00, {
   800: Color(0xffffaf00),
   900: Color(0xffffaf00),
 });
-int adFreq = 100;
+
+int adFreq = 3;

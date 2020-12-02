@@ -13,7 +13,7 @@ class ScalePage extends StatefulWidget {
 }
 
 class _ScalePageState extends State<ScalePage> {
-  int showad = 2;
+  int showad = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

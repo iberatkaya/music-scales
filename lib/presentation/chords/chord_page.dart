@@ -15,7 +15,7 @@ class ChordPage extends StatefulWidget {
 }
 
 class _ChordPageState extends State<ChordPage> {
-  int showad = 2;
+  int showad = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

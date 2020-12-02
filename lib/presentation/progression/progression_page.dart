@@ -15,7 +15,7 @@ class ProgressionPage extends StatefulWidget {
 }
 
 class _ProgressionPageState extends State<ProgressionPage> {
-  int showad = 2;
+  int showad = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
