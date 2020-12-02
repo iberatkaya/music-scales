@@ -74,22 +74,6 @@ class MyDrawer extends StatelessWidget {
               }
             },
           ),
-          if (Platform.isAndroid) ...[
-            Divider(
-              height: 0,
-              color: Colors.black26,
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.fromLTRB(14, 0, 0, 0),
-              title: Text('Get Ad Free', style: TextStyle(fontSize: 15)),
-              leading: Icon(Icons.shop, size: 24, color: Colors.grey[600]),
-              onTap: () {
-                LaunchReview.launch(
-                  androidAppId: "com.kaya.musicapppro",
-                );
-              },
-            ),
-          ],
           Divider(
             height: 0,
             color: Colors.black26,

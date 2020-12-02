@@ -17,8 +17,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   AudioCache audio = new AudioCache();
   AssetImage instrimg;
   String instrument = "Piano";
-  String selectedNoteScaleName = scales[0].name;
-  int selectedNoteScaleIndex = 0;
+  String selectedScaleName = scales[0].name;
+  int selectedScaleIndex = 0;
   String selectedNoteName = "A";
   int selectedNoteIndex = 0;
   List<SNote> myScale = [];
@@ -28,7 +28,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     instrument = store.state.instrument;
     instrimg =
         AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
-    myScale = calculateScale(selectedNoteScaleIndex, selectedNoteIndex);
+    myScale = calculateScale(selectedScaleIndex, selectedNoteIndex);
     super.initState();
   }
 
@@ -297,12 +297,10 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
   Column scaletable(String mode) {
     List<SNote> printScale = [...myScale];
-    print(store.state.showFlatsInScales);
     if (store.state.showFlatsInScales) {
       for (int i = 0; i < myScale.length; i++) {
         SNote temp = SNote(myScale[i].note, myScale[i].index,
             myScale[i].audioindex, myScale[i].bemolle);
-        print("Temp is bemolle; ${temp.bemolle}");
         if (temp.bemolle != "") temp.note = temp.bemolle;
         printScale[i] = temp;
       }
@@ -666,7 +664,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     if (instrument == "Guitar") {
       return TransitionToImage(
         image: AdvancedNetworkImage(
-            "https://www.scales-chords.com/music-scales/${urlScale(selectedNoteScaleName, myScale, instrument.toLowerCase())}.jpg",
+            "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
             useDiskCache: true),
         loadingWidget: Padding(
             padding: EdgeInsets.all(20),
@@ -699,7 +697,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     }
     return TransitionToImage(
       image: AdvancedNetworkImage(
-          "https://www.scales-chords.com/music-scales/${urlScale(selectedNoteScaleName, myScale, instrument.toLowerCase())}.jpg",
+          "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
           useDiskCache: true),
       loadingWidget: Padding(
           padding: EdgeInsets.all(20),
@@ -733,7 +731,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "$selectedNoteName $selectedNoteScaleName",
+          "$selectedNoteName $selectedScaleName",
           style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1)),
           overflow: TextOverflow.fade,
         ),
@@ -814,10 +812,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         }).toList(),
                         onChanged: (SNote newvalue) {
                           setState(() {
-                            updateTableNums(selectedNoteScaleName);
-
+                            updateTableNums(selectedScaleName);
                             selectedNoteIndex = newvalue.index;
                             selectedNoteName = newvalue.note;
+                            myScale = calculateScale(
+                                selectedScaleIndex, selectedNoteIndex);
                           });
                         },
                       ),
@@ -838,7 +837,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                       ),
                       DropdownButton(
                         hint: Text(
-                          selectedNoteScaleName,
+                          selectedScaleName,
                           style:
                               TextStyle(fontSize: 20, color: Colors.deepPurple),
                         ),
@@ -853,9 +852,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         }).toList(),
                         onChanged: (Scale newvalue) {
                           setState(() {
-                            updateTableNums(selectedNoteScaleName);
-                            selectedNoteScaleName = newvalue.name;
-                            selectedNoteScaleIndex = newvalue.index;
+                            updateTableNums(selectedScaleName);
+                            selectedScaleName = newvalue.name;
+                            selectedScaleIndex = newvalue.index;
+                            myScale = calculateScale(
+                                selectedScaleIndex, selectedNoteIndex);
                           });
                         },
                       ),
@@ -879,11 +880,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             : Axis.vertical,
                       ),
                     ),
-                    scaletable(selectedNoteScaleName),
+                    scaletable(selectedScaleName),
                   ]),
                 ),
               ),
-              //Text('$selectedNoteScaleName ${myScale[0].note}  ${urlScale(selectedNoteScaleName, myScale[0].note, instrument.toLowerCase())}'),
+              //Text('$selectedScaleName ${myScale[0].note}  ${urlScale(selectedScaleName, myScale[0].note, instrument.toLowerCase())}'),
             ],
           ),
         ),

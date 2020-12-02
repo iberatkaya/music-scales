@@ -22,7 +22,7 @@ class _ScalePageState extends State<ScalePage> {
           physics: ClampingScrollPhysics(),
           children: [
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
                 icon: Icon(
                   CustomIcons.MyFlutterApp.music_notes,
@@ -49,7 +49,7 @@ class _ScalePageState extends State<ScalePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
                 icon: Icon(
                   Icons.search,
@@ -74,7 +74,7 @@ class _ScalePageState extends State<ScalePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
                 icon: Icon(
                   CustomIcons.MyFlutterApp.prog,
