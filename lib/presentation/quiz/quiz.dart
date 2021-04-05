@@ -20,7 +20,7 @@ class _QuizScreen extends State<QuizScreen> {
   AudioCache audio = new AudioCache();
   List<ChordNote> myScale = [];
   List<ChordNote> mynotes = [];
-  List<String> nums;
+  List<String> scaleNums;
   String ansstr;
   Scale selectedScale;
   List<ChordNote> choices;
@@ -98,7 +98,7 @@ class _QuizScreen extends State<QuizScreen> {
     int answerindex = myrand.nextInt(myScale.length);
     ansstr = myScale[answerindex].note;
     myScale[answerindex].note = "?";
-    nums = ["1", "2", "3", "4", "5", "6", "7"];
+    scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
     int randset;
     choicesset = myScale.toSet();
     ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -113,7 +113,8 @@ class _QuizScreen extends State<QuizScreen> {
     super.initState();
   }
 
-  void tableNums(String mode) {
+  List<String> tableNums(String mode) {
+    List<String> nums = ["1", "2", "3", "4", "5", "6", "7"];
     if (mode == "Minor") {
       nums[2] = "b3";
       nums[5] = "b6";
@@ -268,6 +269,7 @@ class _QuizScreen extends State<QuizScreen> {
       nums[5] = "b6";
       nums[6] = "b7";
     }
+    return nums;
   }
 
   Future<void> play(String note, int index) async {
@@ -319,7 +321,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[0]}",
+                          "${scaleNums[0]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -331,7 +333,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[1]}",
+                          "${scaleNums[1]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -343,7 +345,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[2]}",
+                          "${scaleNums[2]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -375,7 +377,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[3]}",
+                          "${scaleNums[3]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -387,7 +389,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[4]}",
+                          "${scaleNums[4]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -399,7 +401,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[5]}",
+                          "${scaleNums[5]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -439,7 +441,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[0]}",
+                          "${scaleNums[0]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -451,7 +453,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[1]}",
+                          "${scaleNums[1]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -463,7 +465,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[2]}",
+                          "${scaleNums[2]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -495,7 +497,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[3]}",
+                          "${scaleNums[3]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -507,7 +509,7 @@ class _QuizScreen extends State<QuizScreen> {
                             0, textSize * 0.3, 0, textSize * 0.35),
                         child: Center(
                             child: Text(
-                          "${nums[4]}",
+                          "${scaleNums[4]}",
                           style: TextStyle(
                               fontSize: textSize * 0.85,
                               color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -542,7 +544,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[0]}",
+                            "${scaleNums[0]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.75)),
@@ -554,7 +556,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[1]}",
+                            "${scaleNums[1]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -566,7 +568,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[2]}",
+                            "${scaleNums[2]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -578,7 +580,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[3]}",
+                            "${scaleNums[3]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -611,7 +613,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[4]}",
+                            "${scaleNums[4]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -623,7 +625,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[5]}",
+                            "${scaleNums[5]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -635,7 +637,7 @@ class _QuizScreen extends State<QuizScreen> {
                               0, textSize * 0.3, 0, textSize * 0.35),
                           child: Center(
                               child: Text(
-                            "${nums[6]}",
+                            "${scaleNums[6]}",
                             style: TextStyle(
                                 fontSize: textSize * 0.85,
                                 color: Color.fromRGBO(20, 20, 20, 0.55)),
@@ -708,7 +710,6 @@ class _QuizScreen extends State<QuizScreen> {
                 int answerindex = myrand.nextInt(myScale.length);
                 ansstr = myScale[answerindex].note;
                 myScale[answerindex].note = "?";
-                nums = ["1", "2", "3", "4", "5", "6", "7"];
                 int randset;
                 choicesset = myScale.toSet();
                 ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -728,7 +729,7 @@ class _QuizScreen extends State<QuizScreen> {
                   Color.fromRGBO(200, 250, 250, 1),
                   Color.fromRGBO(200, 250, 250, 1)
                 ];
-                tableNums(selectedScale.name);
+                scaleNums = tableNums(selectedScale.name);
                 lifeicons = _lifeicons();
               });
             },
@@ -903,7 +904,7 @@ class _QuizScreen extends State<QuizScreen> {
                             int answerindex = myrand.nextInt(myScale.length);
                             ansstr = myScale[answerindex].note;
                             myScale[answerindex].note = "?";
-                            nums = ["1", "2", "3", "4", "5", "6", "7"];
+                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
                             int randset;
                             choicesset = myScale.toSet();
                             ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -926,7 +927,7 @@ class _QuizScreen extends State<QuizScreen> {
                           });
                         });
                       }
-                      tableNums(selectedScale.name);
+                      scaleNums = tableNums(selectedScale.name);
                       lifeicons = _lifeicons();
                     }
                   },
@@ -991,7 +992,7 @@ class _QuizScreen extends State<QuizScreen> {
                             int answerindex = myrand.nextInt(myScale.length);
                             ansstr = myScale[answerindex].note;
                             myScale[answerindex].note = "?";
-                            nums = ["1", "2", "3", "4", "5", "6", "7"];
+                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
                             int randset;
                             choicesset = myScale.toSet();
                             ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -1012,7 +1013,8 @@ class _QuizScreen extends State<QuizScreen> {
                               Color.fromRGBO(200, 250, 250, 1)
                             ];
                           });
-                          tableNums(selectedScale.name);
+
+                          scaleNums = tableNums(selectedScale.name);
                           lifeicons = _lifeicons();
                         });
                       }
@@ -1079,7 +1081,7 @@ class _QuizScreen extends State<QuizScreen> {
                             int answerindex = myrand.nextInt(myScale.length);
                             ansstr = myScale[answerindex].note;
                             myScale[answerindex].note = "?";
-                            nums = ["1", "2", "3", "4", "5", "6", "7"];
+                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
                             int randset;
                             choicesset = myScale.toSet();
                             ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -1100,7 +1102,8 @@ class _QuizScreen extends State<QuizScreen> {
                               Color.fromRGBO(200, 250, 250, 1)
                             ];
                           });
-                          tableNums(selectedScale.name);
+
+                          scaleNums = tableNums(selectedScale.name);
                           lifeicons = _lifeicons();
                         });
                       }
@@ -1172,7 +1175,7 @@ class _QuizScreen extends State<QuizScreen> {
                             int answerindex = myrand.nextInt(myScale.length);
                             ansstr = myScale[answerindex].note;
                             myScale[answerindex].note = "?";
-                            nums = ["1", "2", "3", "4", "5", "6", "7"];
+                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
                             int randset;
                             choicesset = myScale.toSet();
                             ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -1193,7 +1196,8 @@ class _QuizScreen extends State<QuizScreen> {
                               Color.fromRGBO(200, 250, 250, 1)
                             ];
                           });
-                          tableNums(selectedScale.name);
+
+                          scaleNums = tableNums(selectedScale.name);
                           lifeicons = _lifeicons();
                         });
                       }
@@ -1260,7 +1264,7 @@ class _QuizScreen extends State<QuizScreen> {
                             int answerindex = myrand.nextInt(myScale.length);
                             ansstr = myScale[answerindex].note;
                             myScale[answerindex].note = "?";
-                            nums = ["1", "2", "3", "4", "5", "6", "7"];
+                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
                             int randset;
                             choicesset = myScale.toSet();
                             ChordNote answer = new ChordNote(ansstr, -1, 0);
@@ -1281,7 +1285,7 @@ class _QuizScreen extends State<QuizScreen> {
                               Color.fromRGBO(200, 250, 250, 1)
                             ];
                           });
-                          tableNums(selectedScale.name);
+                          scaleNums = tableNums(selectedScale.name);
                           lifeicons = _lifeicons();
                         });
                       }
