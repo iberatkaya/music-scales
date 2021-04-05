@@ -31,13 +31,15 @@ class _SearchScreen extends State<SearchScreen> {
   final myController = TextEditingController();
   String searchText = "";
   List<Note> searchNotes = [...notes];
+
   List<Note> calculateScale(int mode, int key) {
     List<Note> theScale = [];
     int index = key;
-    Scale scaleObj;
+    late Scale scaleObj;
     for (int i = 0; i < scales.length; i++) {
       if (mode == scales[i].index) scaleObj = scales[i];
     }
+
     for (int j = 0; j < scaleObj.formula.length + 1; j++) {
       if (j != 0) index += scaleObj.formula[j - 1];
       if (index > 11) index %= 12;
@@ -123,7 +125,7 @@ class _SearchScreen extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false, //Fixes keyboard overflow issue
+      resizeToAvoidBottomInset: false, //Fixes keyboard overflow issue
       appBar: AppBar(
         title: Text("Search in a Scale",
             style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
@@ -208,9 +210,10 @@ class _SearchScreen extends State<SearchScreen> {
               itemBuilder: (BuildContext context, int index) {
                 List<List<Note>> scaleNotes = [];
                 for (int j = 0; j < noteindexs.length; j++) {
-                  scaleNotes.add(calculateScale(
-                      scales[scaleindexs[index]].index,
-                      searchNotes[noteindexs[index]].index));
+                  var scale = calculateScale(scales[scaleindexs[index]].index,
+                      searchNotes[noteindexs[index]].index);
+
+                  scaleNotes.add(scale);
                 }
                 return ListTile(
                   title: Container(

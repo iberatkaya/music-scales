@@ -16,20 +16,63 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreen extends State<QuizScreen> {
   Random myrand = new Random();
-  List<Color> buttoncolors;
+  List<Color> buttoncolors = [
+    Color.fromRGBO(200, 250, 250, 1),
+    Color.fromRGBO(200, 250, 250, 1),
+    Color.fromRGBO(200, 250, 250, 1),
+    Color.fromRGBO(200, 250, 250, 1),
+    Color.fromRGBO(200, 250, 250, 1)
+  ];
   AudioCache audio = new AudioCache();
   List<ChordNote> myScale = [];
-  List<ChordNote> mynotes = [];
-  List<String> scaleNums;
-  String ansstr;
-  Scale selectedScale;
-  List<ChordNote> choices;
-  bool clickable;
-  int score;
+  List<ChordNote> mynotes = [
+    ChordNote("A", 0, 0),
+    ChordNote("A#", 1, 0),
+    ChordNote("B", 2, 0),
+    ChordNote("C", 3, 0),
+    ChordNote("C#", 4, 0),
+    ChordNote("D", 5, 0),
+    ChordNote("D#", 6, 0),
+    ChordNote("E", 7, 0),
+    ChordNote("F", 8, 0),
+    ChordNote("F#", 9, 0),
+    ChordNote("G", 10, 0),
+    ChordNote("G#", 11, 0)
+  ];
+  List<String> scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
+  late String ansstr;
+  late Scale selectedScale;
+  List<ChordNote> choices = [];
+  bool clickable = true;
+  int score = 0;
   int deaths = 0;
-  bool reload;
+  bool reload = true;
   int gamesplayed = 0;
-  int highscore;
+  int highscore = 0;
+
+  @override
+  void initState() {
+    _loadHighScore();
+    int rand = myrand.nextInt(34);
+    int randkey = myrand.nextInt(12);
+    selectedScale = scales[rand];
+    myScale = calculateScale(selectedScale, randkey);
+    int answerindex = myrand.nextInt(myScale.length);
+    ansstr = myScale[answerindex].note;
+    myScale[answerindex].note = "?";
+    int randset;
+    Set choicesset = myScale.toSet();
+    ChordNote answer = new ChordNote(ansstr, -1, 0);
+    choices = [answer];
+    while (choicesset.length != 4 + myScale.length) {
+      randset = myrand.nextInt(12);
+      if (choicesset.add(mynotes[randset]) == true) {
+        choices.add(mynotes[randset]);
+      }
+    }
+    lifeicons = _lifeicons();
+    super.initState();
+  }
 
   Future<void> _setHighScore(int temp) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,58 +102,6 @@ class _QuizScreen extends State<QuizScreen> {
     setState(() {
       highscore = (prefs.getInt('highscore') ?? 0);
     });
-  }
-
-  @override
-  void initState() {
-    score = 0;
-    deaths = 0;
-    print(gamesplayed);
-    reload = true;
-    _loadHighScore();
-    buttoncolors = [
-      Color.fromRGBO(200, 250, 250, 1),
-      Color.fromRGBO(200, 250, 250, 1),
-      Color.fromRGBO(200, 250, 250, 1),
-      Color.fromRGBO(200, 250, 250, 1),
-      Color.fromRGBO(200, 250, 250, 1)
-    ];
-    clickable = true;
-    mynotes = [
-      ChordNote("A", 0, 0),
-      ChordNote("A#", 1, 0),
-      ChordNote("B", 2, 0),
-      ChordNote("C", 3, 0),
-      ChordNote("C#", 4, 0),
-      ChordNote("D", 5, 0),
-      ChordNote("D#", 6, 0),
-      ChordNote("E", 7, 0),
-      ChordNote("F", 8, 0),
-      ChordNote("F#", 9, 0),
-      ChordNote("G", 10, 0),
-      ChordNote("G#", 11, 0)
-    ];
-    int rand = myrand.nextInt(34);
-    int randkey = myrand.nextInt(12);
-    selectedScale = scales[rand];
-    myScale = calculateScale(selectedScale, randkey);
-    Set choicesset;
-    int answerindex = myrand.nextInt(myScale.length);
-    ansstr = myScale[answerindex].note;
-    myScale[answerindex].note = "?";
-    scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-    int randset;
-    choicesset = myScale.toSet();
-    ChordNote answer = new ChordNote(ansstr, -1, 0);
-    choices = [answer];
-    while (choicesset.length != 4 + myScale.length) {
-      randset = myrand.nextInt(12);
-      if (choicesset.add(mynotes[randset]) == true) {
-        choices.add(mynotes[randset]);
-      }
-    }
-    lifeicons = _lifeicons();
-    super.initState();
   }
 
   List<String> tableNums(String mode) {
@@ -660,18 +651,19 @@ class _QuizScreen extends State<QuizScreen> {
     }
   }
 
-  var lifeicons;
+  late Row lifeicons;
+
   Row _lifeicons() {
     List<Color> iconcolors = [Colors.grey, Colors.grey, Colors.grey];
     if (deaths == 1)
-      iconcolors[0] = Colors.red[400];
+      iconcolors[0] = Colors.red.shade400;
     else if (deaths == 2) {
-      iconcolors[0] = Colors.red[400];
-      iconcolors[1] = Colors.red[400];
+      iconcolors[0] = Colors.red.shade400;
+      iconcolors[1] = Colors.red.shade400;
     } else if (deaths == 3) {
-      iconcolors[0] = Colors.red[400];
-      iconcolors[1] = Colors.red[400];
-      iconcolors[2] = Colors.red[400];
+      iconcolors[0] = Colors.red.shade400;
+      iconcolors[1] = Colors.red.shade400;
+      iconcolors[2] = Colors.red.shade400;
       gamesplayed++;
       clickable = false;
       return Row(
@@ -764,6 +756,71 @@ class _QuizScreen extends State<QuizScreen> {
         ),
       ],
     );
+  }
+
+  void incorrectAnswer(int index) {
+    setState(() {
+      buttoncolors[index] = Colors.red.shade300;
+      int? ansindex;
+      for (int i = 0; i < 5; i++) {
+        if (choices[i].note == ansstr) ansindex = i;
+      }
+      if (ansindex != null) {
+        buttoncolors[ansindex] = Colors.green.shade300;
+        deaths++;
+        clickable = false;
+      }
+    });
+  }
+
+  void reloadState() {
+    Timer(Duration(milliseconds: 2500), () {
+      setState(() {
+        mynotes = [
+          ChordNote("A", 0, 0),
+          ChordNote("A#", 1, 0),
+          ChordNote("B", 2, 0),
+          ChordNote("C", 3, 0),
+          ChordNote("C#", 4, 0),
+          ChordNote("D", 5, 0),
+          ChordNote("D#", 6, 0),
+          ChordNote("E", 7, 0),
+          ChordNote("F", 8, 0),
+          ChordNote("F#", 9, 0),
+          ChordNote("G", 10, 0),
+          ChordNote("G#", 11, 0)
+        ];
+        Random myrand = new Random();
+        int rand = myrand.nextInt(34);
+        int randkey = myrand.nextInt(12);
+        selectedScale = scales[rand];
+        myScale = calculateScale(selectedScale, randkey);
+        Set choicesset;
+        int answerindex = myrand.nextInt(myScale.length);
+        ansstr = myScale[answerindex].note;
+        myScale[answerindex].note = "?";
+        scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
+        int randset;
+        choicesset = myScale.toSet();
+        ChordNote answer = new ChordNote(ansstr, -1, 0);
+        choices = [answer];
+        while (choicesset.length != 4 + myScale.length) {
+          randset = myrand.nextInt(12);
+          if (choicesset.add(mynotes[randset]) == true) {
+            choices.add(mynotes[randset]);
+          }
+        }
+        choices.shuffle();
+        clickable = true;
+        buttoncolors = [
+          Color.fromRGBO(200, 250, 250, 1),
+          Color.fromRGBO(200, 250, 250, 1),
+          Color.fromRGBO(200, 250, 250, 1),
+          Color.fromRGBO(200, 250, 250, 1),
+          Color.fromRGBO(200, 250, 250, 1)
+        ];
+      });
+    });
   }
 
   @override
@@ -860,73 +917,19 @@ class _QuizScreen extends State<QuizScreen> {
                       if (choices[0].note == ansstr) {
                         setState(() {
                           score++;
-                          buttoncolors[0] = Colors.green[300];
+                          buttoncolors[0] = Colors.green.shade300;
                           clickable = false;
                           if (score > highscore) _setHighScore(score);
                           _loadHighScore();
                         });
                       } else {
-                        setState(() {
-                          buttoncolors[0] = Colors.red[300];
-                          int ansindex;
-                          for (int i = 0; i < 5; i++) {
-                            if (choices[i].note == ansstr) ansindex = i;
-                          }
-                          buttoncolors[ansindex] = Colors.green[300];
-                          deaths++;
-                          clickable = false;
-                        });
+                        incorrectAnswer(0);
                       }
                       if (deaths == 3) reload = false;
                       if (reload) {
-                        Timer(Duration(milliseconds: 2500), () {
-                          setState(() {
-                            mynotes = [
-                              ChordNote("A", 0, 0),
-                              ChordNote("A#", 1, 0),
-                              ChordNote("B", 2, 0),
-                              ChordNote("C", 3, 0),
-                              ChordNote("C#", 4, 0),
-                              ChordNote("D", 5, 0),
-                              ChordNote("D#", 6, 0),
-                              ChordNote("E", 7, 0),
-                              ChordNote("F", 8, 0),
-                              ChordNote("F#", 9, 0),
-                              ChordNote("G", 10, 0),
-                              ChordNote("G#", 11, 0)
-                            ];
-                            Random myrand = new Random();
-                            int rand = myrand.nextInt(34);
-                            int randkey = myrand.nextInt(12);
-                            selectedScale = scales[rand];
-                            myScale = calculateScale(selectedScale, randkey);
-                            Set choicesset;
-                            int answerindex = myrand.nextInt(myScale.length);
-                            ansstr = myScale[answerindex].note;
-                            myScale[answerindex].note = "?";
-                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-                            int randset;
-                            choicesset = myScale.toSet();
-                            ChordNote answer = new ChordNote(ansstr, -1, 0);
-                            choices = [answer];
-                            while (choicesset.length != 4 + myScale.length) {
-                              randset = myrand.nextInt(12);
-                              if (choicesset.add(mynotes[randset]) == true) {
-                                choices.add(mynotes[randset]);
-                              }
-                            }
-                            choices.shuffle();
-                            clickable = true;
-                            buttoncolors = [
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1)
-                            ];
-                          });
-                        });
+                        reloadState();
                       }
+
                       scaleNums = tableNums(selectedScale.name);
                       lifeicons = _lifeicons();
                     }
@@ -948,75 +951,17 @@ class _QuizScreen extends State<QuizScreen> {
                       if (choices[1].note == ansstr) {
                         setState(() {
                           score++;
-                          buttoncolors[1] = Colors.green[300];
+                          buttoncolors[1] = Colors.green.shade300;
                           clickable = false;
                           if (score > highscore) _setHighScore(score);
                           _loadHighScore();
                         });
                       } else {
-                        setState(() {
-                          buttoncolors[1] = Colors.red[300];
-                          int ansindex;
-                          for (int i = 0; i < 5; i++) {
-                            if (choices[i].note == ansstr) ansindex = i;
-                          }
-                          buttoncolors[ansindex] = Colors.green[300];
-                          deaths++;
-                          clickable = false;
-                        });
+                        incorrectAnswer(1);
                       }
                       if (deaths == 3) reload = false;
                       if (reload) {
-                        Timer(Duration(milliseconds: 2500), () {
-                          setState(() {
-                            mynotes = [
-                              ChordNote("A", 0, 0),
-                              ChordNote("A#", 1, 0),
-                              ChordNote("B", 2, 0),
-                              ChordNote("C", 3, 0),
-                              ChordNote("C#", 4, 0),
-                              ChordNote("D", 5, 0),
-                              ChordNote("D#", 6, 0),
-                              ChordNote("E", 7, 0),
-                              ChordNote("F", 8, 0),
-                              ChordNote("F#", 9, 0),
-                              ChordNote("G", 10, 0),
-                              ChordNote("G#", 11, 0)
-                            ];
-                            Random myrand = new Random();
-                            int rand = myrand.nextInt(34);
-                            int randkey = myrand.nextInt(12);
-                            selectedScale = scales[rand];
-                            myScale = calculateScale(selectedScale, randkey);
-                            Set choicesset;
-                            int answerindex = myrand.nextInt(myScale.length);
-                            ansstr = myScale[answerindex].note;
-                            myScale[answerindex].note = "?";
-                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-                            int randset;
-                            choicesset = myScale.toSet();
-                            ChordNote answer = new ChordNote(ansstr, -1, 0);
-                            choices = [answer];
-                            while (choicesset.length != 4 + myScale.length) {
-                              randset = myrand.nextInt(12);
-                              if (choicesset.add(mynotes[randset]) == true) {
-                                choices.add(mynotes[randset]);
-                              }
-                            }
-                            choices.shuffle();
-                            clickable = true;
-                            buttoncolors = [
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1)
-                            ];
-                          });
-
-                          scaleNums = tableNums(selectedScale.name);
-                          lifeicons = _lifeicons();
-                        });
+                        reloadState();
                       }
                     }
                   },
@@ -1037,75 +982,17 @@ class _QuizScreen extends State<QuizScreen> {
                       if (choices[2].note == ansstr) {
                         setState(() {
                           score++;
-                          buttoncolors[2] = Colors.green[300];
+                          buttoncolors[2] = Colors.green.shade300;
                           clickable = false;
                           if (score > highscore) _setHighScore(score);
                           _loadHighScore();
                         });
                       } else {
-                        setState(() {
-                          buttoncolors[2] = Colors.red[300];
-                          int ansindex;
-                          for (int i = 0; i < 5; i++) {
-                            if (choices[i].note == ansstr) ansindex = i;
-                          }
-                          buttoncolors[ansindex] = Colors.green[300];
-                          deaths++;
-                          clickable = false;
-                        });
+                        incorrectAnswer(2);
                       }
                       if (deaths == 3) reload = false;
                       if (reload) {
-                        Timer(Duration(milliseconds: 2500), () {
-                          setState(() {
-                            mynotes = [
-                              ChordNote("A", 0, 0),
-                              ChordNote("A#", 1, 0),
-                              ChordNote("B", 2, 0),
-                              ChordNote("C", 3, 0),
-                              ChordNote("C#", 4, 0),
-                              ChordNote("D", 5, 0),
-                              ChordNote("D#", 6, 0),
-                              ChordNote("E", 7, 0),
-                              ChordNote("F", 8, 0),
-                              ChordNote("F#", 9, 0),
-                              ChordNote("G", 10, 0),
-                              ChordNote("G#", 11, 0)
-                            ];
-                            Random myrand = new Random();
-                            int rand = myrand.nextInt(34);
-                            int randkey = myrand.nextInt(12);
-                            selectedScale = scales[rand];
-                            myScale = calculateScale(selectedScale, randkey);
-                            Set choicesset;
-                            int answerindex = myrand.nextInt(myScale.length);
-                            ansstr = myScale[answerindex].note;
-                            myScale[answerindex].note = "?";
-                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-                            int randset;
-                            choicesset = myScale.toSet();
-                            ChordNote answer = new ChordNote(ansstr, -1, 0);
-                            choices = [answer];
-                            while (choicesset.length != 4 + myScale.length) {
-                              randset = myrand.nextInt(12);
-                              if (choicesset.add(mynotes[randset]) == true) {
-                                choices.add(mynotes[randset]);
-                              }
-                            }
-                            choices.shuffle();
-                            clickable = true;
-                            buttoncolors = [
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1)
-                            ];
-                          });
-
-                          scaleNums = tableNums(selectedScale.name);
-                          lifeicons = _lifeicons();
-                        });
+                        reloadState();
                       }
                     }
                   },
@@ -1131,75 +1018,17 @@ class _QuizScreen extends State<QuizScreen> {
                       if (choices[3].note == ansstr) {
                         setState(() {
                           score++;
-                          buttoncolors[3] = Colors.green[300];
+                          buttoncolors[3] = Colors.green.shade300;
                           clickable = false;
                           if (score > highscore) _setHighScore(score);
                           _loadHighScore();
                         });
                       } else {
-                        setState(() {
-                          buttoncolors[3] = Colors.red[300];
-                          int ansindex;
-                          for (int i = 0; i < 5; i++) {
-                            if (choices[i].note == ansstr) ansindex = i;
-                          }
-                          buttoncolors[ansindex] = Colors.green[300];
-                          deaths++;
-                          clickable = false;
-                        });
+                        incorrectAnswer(3);
                       }
                       if (deaths == 3) reload = false;
                       if (reload) {
-                        Timer(Duration(milliseconds: 2500), () {
-                          setState(() {
-                            mynotes = [
-                              ChordNote("A", 0, 0),
-                              ChordNote("A#", 1, 0),
-                              ChordNote("B", 2, 0),
-                              ChordNote("C", 3, 0),
-                              ChordNote("C#", 4, 0),
-                              ChordNote("D", 5, 0),
-                              ChordNote("D#", 6, 0),
-                              ChordNote("E", 7, 0),
-                              ChordNote("F", 8, 0),
-                              ChordNote("F#", 9, 0),
-                              ChordNote("G", 10, 0),
-                              ChordNote("G#", 11, 0)
-                            ];
-                            Random myrand = new Random();
-                            int rand = myrand.nextInt(34);
-                            int randkey = myrand.nextInt(12);
-                            selectedScale = scales[rand];
-                            myScale = calculateScale(selectedScale, randkey);
-                            Set choicesset;
-                            int answerindex = myrand.nextInt(myScale.length);
-                            ansstr = myScale[answerindex].note;
-                            myScale[answerindex].note = "?";
-                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-                            int randset;
-                            choicesset = myScale.toSet();
-                            ChordNote answer = new ChordNote(ansstr, -1, 0);
-                            choices = [answer];
-                            while (choicesset.length != 4 + myScale.length) {
-                              randset = myrand.nextInt(12);
-                              if (choicesset.add(mynotes[randset]) == true) {
-                                choices.add(mynotes[randset]);
-                              }
-                            }
-                            choices.shuffle();
-                            clickable = true;
-                            buttoncolors = [
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1)
-                            ];
-                          });
-
-                          scaleNums = tableNums(selectedScale.name);
-                          lifeicons = _lifeicons();
-                        });
+                        reloadState();
                       }
                     }
                   },
@@ -1220,74 +1049,17 @@ class _QuizScreen extends State<QuizScreen> {
                       if (choices[4].note == ansstr) {
                         setState(() {
                           score++;
-                          buttoncolors[4] = Colors.green[300];
+                          buttoncolors[4] = Colors.green.shade300;
                           clickable = false;
                           if (score > highscore) _setHighScore(score);
                           _loadHighScore();
                         });
                       } else {
-                        setState(() {
-                          buttoncolors[4] = Colors.red[300];
-                          int ansindex;
-                          for (int i = 0; i < 5; i++) {
-                            if (choices[i].note == ansstr) ansindex = i;
-                          }
-                          buttoncolors[ansindex] = Colors.green[300];
-                          deaths++;
-                          clickable = false;
-                        });
+                        incorrectAnswer(4);
                       }
                       if (deaths == 3) reload = false;
                       if (reload) {
-                        Timer(Duration(milliseconds: 2500), () {
-                          setState(() {
-                            mynotes = [
-                              ChordNote("A", 0, 0),
-                              ChordNote("A#", 1, 0),
-                              ChordNote("B", 2, 0),
-                              ChordNote("C", 3, 0),
-                              ChordNote("C#", 4, 0),
-                              ChordNote("D", 5, 0),
-                              ChordNote("D#", 6, 0),
-                              ChordNote("E", 7, 0),
-                              ChordNote("F", 8, 0),
-                              ChordNote("F#", 9, 0),
-                              ChordNote("G", 10, 0),
-                              ChordNote("G#", 11, 0)
-                            ];
-                            Random myrand = new Random();
-                            int rand = myrand.nextInt(34);
-                            int randkey = myrand.nextInt(12);
-                            selectedScale = scales[rand];
-                            myScale = calculateScale(selectedScale, randkey);
-                            Set choicesset;
-                            int answerindex = myrand.nextInt(myScale.length);
-                            ansstr = myScale[answerindex].note;
-                            myScale[answerindex].note = "?";
-                            scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
-                            int randset;
-                            choicesset = myScale.toSet();
-                            ChordNote answer = new ChordNote(ansstr, -1, 0);
-                            choices = [answer];
-                            while (choicesset.length != 4 + myScale.length) {
-                              randset = myrand.nextInt(12);
-                              if (choicesset.add(mynotes[randset]) == true) {
-                                choices.add(mynotes[randset]);
-                              }
-                            }
-                            choices.shuffle();
-                            clickable = true;
-                            buttoncolors = [
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1),
-                              Color.fromRGBO(200, 250, 250, 1)
-                            ];
-                          });
-                          scaleNums = tableNums(selectedScale.name);
-                          lifeicons = _lifeicons();
-                        });
+                        reloadState();
                       }
                     }
                   },

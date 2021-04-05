@@ -1,6 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:music_scales/application/store/store.dart';
 import 'package:music_scales/domain/core/const.dart';
@@ -15,13 +14,13 @@ class ScalePrintScreen extends StatefulWidget {
 
 class _ScalePrintScreen extends State<ScalePrintScreen> {
   AudioCache audio = new AudioCache();
-  AssetImage instrimg;
+  late AssetImage instrimg;
   String instrument = "Piano";
   String selectedScaleName = scales[0].name;
   int selectedScaleIndex = 0;
   String selectedNoteName = "A";
   int selectedNoteIndex = 0;
-  List<SNote> myScale = [];
+  late List<SNote> myScale = [];
   List<String> scaleNums = ["1", "2", "3", "4", "5", "6", "7"];
 
   @override
@@ -61,10 +60,11 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
     List<SNote> theScale = [];
     int audioindx = 4;
     int index = key;
-    Scale scaleObj;
+    late Scale scaleObj;
     for (int i = 0; i < scales.length; i++) {
       if (mode == scales[i].index) scaleObj = scales[i];
     }
+
     for (int j = 0; j < scaleObj.formula.length + 1; j++) {
       if (j != 0) index += scaleObj.formula[j - 1];
       if (index > 11) {
@@ -663,17 +663,16 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
 
   Widget scaleimg() {
     if (instrument == "Guitar") {
-      return TransitionToImage(
-        image: AdvancedNetworkImage(
+      return CachedNetworkImage(
+        imageUrl:
             "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
-            useDiskCache: true),
-        loadingWidget: Padding(
+        placeholder: (context, url) => Padding(
             padding: EdgeInsets.all(20),
             child: CircularProgressIndicator(
               strokeWidth: 3,
               backgroundColor: Colors.orangeAccent,
             )),
-        placeholder: Column(
+        errorWidget: (context, url, error) => Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -690,23 +689,22 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
             ),
           ],
         ),
-        enableRefresh: true,
         height: 100,
         alignment: Alignment(-1, -1),
         fit: BoxFit.fitHeight,
       );
     }
-    return TransitionToImage(
-      image: AdvancedNetworkImage(
+    return CachedNetworkImage(
+      imageUrl:
           "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
-          useDiskCache: true),
-      loadingWidget: Padding(
-          padding: EdgeInsets.all(20),
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            backgroundColor: Colors.orangeAccent,
-          )),
-      placeholder: Column(
+      placeholder: (context, url) => Padding(
+        padding: EdgeInsets.all(20),
+        child: CircularProgressIndicator(
+          strokeWidth: 3,
+          backgroundColor: Colors.orangeAccent,
+        ),
+      ),
+      errorWidget: (context, url, error) => Column(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -723,7 +721,6 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
           ),
         ],
       ),
-      enableRefresh: true,
     );
   }
 
@@ -797,7 +794,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         style: TextStyle(
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
-                      DropdownButton(
+                      DropdownButton<SNote>(
                         hint: Text(
                           selectedNoteName,
                           style: TextStyle(fontSize: 20, color: Colors.blue),
@@ -811,14 +808,15 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             value: value,
                           );
                         }).toList(),
-                        onChanged: (SNote newvalue) {
-                          setState(() {
-                            selectedNoteIndex = newvalue.index;
-                            selectedNoteName = newvalue.note;
-                            scaleNums = updateTableNums(selectedScaleName);
-                            myScale = calculateScale(
-                                selectedScaleIndex, selectedNoteIndex);
-                          });
+                        onChanged: (newvalue) {
+                          if (newvalue != null)
+                            setState(() {
+                              selectedNoteIndex = newvalue.index;
+                              selectedNoteName = newvalue.note;
+                              scaleNums = updateTableNums(selectedScaleName);
+                              myScale = calculateScale(
+                                  selectedScaleIndex, selectedNoteIndex);
+                            });
                         },
                       ),
                     ],
@@ -836,7 +834,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         style: TextStyle(
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
-                      DropdownButton(
+                      DropdownButton<Scale>(
                         hint: Text(
                           selectedScaleName,
                           style:
@@ -851,16 +849,17 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             value: value,
                           );
                         }).toList(),
-                        onChanged: (Scale newvalue) {
-                          setState(() {
-                            selectedScaleName = newvalue.name;
-                            selectedScaleIndex = newvalue.index;
-                            print(scaleNums);
-                            scaleNums = updateTableNums(selectedScaleName);
-                            print(scaleNums);
-                            myScale = calculateScale(
-                                selectedScaleIndex, selectedNoteIndex);
-                          });
+                        onChanged: (newvalue) {
+                          if (newvalue != null)
+                            setState(() {
+                              selectedScaleName = newvalue.name;
+                              selectedScaleIndex = newvalue.index;
+                              print(scaleNums);
+                              scaleNums = updateTableNums(selectedScaleName);
+                              print(scaleNums);
+                              myScale = calculateScale(
+                                  selectedScaleIndex, selectedNoteIndex);
+                            });
                         },
                       ),
                     ],

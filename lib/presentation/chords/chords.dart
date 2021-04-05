@@ -1,6 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
@@ -20,10 +19,11 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
   AudioPlayer audio = new AudioPlayer();
   AudioCache audioc = new AudioCache();
 
-  Icon myplay;
-  int playctr;
-  EdgeInsets playpadding;
-  AssetImage instrimg;
+  Icon myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
+  int playctr = 1;
+  EdgeInsets playpadding = EdgeInsets.only(left: 6);
+  AssetImage instrimg =
+      AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
   String instrument = "Piano";
 
   String selectedChordName = chords[0].note;
@@ -38,12 +38,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
 
   @override
   void initState() {
-    myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
-    playctr = 1;
-    playpadding = EdgeInsets.only(left: 6);
     instrument = store.state.instrument;
-    instrimg =
-        AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
     scaleNums = tablenums(selectedChordName);
     myNotes = calculateChord(selectedChordIndex, selectedNoteIndex);
     super.initState();
@@ -53,7 +48,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     List<ChordNote> theNotes = [];
     int audioindx = 4;
     var index = key;
-    Chord chordObj;
+    late Chord chordObj;
     for (int i = 0; i < chords.length; i++) {
       if (mode == chords[i].index) chordObj = chords[i];
     }
@@ -719,7 +714,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         else if (mode == "Add2")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
-        else if (mode == "Add4")
+        else //if (mode == "Add4")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-n-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
         return url.replaceAll("#", "s");
@@ -817,7 +812,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         else if (mode == "Add2")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
-        else if (mode == "Add4")
+        else //if (mode == "Add4")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-l-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
         return url
@@ -825,7 +820,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
             .replaceFirst("#", "-sharp")
             .replaceAll("#", "s");
       }
-    } else if (instr == "Guitar") {
+    } else {
       if (!notes[0].note.contains("#")) {
         if (mode == "Major")
           url =
@@ -920,7 +915,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         else if (mode == "Add2")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][24].replaceAll(" ", "-")}";
-        else if (mode == "Add4")
+        else //if (mode == "Add4")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-n-l-h-${strings[img][notes[0].index][25].replaceAll(" ", "-")}";
         return url.replaceAll("#", "s");
@@ -1018,7 +1013,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
         else if (mode == "Add2")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add2-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][24].replaceAll(" ", "-")}";
-        else if (mode == "Add4")
+        else //if (mode == "Add4")
           url =
               "${instr.toLowerCase()}-${notes[0].note}add4-${notes[0].note.toLowerCase()}-l-h-${strings[img][notes[0].index][25].replaceAll(" ", "-")}";
         return url
@@ -1126,10 +1121,10 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       else if (mode == "Add2")
         url =
             "${instr.toLowerCase()}-${notes[0].note}add2-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
-      else if (mode == "Add4")
+      else //if (mode == "Add4")
         url =
             "${instr.toLowerCase()}-${notes[0].note}add4-$speed-${notes[0].note.toLowerCase()}-${notes[1].note.toLowerCase()}-${notes[2].note.toLowerCase()}-${notes[3].note.toLowerCase()}";
-    } else if (instr == "Guitar") {
+    } else {
       if (mode == "Major")
         url =
             "${instr.toLowerCase()}-${notes[0].note}-$speed-${strings[img][notes[0].index][0].replaceAll(" ", "-")}";
@@ -1223,7 +1218,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
       else if (mode == "Add2")
         url =
             "${instr.toLowerCase()}-${notes[0].note}add2-$speed-${strings[img][notes[0].index][24].replaceAll(" ", "-")}";
-      else if (mode == "Add4")
+      else //if (mode == "Add4")
         url =
             "${instr.toLowerCase()}-${notes[0].note}add4-$speed-${strings[img][notes[0].index][25].replaceAll(" ", "-")}";
     }
@@ -1243,20 +1238,21 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     await audio.pause();
   }
 
-  var chordimg;
-  TransitionToImage _chrdimg(String url) {
+  Widget chordimg = Container();
+
+  CachedNetworkImage _chrdimg(String url) {
     String totalurl = "https://www.scales-chords.com/chord-charts/$url.jpg";
-    chordimg = TransitionToImage(
-      image: AdvancedNetworkImage(totalurl, useDiskCache: true),
+    var myChordImg = CachedNetworkImage(
+      imageUrl: totalurl,
       fit: BoxFit.fill,
-      loadingWidget: Container(
+      placeholder: (context, url) => Container(
           padding: EdgeInsets.all(20),
           alignment: Alignment.center,
           child: CircularProgressIndicator(
             strokeWidth: 3,
             backgroundColor: Colors.orangeAccent,
           )),
-      placeholder: Column(
+      errorWidget: (context, url, error) => Column(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.fromLTRB(0, 4, 0, 6),
@@ -1273,9 +1269,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           ),
         ],
       ),
-      enableRefresh: true,
     );
-    return chordimg;
+    return myChordImg;
   }
 
   void playicon() {
@@ -1318,6 +1313,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           child: _chrdimg(
               "${urlChord(selectedChordName, myNotes, instrument, imgctr)}"));
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("${titleText(selectedNoteName, selectedChordName)}",
@@ -1384,7 +1380,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                         style: TextStyle(
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
-                      DropdownButton(
+                      DropdownButton<ChordNote>(
                         hint: Text(
                           selectedNoteName,
                           style: TextStyle(fontSize: 20, color: Colors.blue),
@@ -1398,7 +1394,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                             value: value,
                           );
                         }).toList(),
-                        onChanged: (ChordNote newvalue) {
+                        onChanged: (newvalue) {
+                          if (newvalue == null) return;
                           setState(() {
                             selectedNoteIndex = newvalue.index;
                             selectedNoteName = newvalue.note;
@@ -1425,7 +1422,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               fontSize: 20,
                               color: Color.fromRGBO(50, 50, 50, 1)),
                         ),
-                        DropdownButton(
+                        DropdownButton<Chord>(
                           hint: Text(
                             selectedChordName,
                             style: TextStyle(
@@ -1440,7 +1437,9 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               value: value,
                             );
                           }).toList(),
-                          onChanged: (Chord newvalue) {
+                          onChanged: (newvalue) {
+                            if (newvalue == null) return;
+
                             setState(() {
                               selectedChordName = newvalue.note;
                               selectedChordIndex = newvalue.index;

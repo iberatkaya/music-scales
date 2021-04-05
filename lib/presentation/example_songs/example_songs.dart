@@ -10,7 +10,11 @@ class Song {
   final String section;
   final String url;
 
-  Song({this.artist, this.song, this.section, this.url});
+  Song(
+      {required this.artist,
+      required this.song,
+      required this.section,
+      required this.url});
 
   factory Song.fromJson(Map<String, dynamic> json) {
     return Song(
@@ -28,10 +32,9 @@ class SongsListScreen extends StatefulWidget {
 }
 
 class _SongsListScreen extends State<SongsListScreen> {
-  String apimode;
-  int chordnum = 1;
-  int paramlength;
-  String globalappbarprog;
+  int chordnum = 2;
+  int paramlength = 2;
+  String globalappbarprog = "1-2";
 
   var buttonitems = [
     ["1", "2", "3", "4", "5", "6", "7"],
@@ -39,17 +42,8 @@ class _SongsListScreen extends State<SongsListScreen> {
     ["1", "2", "3", "4", "5", "6", "7"],
     ["1", "2", "3", "4", "5", "6", "7"]
   ];
-  var param;
-  var buttonhint;
-  @override
-  void initState() {
-    chordnum = 2;
-    param = ["1", "2", "3", "4"];
-    paramlength = 2;
-    globalappbarprog = "1-2";
-    buttonhint = ["1", "2", "3", "4"];
-    super.initState();
-  }
+  List<String> param = ["1", "2", "3", "4"];
+  List<String> buttonhint = ["1", "2", "3", "4"];
 
   ListView mylist(List<Song> mysongs) {
     return ListView.separated(
@@ -64,8 +58,8 @@ class _SongsListScreen extends State<SongsListScreen> {
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           onTap: () {
-            url = mysongs[index].url;
-            _launchURL();
+            String url = mysongs[index].url;
+            _launchURL(url);
           },
           contentPadding: EdgeInsets.fromLTRB(14, 9, 0, 8),
           title: Column(children: <Widget>[
@@ -99,8 +93,7 @@ class _SongsListScreen extends State<SongsListScreen> {
     );
   }
 
-  String url;
-  _launchURL() async {
+  _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -125,7 +118,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -159,7 +153,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -189,7 +184,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -223,7 +219,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -257,7 +254,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -271,7 +269,7 @@ class _SongsListScreen extends State<SongsListScreen> {
           },
         ),
       ]);
-    } else if (number == 4) {
+    } else {
       return Row(children: <Widget>[
         DropdownButton<String>(
           hint: Text(
@@ -287,7 +285,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -321,7 +320,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -355,7 +355,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -389,7 +390,8 @@ class _SongsListScreen extends State<SongsListScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -406,52 +408,50 @@ class _SongsListScreen extends State<SongsListScreen> {
     }
   }
 
+  Future<List<Song>> fetchSong(String mode, List<dynamic> chords) async {
+    String url = "";
+    for (int i = 0; i < paramlength; i++) {
+      if (i == paramlength - 1)
+        url += chords[i];
+      else
+        url += chords[i] + ",";
+    }
+    print("url is https://api.hooktheory.com/v1/trends/${mode}?cp=${url}");
+    final response = await http.get(
+      'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}',
+      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+    );
+    final responseJson = json.decode(response.body);
+
+    final response2 = await http.get(
+      'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=2',
+      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+    );
+    final responseJson2 = json.decode(response2.body);
+
+    final response3 = await http.get(
+      'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=3',
+      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+    );
+    final responseJson3 = json.decode(response3.body);
+    List<Song> mysong = [];
+    for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson[i]));
+    for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson2[i]));
+    for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson3[i]));
+    for (int i = 0; i < 15; i++) {
+      print(mysong[i].song);
+    }
+    return mysong;
+  }
+
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      globalappbarprog = "";
-      for (int i = 0; i < paramlength; i++) {
-        if (i == paramlength - 1)
-          globalappbarprog += param[i];
-        else
-          globalappbarprog += param[i] + "-";
-      }
-    });
-
-    Future<List<Song>> fetchSong(String mode, List<dynamic> chords) async {
-      String url = "";
-      for (int i = 0; i < paramlength; i++) {
-        if (i == paramlength - 1)
-          url += chords[i];
-        else
-          url += chords[i] + ",";
-      }
-      print("url is https://api.hooktheory.com/v1/trends/${mode}?cp=${url}");
-      final response = await http.get(
-        'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}',
-        headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
-      );
-      final responseJson = json.decode(response.body);
-
-      final response2 = await http.get(
-        'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=2',
-        headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
-      );
-      final responseJson2 = json.decode(response2.body);
-
-      final response3 = await http.get(
-        'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=3',
-        headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
-      );
-      final responseJson3 = json.decode(response3.body);
-      List<Song> mysong = [];
-      for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson[i]));
-      for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson2[i]));
-      for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson3[i]));
-      for (int i = 0; i < 15; i++) {
-        print(mysong[i].song);
-      }
-      return mysong;
+    globalappbarprog = "";
+    for (int i = 0; i < paramlength; i++) {
+      if (i == paramlength - 1)
+        globalappbarprog += param[i];
+      else
+        globalappbarprog += param[i] + "-";
     }
 
     return Scaffold(
@@ -514,7 +514,8 @@ class _SongsListScreen extends State<SongsListScreen> {
                     ),
                   );
                 }).toList(),
-                onChanged: (int newValueSelected) {
+                onChanged: (newValueSelected) {
+                  if (newValueSelected == null) return;
                   setState(() {
                     param[0] = "1";
                     param[1] = "2";
@@ -568,8 +569,10 @@ class _SongsListScreen extends State<SongsListScreen> {
                             ))),
                     Icon(Icons.error, color: Colors.red),
                   ]));
+                else if (snapshot.data != null)
+                  return Flexible(child: mylist(snapshot.data!));
                 else
-                  return Flexible(child: mylist(snapshot.data));
+                  return Container();
             }
           },
         )

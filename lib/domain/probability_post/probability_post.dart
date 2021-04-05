@@ -5,7 +5,10 @@ class ProbabilityPost {
   final String child_path;
 
   ProbabilityPost(
-      {this.chord_ID, this.chord_HTML, this.probability, this.child_path});
+      {required this.chord_ID,
+      required this.chord_HTML,
+      required this.probability,
+      required this.child_path});
 
   factory ProbabilityPost.fromJson(Map<String, dynamic> json) {
     return ProbabilityPost(

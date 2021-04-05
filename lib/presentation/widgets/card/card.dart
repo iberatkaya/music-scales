@@ -9,13 +9,13 @@ class ButtonCard extends StatelessWidget {
   final int titleSize;
   final int subtitleSize;
   const ButtonCard({
-    @required this.onPressed,
-    @required this.icon,
-    @required this.title,
-    @required this.subtitle,
-    @required this.color,
-    @required this.titleSize,
-    @required this.subtitleSize,
+    required this.onPressed,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.titleSize,
+    required this.subtitleSize,
   });
 
   @override

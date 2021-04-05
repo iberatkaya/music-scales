@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-double textSize = 28.0;
+const double textSize = 28.0;
 MaterialColor myColor = MaterialColor(0xffffaf00, {
   50: Color(0xffffaf00),
   100: Color(0xffffaf00),
@@ -14,4 +14,4 @@ MaterialColor myColor = MaterialColor(0xffffaf00, {
   900: Color(0xffffaf00),
 });
 
-int adFreq = 3;
+const int adFreq = 3;

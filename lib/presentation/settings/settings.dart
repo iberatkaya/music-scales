@@ -65,12 +65,14 @@ class _SettingsScreen extends State<SettingsScreen> {
                                 child: Text("$value"),
                               );
                             }).toList(),
-                            onChanged: (String newValueSelected) async {
+                            onChanged: (newValueSelected) async {
                               store.dispatch(SettingsAction(
                                   settingsActionType:
                                       SettingsActionType.setInstrument,
                                   payload: newValueSelected));
-                              await _changeInstrument(newValueSelected);
+                              if (newValueSelected != null) {
+                                await _changeInstrument(newValueSelected);
+                              }
                             },
                           ),
                         ],
@@ -102,7 +104,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                                 child: Text("$value"),
                               );
                             }).toList(),
-                            onChanged: (String newValueSelected) async {
+                            onChanged: (newValueSelected) async {
                               bool isFast = newValueSelected == "Fast";
                               store.dispatch(SettingsAction(
                                   settingsActionType:
@@ -139,7 +141,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                                 child: Text("$value"),
                               );
                             }).toList(),
-                            onChanged: (String newValueSelected) {
+                            onChanged: (newValueSelected) {
                               bool showFlatsInScales =
                                   newValueSelected == "Yes";
                               store.dispatch(SettingsAction(

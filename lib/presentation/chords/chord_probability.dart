@@ -6,18 +6,23 @@ import 'dart:async';
 
 import 'package:music_scales/domain/probability_post/probability_post.dart';
 
-String apimode;
-int chordnum = 1;
-int paramlength;
-String globalurl;
-String globalappbarprog = "";
-
 class ChordProbScreen extends StatefulWidget {
   @override
   _ChordProbScreen createState() => _ChordProbScreen();
 }
 
 class _ChordProbScreen extends State<ChordProbScreen> {
+  int paramlength = 1;
+  int chordnum = 1;
+
+  List<List<String>> buttonitems = [
+    ["1", "2", "3", "4", "5", "6", "7"],
+    ["1", "2", "3", "4", "5", "6", "7"],
+    ["1", "2", "3", "4", "5", "6", "7"]
+  ];
+  List<String> param = ["1", "2", "3"];
+  List<String> buttonhint = ["1", "2", "3"];
+
   Future<List<ProbabilityPost>> fetchPost(
       String mode, List<dynamic> chords) async {
     String url = "";
@@ -28,9 +33,7 @@ class _ChordProbScreen extends State<ChordProbScreen> {
       else
         url += chords[i] + ",";
     }
-    globalurl = url;
-    print("url is " + url);
-    print("url is https://api.hooktheory.com/v1/trends/${mode}?cp=${url}");
+
     final response = await http.get(
       'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}',
       headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
@@ -41,22 +44,6 @@ class _ChordProbScreen extends State<ChordProbScreen> {
     for (int i = 0; i < 9; i++)
       mypost.add(ProbabilityPost.fromJson(responseJson[i]));
     return mypost;
-  }
-
-  var buttonitems = [
-    ["1", "2", "3", "4", "5", "6", "7"],
-    ["1", "2", "3", "4", "5", "6", "7"],
-    ["1", "2", "3", "4", "5", "6", "7"]
-  ];
-  var param;
-  var buttonhint;
-  @override
-  void initState() {
-    chordnum = 1;
-    param = ["1", "2", "3"];
-    paramlength = 1;
-    buttonhint = ["1", "2", "3"];
-    super.initState();
   }
 
   String htmltostr(String html) {
@@ -259,7 +246,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -288,7 +276,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -321,7 +310,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -334,7 +324,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
           },
         ),
       ]);
-    } else if (number == 3) {
+    } else {
+      //if (number == 3) {
       return Row(children: <Widget>[
         DropdownButton<String>(
           hint: Text(
@@ -350,7 +341,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -383,7 +375,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -416,7 +409,8 @@ class _ChordProbScreen extends State<ChordProbScreen> {
               ),
             );
           }).toList(),
-          onChanged: (String newValueSelected) {
+          onChanged: (newValueSelected) {
+            if (newValueSelected == null) return null;
             setState(() {
               buttonitems = [
                 ["1", "2", "3", "4", "5", "6", "7"],
@@ -478,6 +472,7 @@ class _ChordProbScreen extends State<ChordProbScreen> {
           setState(() {
             fetchPost("nodes", param);
           });
+          return Future.value();
         },
         child: SingleChildScrollView(
             child: Column(children: <Widget>[
@@ -502,7 +497,9 @@ class _ChordProbScreen extends State<ChordProbScreen> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (int newValueSelected) {
+                  onChanged: (newValueSelected) {
+                    if (newValueSelected == null) return null;
+                    if (newValueSelected == null) return;
                     setState(() {
                       param[0] = "1";
                       param[1] = "2";
@@ -560,8 +557,10 @@ class _ChordProbScreen extends State<ChordProbScreen> {
                               ))),
                       Icon(Icons.error, color: Colors.red),
                     ]));
+                  else if (snapshot.data != null)
+                    return mytable(snapshot.data!);
                   else
-                    return mytable(snapshot.data);
+                    return Container();
               }
             },
           )

@@ -5,15 +5,15 @@ class Settings {
   bool showFlatsInScales;
   bool fastChordAudioSpeed;
   Settings({
-    @required this.instrument,
-    @required this.showFlatsInScales,
-    @required this.fastChordAudioSpeed,
+    required this.instrument,
+    required this.showFlatsInScales,
+    required this.fastChordAudioSpeed,
   });
 
   Settings copyWith({
-    String instrument,
-    bool showFlatsInScales,
-    bool fastChordAudioSpeed,
+    String? instrument,
+    bool? showFlatsInScales,
+    bool? fastChordAudioSpeed,
   }) {
     return Settings(
       instrument: instrument ?? this.instrument,

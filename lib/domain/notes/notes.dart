@@ -25,7 +25,6 @@ List<Note> notes = [
 class SNote extends Note {
   String note;
   String bemolle;
-  String alternative;
   int index;
   int audioindex;
   bool isBemolle = false;
@@ -34,7 +33,7 @@ class SNote extends Note {
 
   @override
   String toString() {
-    return 'SNote(note: $note, bemolle: $bemolle, alternative: $alternative, index: $index, audioindex: $audioindex, isBemolle: $isBemolle)';
+    return 'SNote(note: $note, bemolle: $bemolle, index: $index, audioindex: $audioindex, isBemolle: $isBemolle)';
   }
 }
 

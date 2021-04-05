@@ -166,7 +166,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                       style: TextStyle(
                           fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                     ),
-                    DropdownButton(
+                    DropdownButton<Note>(
                       hint: Text(
                         selectedKey,
                         style: TextStyle(fontSize: 20, color: Colors.blue),
@@ -180,10 +180,11 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                           value: value,
                         );
                       }).toList(),
-                      onChanged: (Note newvalue) {
+                      onChanged: (newValue) {
+                        if (newValue == null) return;
                         setState(() {
-                          selectedKey = newvalue.note;
-                          myindex = newvalue.index;
+                          selectedKey = newValue.note;
+                          myindex = newValue.index;
                           theScale = scaleChords(progmode, myindex);
                         });
                       },
@@ -203,7 +204,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                         style: TextStyle(
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
-                      DropdownButton(
+                      DropdownButton<Scale>(
                         hint: Text(
                           progmode,
                           style:
@@ -218,9 +219,10 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                             value: value,
                           );
                         }).toList(),
-                        onChanged: (Scale newvalue) {
+                        onChanged: (newValue) {
+                          if (newValue == null) return;
                           setState(() {
-                            progmode = newvalue.name;
+                            progmode = newValue.name;
                             theScale = scaleChords(progmode, myindex);
                           });
                         },
@@ -378,10 +380,10 @@ class RandomProgScreen extends StatelessWidget {
   final int myindex;
   final List<SmallChord> theScale;
   const RandomProgScreen({
-    @required this.progmode,
-    @required this.musicKey,
-    @required this.myindex,
-    @required this.theScale,
+    required this.progmode,
+    required this.musicKey,
+    required this.myindex,
+    required this.theScale,
   });
 
   Widget build(BuildContext content) {
@@ -431,7 +433,7 @@ class RandomProgScreen extends StatelessWidget {
           [1, 3, 4, 5],
           [1, 2, 5]
         ];
-      else if (progmode == "minor")
+      else
         theProgs = [
           [1, 6, 7],
           [1, 4, 6],
@@ -520,8 +522,7 @@ class RandomProgScreen extends StatelessWidget {
             )
           ],
         );
-      }
-      if (progressions[number].length == 4) {
+      } else {
         return Column(
           children: <Widget>[
             Padding(
