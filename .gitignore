@@ -14,6 +14,16 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 *.keystore
 
+# fastlane
+android/fastlane/play-console.json
+android/fastlane/README.md
+android/fastlane/report.xml
+ios/fastlane/Preview.html
+ios/fastlane/README.md
+ios/fastlane/report.xml
+ios/*.zip
+ios/Runner.ipa
+
 # IntelliJ related
 *.iml
 *.ipr

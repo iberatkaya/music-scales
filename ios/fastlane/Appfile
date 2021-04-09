@@ -1,0 +1,5 @@
+app_identifier("com.kaya.musicapp") # The bundle identifier of your app
+apple_id("ibkstelapps@gmail.com") # Your Apple email address
+
+itc_team_id("121028482") # App Store Connect Team ID
+team_id("QH78WN2XWN") # Developer Portal Team ID
