@@ -58,9 +58,7 @@ class _ChordProbScreen extends State<ChordProbScreen> {
           i++;
         }
         if (temp == "&#9837") str += "b";
-        print(temp);
         temp = "";
-        print(temp);
       } else {
         str += html[i];
       }
