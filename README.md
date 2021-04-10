@@ -3,9 +3,9 @@
 > Music Scales is a music theory mobile application that shows scales and chords for the piano and guitar. Check out the <a href="https://play.google.com/store/apps/details?id=com.kaya.musicapp">Android app</a> and the <a href="https://apps.apple.com/us/app/music-scales/id1498463498">iOS app</a>.
 
 <p align="center">
-    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/0.png" width="240" height="480">
-    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/1.png" width="240" height="480">
-    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/2.png" width="240" height="480">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/0.png" width="220" height="480">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/1.png" width="220" height="480">
+    <img alt="Screenshot" src="https://raw.githubusercontent.com/iberatkaya/music-scales/master/screenshots/2.png" width="220" height="480">
 </p>
 
 ## Authors
