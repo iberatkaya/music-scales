@@ -13,7 +13,6 @@ class ScalePrintScreen extends StatefulWidget {
 }
 
 class _ScalePrintScreen extends State<ScalePrintScreen> {
-  late AssetImage instrimg;
   String instrument = "Piano";
   String selectedScaleName = scales[0].name;
   int selectedScaleIndex = 0;
@@ -25,8 +24,6 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   @override
   void initState() {
     instrument = store.state.instrument;
-    instrimg =
-        AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
     myScale = calculateScale(selectedScaleIndex, selectedNoteIndex);
     super.initState();
   }
@@ -79,6 +76,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   Widget scaleimg() {
     if (instrument == "Guitar") {
       return CachedNetworkImage(
+        key: ValueKey(
+            "${selectedNoteName}_${selectedScaleName}_${instrument}_image"),
         imageUrl:
             "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
         placeholder: (context, url) => Padding(
@@ -110,6 +109,8 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
       );
     }
     return CachedNetworkImage(
+      key: ValueKey(
+          "${selectedNoteName}_${selectedScaleName}_${instrument}_image"),
       imageUrl:
           "https://www.scales-chords.com/music-scales/${urlScale(selectedScaleName, myScale, instrument.toLowerCase())}.jpg",
       placeholder: (context, url) => Padding(
@@ -142,6 +143,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ValueKey("scale_detail_page"),
       appBar: AppBar(
         title: Text(
           "$selectedNoteName $selectedScaleName",
@@ -151,24 +153,25 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
         elevation: 1,
         actions: <Widget>[
           GestureDetector(
+            key: ValueKey("instrument_button"),
             onTap: () {
               setState(() {
                 if (instrument == "Guitar")
                   instrument = "Piano";
                 else if (instrument == "Piano") instrument = "Guitar";
-                instrimg =
-                    AssetImage('assets/imgs/${instrument.toLowerCase()}.png');
               });
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 8, 6, 8),
               child: Image(
                 color: Colors.black,
-                image: instrimg,
+                image:
+                    AssetImage('assets/imgs/${instrument.toLowerCase()}.png'),
               ),
             ),
           ),
           GestureDetector(
+            key: ValueKey("help_button"),
             child: Padding(
                 padding: EdgeInsets.only(right: 6),
                 child: Icon(
@@ -177,15 +180,17 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                 )),
             onTap: () {
               showDialog(
-                  context: context,
-                  builder: (ctxt) => AlertDialog(
-                        title: Text(
-                          "Help",
-                          textAlign: TextAlign.center,
-                        ),
-                        content: Text(
-                            "Click and select a scale from the menu. Press the button next to the question mark to change the instrument. Click on the red tiles to hear the individual notes with the selected instrument. While viewing the guitar scale, slide the scale to the right to see the remaining scale."),
-                      ));
+                context: context,
+                builder: (ctxt) => AlertDialog(
+                  key: ValueKey("help_dialog"),
+                  title: Text(
+                    "Help",
+                    textAlign: TextAlign.center,
+                  ),
+                  content: Text(
+                      "Click and select a scale from the menu. Press the button next to the question mark to change the instrument. Click on the red tiles to hear the individual notes with the selected instrument. While viewing the guitar scale, slide the scale to the right to see the remaining scale."),
+                ),
+              );
             },
           )
         ],
@@ -210,12 +215,14 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
                       DropdownButton<SNote>(
+                        key: ValueKey("scale_key_dropdown_button"),
                         hint: Text(
                           selectedNoteName,
                           style: TextStyle(fontSize: 20, color: Colors.blue),
                         ),
                         items: sNotes.map((SNote value) {
                           return DropdownMenuItem<SNote>(
+                            key: ValueKey("dropdown_note_${value.note}"),
                             child: Text(
                               "${value.note}",
                               style: TextStyle(fontSize: 18),
@@ -250,6 +257,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
                       DropdownButton<Scale>(
+                        key: ValueKey("scale_name_dropdown_button"),
                         hint: Text(
                           selectedScaleName,
                           style:
@@ -257,6 +265,7 @@ class _ScalePrintScreen extends State<ScalePrintScreen> {
                         ),
                         items: scales.map((Scale value) {
                           return DropdownMenuItem<Scale>(
+                            key: ValueKey("dropdown_scale_${value.name}"),
                             child: Text(
                               "${value.name}",
                               style: TextStyle(fontSize: 18),

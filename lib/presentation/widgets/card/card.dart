@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ButtonCard extends StatelessWidget {
+  final Key? key;
   final void Function() onPressed;
   final Widget icon;
   final String title;
@@ -9,6 +10,7 @@ class ButtonCard extends StatelessWidget {
   final int titleSize;
   final int subtitleSize;
   const ButtonCard({
+    this.key,
     required this.onPressed,
     required this.icon,
     required this.title,

@@ -12,20 +12,18 @@ import 'package:music_scales/domain/chords/chords.dart';
 import 'package:music_scales/presentation/chords/utils/utils.dart';
 import 'package:music_scales/presentation/chords/widgets/note_table.dart';
 
-class ChordPrintScreen extends StatefulWidget {
+class ChordDetailScreen extends StatefulWidget {
   @override
-  _ChordPrintScreen createState() => _ChordPrintScreen();
+  _ChordDetailScreen createState() => _ChordDetailScreen();
 }
 
-class _ChordPrintScreen extends State<ChordPrintScreen> {
+class _ChordDetailScreen extends State<ChordDetailScreen> {
   AudioPlayer audio = new AudioPlayer();
   AudioCache audioc = new AudioCache();
 
   Icon myplay = Icon(FontAwesomeIcons.play, color: Colors.black87);
   int playctr = 1;
   EdgeInsets playpadding = EdgeInsets.only(left: 6);
-  AssetImage instrimg =
-      AssetImage('assets/imgs/${store.state.instrument.toLowerCase()}.png');
   String instrument = "Piano";
 
   String selectedChordName = chords[0].note;
@@ -105,6 +103,8 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
     if (instrument == "Guitar") {
       int itemcount = 4;
       chordimg = Container(
+          key: ValueKey(
+              "${selectedNoteName}_${selectedChordName}_${instrument}_image"),
           height: 135,
           padding: EdgeInsets.fromLTRB(10, 8, 10, 0),
           child: Swiper(
@@ -126,37 +126,41 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
           ));
     } else {
       chordimg = Container(
+          key: ValueKey(
+              "${selectedNoteName}_${selectedChordName}_${instrument}_image"),
           padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
           child: _chrdimg(
               "${urlChord(selectedChordName, myNotes, instrument, imgctr)}"));
     }
 
     return Scaffold(
+      key: ValueKey("chord_detail_page"),
       appBar: AppBar(
         title: Text("${titleText(selectedNoteName, selectedChordName)}",
             style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1))),
         elevation: 1,
         actions: <Widget>[
           GestureDetector(
+            key: ValueKey("instrument_button"),
             onTap: () {
               setState(() {
                 if (instrument == "Guitar") {
                   instrument = "Piano";
                   imgctr = 0;
                 } else if (instrument == "Piano") instrument = "Guitar";
-                instrimg =
-                    AssetImage('assets/imgs/${instrument.toLowerCase()}.png');
               });
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 8, 6, 8),
               child: Image(
                 color: Colors.black,
-                image: instrimg,
+                image:
+                    AssetImage('assets/imgs/${instrument.toLowerCase()}.png'),
               ),
             ),
           ),
           GestureDetector(
+            key: ValueKey("help_button"),
             child: Padding(
                 padding: EdgeInsets.only(right: 6),
                 child: Icon(
@@ -167,6 +171,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
               showDialog(
                   context: context,
                   builder: (ctxt) => AlertDialog(
+                        key: ValueKey("help_dialog"),
                         title: Text(
                           "Help",
                           textAlign: TextAlign.center,
@@ -198,12 +203,14 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
                       DropdownButton<ChordNote>(
+                        key: ValueKey("chord_key_dropdown_button"),
                         hint: Text(
                           selectedNoteName,
                           style: TextStyle(fontSize: 20, color: Colors.blue),
                         ),
                         items: chordNotes.map((ChordNote value) {
                           return DropdownMenuItem<ChordNote>(
+                            key: ValueKey("dropdown_note_${value.note}"),
                             child: Text(
                               "${value.note}",
                               style: TextStyle(fontSize: 18),
@@ -240,6 +247,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                               color: Color.fromRGBO(50, 50, 50, 1)),
                         ),
                         DropdownButton<Chord>(
+                          key: ValueKey("chord_name_dropdown_button"),
                           hint: Text(
                             selectedChordName,
                             style: TextStyle(
@@ -247,6 +255,7 @@ class _ChordPrintScreen extends State<ChordPrintScreen> {
                           ),
                           items: chords.map((Chord value) {
                             return DropdownMenuItem<Chord>(
+                              key: ValueKey("dropdown_chord_${value.note}"),
                               child: Text(
                                 "${value.note}",
                                 style: TextStyle(fontSize: 18),

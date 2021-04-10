@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_scales/domain/core/const.dart';
-import 'package:music_scales/infrastructure/ads/ads.dart';
+import 'package:music_scales/infrastructure/ads/utils.dart';
 import 'package:music_scales/presentation/chords/chord_probability.dart';
 import 'package:music_scales/presentation/example_songs/example_songs.dart';
 import 'package:music_scales/presentation/piano/piano.dart';
-import 'package:music_scales/presentation/progression/progression_detail.dart';
 import 'package:music_scales/presentation/widgets/card/card.dart';
 import '../icons/my_flutter_app_icons.dart' as CustomIcons;
 
@@ -19,6 +18,7 @@ class _ProgressionPageState extends State<ProgressionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ValueKey("progression_page"),
       body: SafeArea(
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -38,8 +38,8 @@ class _ProgressionPageState extends State<ProgressionPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,
@@ -65,8 +65,8 @@ class _ProgressionPageState extends State<ProgressionPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => PianoScreen()));
@@ -90,8 +90,8 @@ class _ProgressionPageState extends State<ProgressionPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:music_scales/domain/probability_post/probability_post.dart';
+import 'package:music_scales/presentation/core/const.dart';
 
 class ChordProbScreen extends StatefulWidget {
   @override
@@ -36,7 +37,7 @@ class _ChordProbScreen extends State<ChordProbScreen> {
 
     final response = await http.get(
       'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}',
-      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+      headers: {"Authorization": "Bearer $bearerToken"},
     );
     final responseJson = json.decode(response.body);
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_scales/domain/core/const.dart';
-import 'package:music_scales/infrastructure/ads/ads.dart';
+import 'package:music_scales/infrastructure/ads/utils.dart';
 import 'package:music_scales/presentation/progression/progression_detail.dart';
 import 'package:music_scales/presentation/scale/scales_detail.dart';
 import 'package:music_scales/presentation/scale/search.dart';
@@ -14,9 +14,11 @@ class ScalePage extends StatefulWidget {
 
 class _ScalePageState extends State<ScalePage> {
   int showad = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ValueKey("scale_page"),
       body: SafeArea(
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -24,6 +26,7 @@ class _ScalePageState extends State<ScalePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
+                key: ValueKey("scale_page_button"),
                 icon: Icon(
                   CustomIcons.MyFlutterApp.music_notes,
                   size: 48,
@@ -33,8 +36,8 @@ class _ScalePageState extends State<ScalePage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,
@@ -60,8 +63,8 @@ class _ScalePageState extends State<ScalePage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SearchScreen()));
@@ -85,8 +88,8 @@ class _ScalePageState extends State<ScalePage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,

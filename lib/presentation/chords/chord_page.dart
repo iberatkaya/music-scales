@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_scales/domain/core/const.dart';
-import 'package:music_scales/infrastructure/ads/ads.dart';
+import 'package:music_scales/infrastructure/ads/utils.dart';
 import 'package:music_scales/presentation/chords/search_chord.dart';
-import 'package:music_scales/presentation/progression/progression_detail.dart';
 import 'package:music_scales/presentation/quiz/quiz.dart';
 import 'package:music_scales/presentation/widgets/card/card.dart';
 import '../icons/my_flutter_app_icons.dart' as CustomIcons;
-import 'chords.dart';
+import 'chord_detail.dart';
 
 class ChordPage extends StatefulWidget {
   @override
@@ -16,9 +14,11 @@ class ChordPage extends StatefulWidget {
 
 class _ChordPageState extends State<ChordPage> {
   int showad = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ValueKey("chord_page"),
       body: SafeArea(
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -26,6 +26,7 @@ class _ChordPageState extends State<ChordPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
+                key: ValueKey("chord_detail_button"),
                 icon: Icon(
                   CustomIcons.MyFlutterApp.prog,
                   size: 48,
@@ -35,13 +36,13 @@ class _ChordPageState extends State<ChordPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChordPrintScreen()));
+                          builder: (context) => ChordDetailScreen()));
                 },
                 subtitle: "Learn about chord progressions!",
                 title: "Chords",
@@ -65,8 +66,8 @@ class _ChordPageState extends State<ChordPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => QuizScreen()));
@@ -90,8 +91,8 @@ class _ChordPageState extends State<ChordPage> {
                   showad++;
                   if (showad % adFreq == 1) {
                     final myInterstitialAd = interstitialAd();
-                    await myInterstitialAd.load();
-                    await myInterstitialAd.show();
+                    await myInterstitialAd?.load();
+                    await myInterstitialAd?.show();
                   }
                   Navigator.push(
                       context,

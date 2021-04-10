@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_scales/presentation/core/const.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -416,31 +417,28 @@ class _SongsListScreen extends State<SongsListScreen> {
       else
         url += chords[i] + ",";
     }
-    print("url is https://api.hooktheory.com/v1/trends/${mode}?cp=${url}");
     final response = await http.get(
       'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}',
-      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+      headers: {"Authorization": "Bearer $bearerToken"},
     );
     final responseJson = json.decode(response.body);
 
     final response2 = await http.get(
       'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=2',
-      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+      headers: {"Authorization": "Bearer $bearerToken"},
     );
     final responseJson2 = json.decode(response2.body);
 
     final response3 = await http.get(
       'https://api.hooktheory.com/v1/trends/${mode}?cp=${url}&page=3',
-      headers: {"Authorization": "Bearer 6eed7f57c99b5ea87b4ec3941a3585d5"},
+      headers: {"Authorization": "Bearer $bearerToken"},
     );
     final responseJson3 = json.decode(response3.body);
     List<Song> mysong = [];
     for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson[i]));
     for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson2[i]));
     for (int i = 0; i < 5; i++) mysong.add(Song.fromJson(responseJson3[i]));
-    for (int i = 0; i < 15; i++) {
-      print(mysong[i].song);
-    }
+
     return mysong;
   }
 

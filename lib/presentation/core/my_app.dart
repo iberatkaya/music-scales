@@ -91,15 +91,22 @@ class _MyAppState extends State<MyApp> {
             BottomNavigationBarItem(
               icon: Icon(
                 CustomIcons.MyFlutterApp.music_notes,
+                key: ValueKey("bottom_navbar_scale_page"),
               ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(CustomIcons.MyFlutterApp.prog),
+              icon: Icon(
+                CustomIcons.MyFlutterApp.prog,
+                key: ValueKey("bottom_navbar_chord_page"),
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(CustomIcons.MyFlutterApp.international_music),
+              icon: Icon(
+                CustomIcons.MyFlutterApp.international_music,
+                key: ValueKey("bottom_navbar_progression_page"),
+              ),
               label: "",
             ),
           ],
