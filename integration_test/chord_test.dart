@@ -84,8 +84,7 @@ void main() {
     expect(chordImage, findsOneWidget);
   });
 
-  testWidgets(
-      "Chord Detail Page should display images with different keys, modes, and instruments",
+  testWidgets("Chord Detail Page should display helper dialog",
       (WidgetTester tester) async {
     await launchChordPage(tester);
 

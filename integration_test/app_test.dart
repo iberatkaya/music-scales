@@ -35,14 +35,14 @@ void main() {
     await app.main();
     await tester.pumpAndSettle();
 
-    final Finder bottomNavbarProgressionPage =
-        find.byKey(ValueKey("bottom_navbar_progression_page"));
-    expect(bottomNavbarProgressionPage, findsOneWidget);
+    final Finder bottomNavbarUtilsPage =
+        find.byKey(ValueKey("bottom_navbar_utils_page"));
+    expect(bottomNavbarUtilsPage, findsOneWidget);
 
-    await tester.tap(bottomNavbarProgressionPage);
+    await tester.tap(bottomNavbarUtilsPage);
     await tester.pumpAndSettle();
 
-    final Finder progressionPage = find.byKey(ValueKey("progression_page"));
+    final Finder progressionPage = find.byKey(ValueKey("utils_page"));
     expect(progressionPage, findsOneWidget);
   });
 }

@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/infrastructure/ads/utils.dart';
-import 'package:music_scales/presentation/chords/chord_probability.dart';
-import 'package:music_scales/presentation/example_songs/example_songs.dart';
-import 'package:music_scales/presentation/piano/piano.dart';
+import 'package:music_scales/presentation/utils_pages/chord_probability.dart';
+import 'package:music_scales/presentation/utils_pages/example_songs.dart';
+import 'package:music_scales/presentation/utils_pages/piano.dart';
 import 'package:music_scales/presentation/widgets/card/card.dart';
 import '../icons/my_flutter_app_icons.dart' as CustomIcons;
 
-class ProgressionPage extends StatefulWidget {
+class UtilsPage extends StatefulWidget {
   @override
-  _ProgressionPageState createState() => _ProgressionPageState();
+  _UtilsPageState createState() => _UtilsPageState();
 }
 
-class _ProgressionPageState extends State<ProgressionPage> {
+class _UtilsPageState extends State<UtilsPage> {
   int showad = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ValueKey("progression_page"),
+      key: ValueKey("utils_page"),
       body: SafeArea(
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),

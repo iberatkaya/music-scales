@@ -6,8 +6,8 @@ import 'package:music_scales/application/store/store.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/domain/settings/settings.dart';
 import 'package:music_scales/presentation/chords/chord_page.dart';
-import 'package:music_scales/presentation/progression/progression_page.dart';
 import 'package:music_scales/presentation/scale/scale_page.dart';
+import 'package:music_scales/presentation/utils_pages/utils_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../icons/my_flutter_app_icons.dart' as CustomIcons;
 import 'drawer/drawer.dart';
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             ScalePage(),
             ChordPage(),
-            ProgressionPage(),
+            UtilsPage(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
             BottomNavigationBarItem(
               icon: Icon(
                 CustomIcons.MyFlutterApp.international_music,
-                key: ValueKey("bottom_navbar_progression_page"),
+                key: ValueKey("bottom_navbar_utils_page"),
               ),
               label: "",
             ),

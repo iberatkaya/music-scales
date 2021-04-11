@@ -22,6 +22,18 @@ void main() {
     expect(scaleDetailPage, findsOneWidget);
   }
 
+  Future<void> launchProgressionPage(WidgetTester tester) async {
+    await app.main();
+    await tester.pumpAndSettle();
+
+    final Finder progressionDetailPage =
+        find.byKey(ValueKey("progression_page_button"));
+    expect(progressionDetailPage, findsOneWidget);
+
+    await tester.tap(progressionDetailPage);
+    await tester.pumpAndSettle();
+  }
+
   testWidgets("Scale Detail Page should launch", (WidgetTester tester) async {
     await launchScalePage(tester);
   });
@@ -76,8 +88,7 @@ void main() {
     expect(scaleImage, findsOneWidget);
   });
 
-  testWidgets(
-      "Scale Detail Page should display images with different keys, modes, and instruments",
+  testWidgets("Scale Detail Page should display helper dialog",
       (WidgetTester tester) async {
     await launchScalePage(tester);
 
@@ -94,5 +105,42 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(helpDialog, findsNothing);
+  });
+
+  testWidgets(
+      "Progression Detail Page should display progressions with different keys and modes",
+      (WidgetTester tester) async {
+    await launchProgressionPage(tester);
+
+    final Finder progressionKeyDropdownButton =
+        find.byKey(ValueKey("progression_key_dropdown_button"));
+    expect(progressionKeyDropdownButton, findsOneWidget);
+
+    await tester.tap(progressionKeyDropdownButton);
+    await tester.pumpAndSettle();
+
+    final Finder progressionKeyB =
+        find.byKey(ValueKey("progression_key_B")).last;
+    expect(progressionKeyB, findsOneWidget);
+
+    await tester.tap(progressionKeyB);
+    await tester.pumpAndSettle();
+
+    final Finder progressionChordDropdownButton =
+        find.byKey(ValueKey("progression_chord_dropdown_button"));
+    expect(progressionChordDropdownButton, findsOneWidget);
+
+    await tester.tap(progressionChordDropdownButton);
+    await tester.pumpAndSettle();
+
+    final Finder progressionChordMinor =
+        find.byKey(ValueKey("progression_chord_Minor")).last;
+    expect(progressionChordMinor, findsOneWidget);
+
+    await tester.tap(progressionChordMinor);
+    await tester.pumpAndSettle();
+
+    final Finder cSharpDimChord = find.text("C#dim");
+    expect(cSharpDimChord, findsOneWidget);
   });
 }

@@ -8,8 +8,7 @@ import 'package:music_scales/domain/chords/chords.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/domain/notes/notes.dart';
 import 'package:music_scales/domain/scales/scales.dart';
-import 'package:music_scales/presentation/progression/random_progression_page.dart';
-import 'package:music_scales/presentation/quiz/quiz.dart';
+import 'package:music_scales/presentation/scale/random_progression_page.dart';
 
 class ProgPrintScreen extends StatefulWidget {
   @override
@@ -168,12 +167,14 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                           fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                     ),
                     DropdownButton<Note>(
+                      key: ValueKey("progression_key_dropdown_button"),
                       hint: Text(
                         selectedKey,
                         style: TextStyle(fontSize: 20, color: Colors.blue),
                       ),
                       items: notes.map((Note value) {
                         return DropdownMenuItem<Note>(
+                          key: ValueKey("progression_key_${value.note}"),
                           child: Text(
                             "${value.note}",
                             style: TextStyle(fontSize: 18),
@@ -206,6 +207,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                             fontSize: 20, color: Color.fromRGBO(50, 50, 50, 1)),
                       ),
                       DropdownButton<Scale>(
+                        key: ValueKey("progression_chord_dropdown_button"),
                         hint: Text(
                           progmode,
                           style:
@@ -213,6 +215,7 @@ class _ProgPrintScreen extends State<ProgPrintScreen> {
                         ),
                         items: scales.map((Scale value) {
                           return DropdownMenuItem<Scale>(
+                            key: ValueKey("progression_chord_${value.name}"),
                             child: Text(
                               "${value.name}",
                               style: TextStyle(fontSize: 18),

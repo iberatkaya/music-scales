@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_scales/domain/core/const.dart';
 import 'package:music_scales/infrastructure/ads/utils.dart';
-import 'package:music_scales/presentation/progression/progression_detail.dart';
+import 'package:music_scales/presentation/scale/progression_detail.dart';
 import 'package:music_scales/presentation/scale/scales_detail.dart';
 import 'package:music_scales/presentation/scale/search.dart';
 import 'package:music_scales/presentation/widgets/card/card.dart';
@@ -79,6 +79,7 @@ class _ScalePageState extends State<ScalePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: ButtonCard(
+                key: ValueKey("progression_page_button"),
                 icon: Icon(
                   CustomIcons.MyFlutterApp.prog,
                   size: 48,
